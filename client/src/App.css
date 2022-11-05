@@ -42,3 +42,58 @@ body {
   margin: 5px;
   font-size: 80%;
 }
+
+.modal-header, .modal-footer {
+  border: none;
+}
+
+.modal-header {
+  justify-content: center;
+}
+
+.modal-body {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.modal-content {
+  background-color: #839FC3;
+  height: 500px;
+  display: flex;
+  top: 75px;
+}
+
+.modal-button {
+  background-color: #EBEBEB;
+  border-radius: 10%;
+  padding: 2%;
+  color:#404264;
+}
+
+.manga-modal {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  padding-top: 0px;
+  align-items: flex-start;
+  margin: 0px 50px;
+}
+
+.modal-cover {
+  width: 200px;
+  height: 300px;
+  border-radius: 5%;
+}
+
+.manga-info {
+  padding-left: 40px;
+}
+
+.manga-description {
+  height: 180px;
+  overflow-y: scroll;
+}
+
+::-webkit-scrollbar { 
+  display: none;
+}
