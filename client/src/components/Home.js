@@ -3,7 +3,7 @@ import { useLayoutEffect } from "react";
 import rough from "roughjs/bundled/rough.esm";
 const gen = rough.generator();
 
-const Home = () => {
+const Home = ({validLogin, setCurrentView, setShowError}) => {
   // allows canvas to draw as the page is uploading
   useLayoutEffect(() => {
     const canvas = document.getElementById("canvas");
@@ -107,10 +107,15 @@ const Home = () => {
     drawRoom("#ebebeb", 0.3, 1, 0, 30);
     drawDesk("#ebebeb", 0.5, 2.5, 0, 30);
     drawWindow("#ebebeb", 0.3, 2, 0, 0);
+    const rect = gen.rectangle(550, 60, 200, 270, {
+        fill: "#404264"
+    });
+    rc.draw(rect);
   });
 
   return (
     <>
+      <button className="manga-poster" onClick={() => validLogin ? setCurrentView("poster") : setShowError(true)}></button>
       <canvas id="canvas" width={window.innerWidth} height={window.innerWidth} style={{position: "fixed", top: "125px"}}>
         Canvas
       </canvas>

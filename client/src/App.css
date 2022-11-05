@@ -122,6 +122,10 @@ body {
   height: 450px;
 }
 
+.error-height {
+  height: 180px;
+}
+
 .manga-modal {
   display: flex;
   flex-direction: row;
@@ -224,5 +228,9 @@ input:focus {
   .container {
     max-width: 100vw;
     max-height: 100vh;
+  }
+  #canvas {
+    width: 100%;
+    z-index: 1;
   }
 }
