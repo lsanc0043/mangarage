@@ -21,10 +21,39 @@ const getManga = async (search) => {
   );
   const mangaData = allData.data.filter((manga) => manga.type === "manga"); // removes doujinshis or one-shots
   // grabs the ONE manga that matches the searched name the most
-  const filtered = mangaData.filter(
-    (manga) => search.toLowerCase() === manga.attributes.title.en.toLowerCase()
+  const filtered = mangaData.filter((manga) =>
+    search === "prince of tennis"
+      ? manga.attributes.title.en.toLowerCase() === "the prince of tennis"
+      : search === "spy x family"
+      ? manga.attributes.title.en.toLowerCase() === "spy×family"
+      : search === "yu yu hakusho"
+      ? manga.attributes.title.en.toLowerCase() === "yu★yu★hakusho"
+      : manga.attributes.title.en
+      ? manga.attributes.title.en.toLowerCase() === search.toLowerCase()
+      : ""
   );
-  return filtered;
+  // a separate API call for the filtered manga's cover page
+  const filteredCover = await fetchData(
+    `https://api.mangadex.org/cover/${
+      filtered[0].relationships.filter((tag) => tag.type === "cover_art")[0].id
+    }`
+  );
+  // a separate API call for the filtered manga's author
+  const filteredAuthor = await fetchData(
+    `https://api.mangadex.org/author/${
+      filtered[0].relationships.filter((tag) => tag.type === "author")[0].id
+    }`
+  );
+  // a separate API call for the filtered manga's last updated chapter
+  const lastChapter = await fetchData(
+    `https://api.mangadex.org/chapter/${filtered[0].attributes.latestUploadedChapter}`
+  );
+  return {
+    manga: filtered,
+    cover: filteredCover,
+    author: filteredAuthor,
+    lastChapter: lastChapter,
+  };
 };
 
 // get request
