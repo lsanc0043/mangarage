@@ -21,7 +21,10 @@ const getManga = async (search) => {
   );
   const mangaData = allData.data.filter((manga) => manga.type === "manga"); // removes doujinshis or one-shots
   // grabs the ONE manga that matches the searched name the most
-  return mangaData;
+  const filtered = mangaData.filter(
+    (manga) => search.toLowerCase() === manga.attributes.title.en.toLowerCase()
+  );
+  return filtered;
 };
 
 // get request
