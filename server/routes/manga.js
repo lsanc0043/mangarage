@@ -159,6 +159,25 @@ router.get("/post/:search", async (req, res) => {
   const search = req.params.search;
   const results = await getManga(search);
   res.send(results);
+  try {
+    const manga = await db.any(
+      "INSERT INTO manga (title, author, year, status, description, genres, cover, characters, last_updated) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+      [
+        results[0].title,
+        results[0].author,
+        results[0].year,
+        results[0].status,
+        results[0].description,
+        `{${results[0].genres}}`,
+        results[0].cover,
+        `{${results[0].chars}}`,
+        results[0].last_updated,
+      ]
+    );
+  } catch (e) {
+    console.log("manga post", e);
+    res.status(400).send({ e });
+  }
 });
 
 export default router;
