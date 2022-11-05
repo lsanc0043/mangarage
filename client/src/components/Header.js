@@ -26,6 +26,7 @@ const Header = () => {
         showLR={showLR}
         setShowLR={setShowLR}
         login={login}
+        loginModal={loginModal}
         register={register}
         setRegister={setRegister}
       />

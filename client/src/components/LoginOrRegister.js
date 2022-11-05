@@ -5,6 +5,7 @@ const LoginOrRegister = ({
   showLR,
   setShowLR,
   login,
+  loginModal,
   register,
   setRegister,
 }) => {
@@ -12,6 +13,9 @@ const LoginOrRegister = ({
   const emailAvailable = [0]; // is the email available? [0] = false, [1] = true
   const userAvailable = [0]; // is the username available? [0] = false, [1] = true
   const passwordValidity = [0, 0, 0, 0]; // is the password valid, [1, 1, 1, 1] = true, four requirements
+  const [error, setError] = useState(""); // error message as a hint to login and register
+  const [validRegistration, setValidRegistration] = useState(false); // did the user make a valid registration?
+  const [loggedUser, setLoggedUser] = useState(""); // saves the username of the logged in user
 
   const [loginInfo, setLoginInfo] = useState({
     // saves the user typed info for both login and registration
@@ -73,8 +77,74 @@ const LoginOrRegister = ({
     };
   };
 
-  const submitInfo = () => {
+  const submitInfo = async () => {
     console.log(loginInfo);
+    // send the user typed info to the backend to validate
+    const response = await fetch("http://localhost:4020/users/validate", {
+      method: "POST",
+      headers: {
+        Accepted: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginInfo),
+    });
+    const data = await response.json();
+    // if the user had a valid login
+    const loggedIn = data.type === "success";
+    // if the user intended to login and NOT register
+    if (login && !register) {
+      // check if the username/email is correct
+      if (
+        allUsers.filter(
+          (user) =>
+            user.username === loginInfo.username ||
+            user.email === loginInfo.username
+        ).length === 0
+      ) {
+        setError("Wrong Username or Email");
+      } else {
+        // valid user login, hide login/register modal, hide error modal, grab the username of the user, send the user id to App.js
+        if (loggedIn) {
+          setShowLR(false);
+          setLoggedUser(
+            allUsers.filter(
+              (user) =>
+                user.username === loginInfo.username ||
+                user.email === loginInfo.username
+            )
+          );
+        } else {
+          // invalid user login
+          setError("Wrong Password");
+        }
+      }
+    } else {
+      // if register and NOT login
+      // if EVERY password validation passed, reset error, redirect to login
+      if (passwordValidity.every((val) => val === 1)) {
+        setValidRegistration(true);
+        // redirect to the login modal with the prefilled info from the register page
+        loginModal();
+        // post the new account to the users table in the backend
+        const response = await fetch("http://localhost:4020/users/add", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: loginInfo.email,
+            username: loginInfo.username,
+            password: loginInfo.password,
+          }),
+        });
+        await response.json();
+        setError("");
+      } else {
+        // one or more password validation failed
+        setError("Please check the requirements!");
+      }
+    }
   };
 
   return (
