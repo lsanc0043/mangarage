@@ -1,9 +1,10 @@
 import "./App.css";
+import MangaPoster from "./components/MangaPoster";
 
 function App() {
   return (
     <div className="App">
-      <h1>hello from App.js in the frontend</h1>
+      <MangaPoster />
     </div>
   );
 }
