@@ -5,14 +5,14 @@ import Home from "./components/Home";
 import MangaPoster from "./components/MangaPoster";
 
 function App() {
-  const [currentView, setcurrentView] = useState("");
+  const [currentView, setCurrentView] = useState("");
   const [showError, setShowError] = useState(false);
   const [validLogin, setValidLogin] = useState(false);
 
   return (
     <div className="App">
       <LoginOrRegister
-        setcurrentView={setcurrentView}
+        setCurrentView={setCurrentView}
         validLogin={validLogin}
         setValidLogin={setValidLogin}
         showError={showError}
@@ -25,7 +25,7 @@ function App() {
             return (
               <Home
                 validLogin={validLogin}
-                setCurrentView={setcurrentView}
+                setCurrentView={setCurrentView}
                 setShowError={setShowError}
               />
             );

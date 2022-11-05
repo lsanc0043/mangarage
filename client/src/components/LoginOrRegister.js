@@ -133,6 +133,7 @@ const LoginOrRegister = ({
         // valid user login, hide login/register modal, hide error modal, grab the username of the user, send the user id to App.js
         if (loggedIn) {
           setShow(false);
+          setShowError(false);
           setLoggedUser(
             allUsers.filter(
               (user) =>
@@ -182,6 +183,7 @@ const LoginOrRegister = ({
         showError={showError}
         setShowError={setShowError}
       />
+      {/* login/register modal */}
       {/* login/register modal */}
       <Modal
         contentClassName={
