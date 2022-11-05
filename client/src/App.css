@@ -211,6 +211,14 @@ input:focus {
   box-shadow: 0 0 15px 4px #839FC3;
 }
 
+.fa-eye {
+  margin-left: 7px;
+}
+
+.fa-eye:hover {
+  color: red;
+}
+
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
   .container {

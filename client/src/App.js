@@ -1,11 +1,11 @@
 import "./App.css";
-import Header from "./components/Header";
+import LoginOrRegister from "./components/LoginOrRegister";
 import MangaPoster from "./components/MangaPoster";
 
 function App() {
   return (
     <div className="App">
-      <Header />
+      <LoginOrRegister />
       <MangaPoster />
     </div>
   );

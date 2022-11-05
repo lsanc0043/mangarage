@@ -1,35 +1,13 @@
-import { useState } from "react";
-import LoginOrRegister from "./LoginOrRegister";
-
-const Header = () => {
-  const [showLR, setShowLR] = useState(false);
-  const [login, setLogin] = useState(false);
-  const [register, setRegister] = useState(false);
-
-  // if the user wants to login, show the modal, set modal to login, set register to false, reset error/hint message
-  const loginModal = () => {
-    setShowLR(true);
-    setLogin(true);
-    setRegister(false);
-  };
-
-  // if the user wants to register, show the modal, set login to false, set modal to register, reset error/hint message
-  const registerModal = () => {
-    setShowLR(true);
-    setLogin(false);
-    setRegister(true);
-  };
-
+const Header = ({
+  loginModal,
+  registerModal,
+  loggedUser,
+  validLogin,
+  setValidLogin,
+  setLoginInfo,
+}) => {
   return (
-    <div className="header">
-      <LoginOrRegister
-        showLR={showLR}
-        setShowLR={setShowLR}
-        login={login}
-        loginModal={loginModal}
-        register={register}
-        setRegister={setRegister}
-      />
+    <>
       {/* header portion, returns to home page if the title is clicked */}
       <img
         src="https://i.ibb.co/djLYvqf/Site-Title.png"
@@ -45,15 +23,42 @@ const Header = () => {
           alignItems: "center",
         }}
       >
-        <button onClick={loginModal} className="login-or-register">
-          Login
-        </button>
-        or
-        <button onClick={registerModal} className="login-or-register">
-          Register
-        </button>
+        {validLogin ? (
+          <>
+            <h4 className="welcome">
+              Welcome,{" "}
+              <span style={{ textDecoration: "underline" }}>
+                {loggedUser[0].username}
+              </span>
+            </h4>
+            <button
+              className="login-or-register"
+              onClick={() => {
+                setValidLogin(false);
+                setLoginInfo({
+                  email: "",
+                  username: "",
+                  password: "",
+                  confirmPassword: "",
+                });
+              }}
+            >
+              <i className="fa fa-sign-out"></i>
+            </button>
+          </>
+        ) : (
+          <>
+            <button onClick={loginModal} className="login-or-register">
+              Login
+            </button>
+            or
+            <button onClick={registerModal} className="login-or-register">
+              Register
+            </button>
+          </>
+        )}
       </div>
-    </div>
+    </>
   );
 };
 
