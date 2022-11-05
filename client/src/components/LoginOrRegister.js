@@ -8,7 +8,9 @@ const LoginOrRegister = ({
   register,
   setRegister,
 }) => {
-  const [allUsers, setAllUsers] = useState([]);
+  const [allUsers, setAllUsers] = useState([]); // list of all users
+  const emailAvailable = [0]; // is the email available? [0] = false, [1] = true
+  const userAvailable = [0]; // is the username available? [0] = false, [1] = true
 
   const [loginInfo, setLoginInfo] = useState({
     // saves the user typed info for both login and registration
@@ -31,6 +33,19 @@ const LoginOrRegister = ({
 
   // changes the loginInfo object as the user types in the fields
   const set = (keyProp) => {
+    if (register) {
+      if (
+        allUsers.filter((user) => user.email === loginInfo.email).length > 0
+      ) {
+        emailAvailable[0] = 1; // checks if the email the user wants to use already exists
+      }
+      if (
+        allUsers.filter((user) => user.username === loginInfo.username).length >
+        0
+      ) {
+        userAvailable[0] = 1; // checks if the username the user wants to use already exists
+      }
+    }
     // sets input field values to the corresponding loginInfo object property
     return ({ target: { value } }) => {
       setLoginInfo((originalValues) => ({
@@ -77,7 +92,11 @@ const LoginOrRegister = ({
                   onChange={set("email")}
                 />
                 {/* real-time error to validate email is unique */}
-                <p></p>
+                <p>
+                  {emailAvailable[0] === 0
+                    ? ""
+                    : "This email is already registered to an account."}
+                </p>
               </>
             )}
             <label htmlFor="username">
@@ -95,7 +114,7 @@ const LoginOrRegister = ({
               onChange={set("username")}
             />
             {/* real-time error to validate username is unique*/}
-            <p></p>
+            <p>{userAvailable[0] === 0 ? "" : "Username already taken."}</p>
             <label htmlFor="password">Password: </label> <br />
             <input
               type="text"
