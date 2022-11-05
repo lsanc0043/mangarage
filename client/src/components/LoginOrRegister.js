@@ -6,7 +6,7 @@ import Header from "./Header";
 // the header with the page title + the login and register buttons
 // the login/register functionality in a modal + the error modal
 
-const LoginOrRegister = () => {
+const LoginOrRegister = ({ setCurrentView }) => {
   const [allUsers, setAllUsers] = useState([]); // list of all users
   const [show, setShow] = useState(false); // show login/register modal or not
   const [login, setLogin] = useState(false); // is the modal for login?
@@ -372,6 +372,7 @@ const LoginOrRegister = () => {
         validLogin={validLogin}
         setValidLogin={setValidLogin}
         setLoginInfo={setLoginInfo}
+        setCurrentView={setCurrentView}
       />
     </div>
   );
