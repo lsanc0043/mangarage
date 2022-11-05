@@ -22,6 +22,11 @@ const Home = () => {
       );
     };
 
+    const drawCircle = (xPosition, yPosition, radius, color, width, rough) => {
+       const circle = gen.circle(xPosition, yPosition, radius, { stroke: color, width: width, roughness: rough });
+      rc.draw(circle);
+    }
+
     const drawRoom = (color, width, rough, xChange, yChange) => {
       drawLine(0, 0, window.innerWidth, 0, color, width, rough); // upper edge 1
       drawLine(0, 40, window.innerWidth, 40, color, width, rough); // upper edge 2
@@ -62,8 +67,46 @@ const Home = () => {
       drawLine(215 + xChange, 780 + yChange, 225 + xChange, 770 + yChange, color, 0.3, 1); // top right leg - bottom horizontal edge
     };
 
+    const drawWindow = (color, width, rough, xChange, yChange) => {
+      drawLine(1015 + xChange, 40 + yChange, 1015 + xChange, 280 + yChange, color, width, rough); // left outer vertical
+      drawLine(1000 + xChange, 40 + yChange, 1000 + xChange, 280 + yChange, color, width, rough); // left inner vertical
+      drawLine(1450 + xChange, 40 + yChange, 1450 + xChange, 280 + yChange, color, width, rough); // right inner vertical
+      drawLine(1465 + xChange, 40 + yChange, 1465 + xChange, 280 + yChange, color, width, rough); // right outer vertical
+      drawLine(1015 + xChange, 60 + yChange, 1450 + xChange, 60 + yChange, color, width, rough); // horizontal upper window 1
+      drawLine(1015 + xChange, 80 + yChange, 1450 + xChange, 80 + yChange, color, width, rough); // horizontal upper window 2
+      drawLine(1000 + xChange, 280 + yChange, 1465 + xChange, 280 + yChange, color, width, rough); // horizontal windowsill 1
+      drawLine(960 + xChange, 300 + yChange, 1500 + xChange, 300 + yChange, color, width, rough); // horizontal windowsill 2
+      drawLine(960 + xChange, 310 + yChange, 1500 + xChange, 310 + yChange, color, width, rough); // horizontal windowsill 3
+      drawLine(960 + xChange, 300 + yChange, 1000 + xChange, 280 + yChange, color, width, rough); // left diagonal
+      drawLine(1465 + xChange, 280 + yChange, 1500 + xChange, 300 + yChange, color, width, rough); // right diagonal
+      drawLine(960 + xChange, 300 + yChange, 960 + xChange, 310 + yChange, color, width, rough); // left sill vertical
+      drawLine(1500 + xChange, 300 + yChange, 1500 + xChange, 310 + yChange, color, width, rough); // right sill vertical
+      drawSky("#ebebeb", 0.2, 1, 0, 0);
+    }
+
+    const drawSky = (color, width, rough, xChange, yChange) => {
+      rc.path(`M${1380 + xChange} ${85 + yChange} A 80 80, 0, 0, 0, ${1445 + xChange} ${150 + yChange} L ${1445 + xChange} ${85 + yChange} Z`, { stroke: color, fill: color, width: width, roughness: rough }); // moon
+      drawCircle(1030 + xChange, 110 + yChange, 5, "#ebebeb", 0.3, 2);
+      drawCircle(1040 + xChange, 250 + yChange, 5, "#ebebeb", 0.3, 2);
+      drawCircle(1060 + xChange, 175 + yChange, 5, "#ebebeb", 0.3, 2);
+      drawCircle(1090 + xChange, 90 + yChange, 5, "#ebebeb", 0.3, 2);
+      drawCircle(1120 + xChange, 220 + yChange, 5, "#ebebeb", 0.3, 2);
+      drawCircle(1150 + xChange, 140 + yChange, 5, "#ebebeb", 0.3, 2);
+      drawCircle(1170 + xChange, 270 + yChange, 5, "#ebebeb", 0.3, 2);
+      drawCircle(1200 + xChange, 190 + yChange, 5, "#ebebeb", 0.3, 2);
+      drawCircle(1220 + xChange, 110 + yChange, 5, "#ebebeb", 0.3, 2);
+      drawCircle(1240 + xChange, 250 + yChange, 5, "#ebebeb", 0.3, 2);
+      drawCircle(1260 + xChange, 175 + yChange, 5, "#ebebeb", 0.3, 2);
+      drawCircle(1290 + xChange, 90 + yChange, 5, "#ebebeb", 0.3, 2);
+      drawCircle(1320 + xChange, 220 + yChange, 5, "#ebebeb", 0.3, 2);
+      drawCircle(1350 + xChange, 140 + yChange, 5, "#ebebeb", 0.3, 2);
+      drawCircle(1370 + xChange, 270 + yChange, 5, "#ebebeb", 0.3, 2);
+      drawCircle(1400 + xChange, 190 + yChange, 5, "#ebebeb", 0.3, 2);
+    }
+
     drawRoom("#ebebeb", 0.3, 1, 0, 30);
     drawDesk("#ebebeb", 0.5, 2.5, 0, 30);
+    drawWindow("#ebebeb", 0.3, 2, 0, 0);
   });
 
   return (
