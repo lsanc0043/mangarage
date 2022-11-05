@@ -2,6 +2,90 @@ import fetch from "node-fetch";
 import { Router } from "express";
 const router = Router();
 
+async function getChars(manga) {
+  const regex = /[^\w\s]|_/g; // removes any special characters
+  let mangaName = "";
+  // special cases where the name is different across the two APIs
+  switch (manga) {
+    case "Ace of Diamond":
+      mangaName = "ace-of-the-diamond";
+      break;
+    case "Detective Conan":
+      mangaName = "case-closed";
+      break;
+    case "Kimetsu no Yaiba":
+      mangaName = "demon-slayer-kimetsu-no-yaiba";
+      break;
+    case "Sinryeong":
+      mangaName = "godly-bells";
+      break;
+    case "Haikyu":
+      mangaName = "haikyuu";
+      break;
+    case "Boku no Hero Academia":
+      mangaName = "my-hero-academia";
+      break;
+    case "Omniscient Readers Viewpoint":
+      mangaName = "omniscient-reader";
+      break;
+    case "One PunchMan":
+      mangaName = "one-punch-man";
+      break;
+    case "Rave":
+      mangaName = "rave-master";
+      break;
+    case "Nanatsu no Taizai":
+      mangaName = "the-seven-deadly-sins";
+      break;
+    case "Shingeki no Kyojin":
+      mangaName = "attack-on-titan";
+      break;
+    case "SPYFAMILY":
+      mangaName = "spy-x-family";
+      break;
+    case "Tate no Yuusha no Nariagari":
+      mangaName = "the-rising-of-the-shield-hero";
+      break;
+    case "Tensei Shitara Slime Datta Ken":
+      mangaName = "that-time-i-got-reincarnated-as-a-slime";
+      break;
+    case "The World God Only Knows":
+      mangaName = "kami-nomi-zo-shiru-sekai";
+      break;
+    case "Akatsuki no Yona":
+      mangaName = "yona-of-the-dawn";
+      break;
+    case "YuYuHakusho":
+      mangaName = "yu-yu-hakusho";
+      break;
+    default:
+      mangaName = manga
+        .split(" ")
+        .filter((word) => !regex.test(word))
+        .join("-")
+        .replace(/[()]/g, "");
+  }
+  const url = `https://www.anime-planet.com/manga/${mangaName}/characters`;
+  //   console.log(url);
+  try {
+    const response = await fetch(url);
+    const data = await response.text(); // uses text instead of json because i'm retrieving data from a webpage
+    const reducedData = data
+      .slice(data.indexOf('<div class="pure-1 md-4-5">'))
+      .slice(
+        0,
+        data
+          .slice(data.indexOf('<div class="pure-1 md-4-5">'))
+          .indexOf("<style>")
+      );
+    const characters = reducedData.matchAll(/"name">(.*?)</g); // find the chunk of the html data that is between the specified regex
+    // console.log(Array.from(characters, (x) => x[1]));
+    return Array.from(characters, (x) => x[1]);
+  } catch (e) {
+    console.log("characters get", e);
+  }
+}
+
 // helper function to fetch data from API
 const fetchData = async (url) => {
   try {
@@ -48,11 +132,16 @@ const getManga = async (search) => {
   const lastChapter = await fetchData(
     `https://api.mangadex.org/chapter/${filtered[0].attributes.latestUploadedChapter}`
   );
+  // uses the helper function to retrieve all associated characters
+  const characters = await getChars(
+    filtered[0].attributes.title.en.replace(/[^\w\s]|_/g, "")
+  );
   return {
     manga: filtered,
     cover: filteredCover,
     author: filteredAuthor,
     lastChapter: lastChapter,
+    characters: characters,
   };
 };
 
