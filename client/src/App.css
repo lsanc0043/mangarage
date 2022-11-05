@@ -156,6 +156,35 @@ body {
   justify-content: space-evenly;
 }
 
+path {
+  stroke-linecap: round;
+}
+
+.ex {
+  stroke: red;
+  stroke-width: 1.5;
+}
+
+.checks {
+  stroke:currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke: green;
+  stroke-linejoin: round;
+  stroke-dasharray: 18;
+  stroke-dashoffset: 18;
+  animation: draw 0.25s forwards 0.25s;
+}
+
+@keyframes draw { 
+  to { stroke-dashoffset: 0 } 
+}
+
+.pw-requirements {
+  text-align: right;
+  font-size: 15px;
+}
+
 input[type=text], input[type=password], input[type=email] {
   font-family: Arial, Helvetica, sans-serif;
   padding: 10px;
