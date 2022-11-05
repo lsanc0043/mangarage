@@ -1,7 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 
-const LoginOrRegister = ({ showLR, setShowLR, login, register }) => {
+const LoginOrRegister = ({
+  showLR,
+  setShowLR,
+  login,
+  register,
+  setRegister,
+}) => {
+  const [allUsers, setAllUsers] = useState([]);
+
   const [loginInfo, setLoginInfo] = useState({
     // saves the user typed info for both login and registration
     email: "",
@@ -9,6 +17,17 @@ const LoginOrRegister = ({ showLR, setShowLR, login, register }) => {
     password: "",
     confirmPassword: "",
   });
+
+  // retrieve all the users from the backend
+  const getUsers = async () => {
+    const response = await fetch("http://localhost:4020/users");
+    const data = await response.json();
+    setAllUsers(data);
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   // changes the loginInfo object as the user types in the fields
   const set = (keyProp) => {
@@ -19,6 +38,10 @@ const LoginOrRegister = ({ showLR, setShowLR, login, register }) => {
         [keyProp]: value,
       }));
     };
+  };
+
+  const submitInfo = () => {
+    console.log(loginInfo);
   };
 
   return (
@@ -53,6 +76,8 @@ const LoginOrRegister = ({ showLR, setShowLR, login, register }) => {
                   value={loginInfo.email}
                   onChange={set("email")}
                 />
+                {/* real-time error to validate email is unique */}
+                <p></p>
               </>
             )}
             <label htmlFor="username">
@@ -69,6 +94,8 @@ const LoginOrRegister = ({ showLR, setShowLR, login, register }) => {
               value={loginInfo.username}
               onChange={set("username")}
             />
+            {/* real-time error to validate username is unique*/}
+            <p></p>
             <label htmlFor="password">Password: </label> <br />
             <input
               type="text"
@@ -110,12 +137,19 @@ const LoginOrRegister = ({ showLR, setShowLR, login, register }) => {
                 username: "",
                 password: "",
               });
+              setRegister(true);
+            }}
+            style={{
+              display: register ? "none" : "block",
             }}
           >
             Register
           </button>
-          {/* submits the info */}
-          <button variant="secondary" className="modal-button">
+          <button
+            variant="secondary"
+            className="modal-button"
+            onClick={submitInfo}
+          >
             Enter
           </button>
         </Modal.Footer>

@@ -27,6 +27,7 @@ const Header = () => {
         setShowLR={setShowLR}
         login={login}
         register={register}
+        setRegister={setRegister}
       />
       {/* header portion, returns to home page if the title is clicked */}
       <img
