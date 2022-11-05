@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import db from "../db/db-connection.js";
 import { Router } from "express";
 const router = Router();
 
@@ -153,7 +154,7 @@ const getManga = async (search) => {
   }));
 };
 
-// get request
+// get request, post to the backend
 router.get("/post/:search", async (req, res) => {
   const search = req.params.search;
   const results = await getManga(search);
