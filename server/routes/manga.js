@@ -136,13 +136,21 @@ const getManga = async (search) => {
   const characters = await getChars(
     filtered[0].attributes.title.en.replace(/[^\w\s]|_/g, "")
   );
-  return {
-    manga: filtered,
-    cover: filteredCover,
-    author: filteredAuthor,
-    lastChapter: lastChapter,
-    characters: characters,
-  };
+  // only grabs the sections of the large object that i need
+  return filtered.map((manga) => ({
+    id: manga.id,
+    title: manga.attributes.title.en,
+    author: filteredAuthor.data.attributes.name,
+    year: manga.attributes.year,
+    status: manga.attributes.status,
+    last_updated: lastChapter.data.attributes.updatedAt,
+    description: manga.attributes.description.en,
+    genres: manga.attributes.tags
+      .filter((tag) => tag.attributes.group === "genre")
+      .map((tag) => tag.attributes.name.en),
+    cover: `https://mangadex.org/covers/${manga.id}/${filteredCover.data.attributes.fileName}`,
+    chars: characters,
+  }));
 };
 
 // get request
