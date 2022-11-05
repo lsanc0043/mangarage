@@ -25,19 +25,39 @@ const LoginOrRegister = ({ showLR, setShowLR, login, register }) => {
     <>
       {/* login/register modal */}
       <Modal
-        show={showLR}
-        onHide={() => setShowLR(false)}
-        size="sm"
         contentClassName={
           login && !register ? "login-height" : "register-height"
         }
+        size={login && !register ? "sm" : "md"}
+        show={showLR}
+        onHide={() => setShowLR(false)}
       >
         <Modal.Header className="user-modal">
-          <Modal.Title>Login or Register</Modal.Title>
+          <Modal.Title>
+            {login && !register ? "Login!" : "Register"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body className="user-modal user-modal-body">
           <form>
-            <label htmlFor="username">Username:</label>
+            {/* shows email field if the user wants to register */}
+            {login && !register ? (
+              <></>
+            ) : (
+              <>
+                <label htmlFor="email">Email: </label> <br />
+                <input
+                  type="email"
+                  id="email"
+                  required
+                  autoComplete="off"
+                  value={loginInfo.email}
+                  onChange={set("email")}
+                />
+              </>
+            )}
+            <label htmlFor="username">
+              {login && !register ? "Username/Email: " : "Username: "}
+            </label>
             <br />
             <input
               type="text"
@@ -60,6 +80,24 @@ const LoginOrRegister = ({ showLR, setShowLR, login, register }) => {
               value={loginInfo.password}
               onChange={set("password")}
             />
+            {/* shows confirm password field if user wants to register */}
+            {login && !register ? (
+              <></>
+            ) : (
+              <>
+                <br />
+                <label htmlFor="confirm-password">Confirm Password:</label>
+                <br />
+                <input
+                  type="text"
+                  id="confirm-password"
+                  required
+                  autoComplete="off"
+                  value={loginInfo.confirmPassword}
+                  onChange={set("confirmPassword")}
+                />
+              </>
+            )}
           </form>
         </Modal.Body>
         <Modal.Footer className="user-modal">
