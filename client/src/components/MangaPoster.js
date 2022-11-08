@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import MangaModal from "./MangaModal";
 
-const MangaPoster = () => {
+const MangaPoster = ({ userId }) => {
   const [allMangas, setAllMangas] = useState([]);
+  const [readMangas, setReadMangas] = useState([]);
   const [selectedManga, setSelectedManga] = useState({});
   const [showModal, setShowModal] = useState(false);
 
@@ -13,8 +14,16 @@ const MangaPoster = () => {
     setAllMangas(data);
   };
 
+  // retrieve the read mangas
+  const getReadMangas = async () => {
+    const response = await fetch(`http://localhost:4020/users/read/${userId}`);
+    const data = await response.json();
+    setReadMangas(data);
+  };
+
   useEffect(() => {
     getMangas();
+    getReadMangas();
   }, []);
 
   return (
