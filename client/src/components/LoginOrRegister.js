@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import Header from "./Header";
+import LoginError from "./LoginError";
 
 // CONTAINS:
 // the header with the page title + the login and register buttons
 // the login/register functionality in a modal + the error modal
 
-const LoginOrRegister = () => {
+const LoginOrRegister = ({
+  setCurrentView,
+  validLogin,
+  setValidLogin,
+  showError,
+  setShowError,
+}) => {
   const [allUsers, setAllUsers] = useState([]); // list of all users
   const [show, setShow] = useState(false); // show login/register modal or not
   const [login, setLogin] = useState(false); // is the modal for login?
@@ -14,7 +21,6 @@ const LoginOrRegister = () => {
   const [validRegistration, setValidRegistration] = useState(false); // did the user make a valid registration?
   const [error, setError] = useState(""); // error message as a hint to login and register
   const [viewPassword, setViewPassword] = useState(false); // allow the user to view what they're typing in the password field
-  const [validLogin, setValidLogin] = useState(false); // determines if the user has successfully logged in or not
   const [loggedUser, setLoggedUser] = useState(""); // saves the username of the logged in user
   const emailAvailable = [0]; // is the email available? [0] = false, [1] = true
   const userAvailable = [0]; // is the username available? [0] = false, [1] = true
@@ -127,6 +133,7 @@ const LoginOrRegister = () => {
         // valid user login, hide login/register modal, hide error modal, grab the username of the user, send the user id to App.js
         if (loggedIn) {
           setShow(false);
+          setShowError(false);
           setLoggedUser(
             allUsers.filter(
               (user) =>
@@ -170,6 +177,13 @@ const LoginOrRegister = () => {
 
   return (
     <div className="header">
+      <LoginError
+        loginModal={loginModal}
+        registerModal={registerModal}
+        showError={showError}
+        setShowError={setShowError}
+      />
+      {/* login/register modal */}
       {/* login/register modal */}
       <Modal
         contentClassName={
@@ -372,6 +386,7 @@ const LoginOrRegister = () => {
         validLogin={validLogin}
         setValidLogin={setValidLogin}
         setLoginInfo={setLoginInfo}
+        setCurrentView={setCurrentView}
       />
     </div>
   );
