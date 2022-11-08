@@ -1,3 +1,5 @@
+import ScratchCard from "react-scratchcard";
+
 import { useState, useEffect } from "react";
 import MangaModal from "./MangaModal";
 
@@ -26,6 +28,34 @@ const MangaPoster = ({ userId }) => {
     getReadMangas();
   }, []);
 
+  // removing the scratchcard jsx allows me to remount the div
+  const renderCard = (manga) => {
+    return (
+      <div
+        className="scratch-card"
+        id={`card-${manga.id}`}
+        style={{
+          display: readMangas.includes(manga.id) ? "none" : "block",
+        }}
+      >
+        <ScratchCard
+          width={148}
+          height={240}
+          image={"https://i.ibb.co/H49kqG7/silver.png"}
+          finishPercent={85}
+          onComplete={() => console.log("complete")}
+          // onComplete={() => sendManga([manga.id, !userRead.includes(manga.id)])}
+        >
+          <img
+            className="covers"
+            src={manga.cover}
+            alt={`${manga.title} cover`}
+          />
+        </ScratchCard>
+      </div>
+    );
+  };
+
   return (
     <div className="container">
       <MangaModal
@@ -40,11 +70,19 @@ const MangaPoster = ({ userId }) => {
             key={index}
             onClick={() => {
               setSelectedManga(manga);
-              setShowModal(true);
+              // setShow(true);
             }}
             className="manga-selection"
           >
-            <div>
+            {/* unmount and remount if the user marks it as unread so content can be scratched again */}
+            {/* {!reset ? renderCard(manga) : <></>} */}
+            {renderCard(manga)}
+            {/* underlies the scratchcard, revealed when scratchcard is completed */}
+            <div
+              style={{
+                display: readMangas.includes(manga.id) ? "block" : "none",
+              }}
+            >
               <img
                 className="covers"
                 src={manga.cover}

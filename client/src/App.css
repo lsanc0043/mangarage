@@ -76,6 +76,15 @@ body {
   border-radius: 5%;
 }
 
+.scratch-card {
+  cursor: url("https://i.ibb.co/bF1c927/coin.png") 60 60, auto;
+}
+
+.ScratchCard__Canvas {
+  border-radius: 5%;
+  left: 0px;
+}
+
 .modal-cover {
   width: 200px;
   height: 300px;
