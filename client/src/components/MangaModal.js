@@ -1,6 +1,12 @@
 import Modal from "react-bootstrap/Modal";
 
-const MangaModal = ({ showModal, setShowModal, selectedManga }) => {
+const MangaModal = ({
+  showModal,
+  setShowModal,
+  selectedManga,
+  readMangas,
+  markReadOrUnread,
+}) => {
   if (selectedManga === {}) {
     return "Loading...";
   } else {
@@ -51,6 +57,23 @@ const MangaModal = ({ showModal, setShowModal, selectedManga }) => {
           </div>
         </Modal.Body>
         <Modal.Footer>
+          {/* mark as read or unread */}
+          <button
+            className="modal-button"
+            onClick={() => {
+              setShowModal(false);
+              markReadOrUnread(
+                selectedManga.id,
+                !readMangas.includes(selectedManga.id)
+              );
+            }}
+          >
+            <strong>
+              {readMangas.includes(selectedManga.id)
+                ? "Mark as Unread"
+                : "Mark as Read"}
+            </strong>
+          </button>
           {/* return to the poster */}
           <button className="modal-button" onClick={() => setShowModal(false)}>
             <strong>Go Back to Poster</strong>

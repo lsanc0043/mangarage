@@ -28,6 +28,44 @@ const MangaPoster = ({ userId }) => {
     getReadMangas();
   }, []);
 
+  const markReadOrUnread = async (selectedId, doneReading) => {
+    const read = { user: userId, manga: selectedId, rating: 10 }; // object that saves the user id, manga id, and the rating
+    // if the user is done reading the manga, post it to the backend
+    if (doneReading) {
+      const response = await fetch("http://localhost:4020/users/read", {
+        method: "POST",
+        headers: {
+          Accepted: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(read),
+      });
+      const data = await response.json();
+      // if the post is valid (meaning the user is not trying to read a manga that's already marked as read)
+      if (data.type === "success") {
+        // refresh MangaPoster to load the data in real time
+        getMangas();
+        getReadMangas();
+      }
+    } else {
+      // delete the manga from the junction table if the user wants to mark it as unread
+      const response = await fetch(
+        `http://localhost:4020/users/read/${userId}/${selectedId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await response.json();
+      // if the delete is valid
+      if (data.type === "success") {
+        // refresh MangaPoster to load the data in real time
+        // getMangas();
+        // getReadMangas();
+        // onClickReset(); // reset the scratch card so user can "mark as read" again
+      }
+    }
+  };
+
   // removing the scratchcard jsx allows me to remount the div
   const renderCard = (manga) => {
     return (
@@ -43,8 +81,9 @@ const MangaPoster = ({ userId }) => {
           height={240}
           image={"https://i.ibb.co/H49kqG7/silver.png"}
           finishPercent={85}
-          onComplete={() => console.log("complete")}
-          // onComplete={() => sendManga([manga.id, !userRead.includes(manga.id)])}
+          onComplete={() =>
+            markReadOrUnread(manga.id, !readMangas.includes(manga.id))
+          }
         >
           <img
             className="covers"
@@ -62,6 +101,8 @@ const MangaPoster = ({ userId }) => {
         showModal={showModal}
         setShowModal={setShowModal}
         selectedManga={selectedManga}
+        readMangas={readMangas}
+        markReadOrUnread={markReadOrUnread}
       />
       {/* map all mangas */}
       {allMangas.map((manga, index) => {
