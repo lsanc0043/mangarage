@@ -8,6 +8,17 @@ const MangaPoster = ({ userId }) => {
   const [readMangas, setReadMangas] = useState([]);
   const [selectedManga, setSelectedManga] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [reset, setReset] = useState(false);
+
+  const onClickReset = () => {
+    setReset(true);
+  };
+
+  // dismounts the scratchcard and remounts it after 1 second
+  useEffect(() => {
+    const timer = setTimeout(() => setReset(false), 1);
+    return () => clearTimeout(timer);
+  }, [reset]);
 
   // retrieve all the mangas
   const getMangas = async () => {
@@ -59,9 +70,9 @@ const MangaPoster = ({ userId }) => {
       // if the delete is valid
       if (data.type === "success") {
         // refresh MangaPoster to load the data in real time
-        // getMangas();
-        // getReadMangas();
-        // onClickReset(); // reset the scratch card so user can "mark as read" again
+        getMangas();
+        getReadMangas();
+        onClickReset(); // reset the scratch card so user can "mark as read" again
       }
     }
   };
@@ -117,8 +128,8 @@ const MangaPoster = ({ userId }) => {
             className="manga-selection"
           >
             {/* unmount and remount if the user marks it as unread so content can be scratched again */}
-            {/* {!reset ? renderCard(manga) : <></>} */}
-            {renderCard(manga)}
+            {!reset ? renderCard(manga) : <></>}
+            {/* {renderCard(manga)} */}
             {/* underlies the scratchcard, revealed when scratchcard is completed */}
             <div
               style={{
