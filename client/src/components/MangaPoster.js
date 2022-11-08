@@ -20,7 +20,7 @@ const MangaPoster = ({ userId }) => {
   const getReadMangas = async () => {
     const response = await fetch(`http://localhost:4020/users/read/${userId}`);
     const data = await response.json();
-    setReadMangas(data);
+    setReadMangas(data.map((value) => value.manga_id));
   };
 
   useEffect(() => {
@@ -70,7 +70,8 @@ const MangaPoster = ({ userId }) => {
             key={index}
             onClick={() => {
               setSelectedManga(manga);
-              // setShow(true);
+              setShowModal(true);
+              console.log(manga.id);
             }}
             className="manga-selection"
           >
