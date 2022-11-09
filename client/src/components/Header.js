@@ -5,7 +5,6 @@ const Header = ({
   validLogin,
   setValidLogin,
   setLoginInfo,
-  setCurrentView,
 }) => {
   return (
     <>
@@ -14,7 +13,6 @@ const Header = ({
         src="https://i.ibb.co/djLYvqf/Site-Title.png"
         alt="Site-Title"
         className="title"
-        onClick={() => setCurrentView("")}
       />
       {/* displays the login and register buttons OR the welcome, user text with a logout button */}
       <div
@@ -37,7 +35,6 @@ const Header = ({
               className="login-or-register"
               onClick={() => {
                 setValidLogin(false);
-                setCurrentView("");
                 setLoginInfo({
                   email: "",
                   username: "",
