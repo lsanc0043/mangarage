@@ -1,18 +1,73 @@
 import { useState, useEffect } from "react";
 
 const QuizCard = ({ selectedManga }) => {
-  const [allAnswers, setAllAnswers] = useState([]);
-  const [rightAnswer, setRightAnswer] = useState("");
+  const test = 0;
+  const [allAnswers, setAllAnswers] = useState({
+    years: [],
+    authors: [],
+    characters: [],
+  });
+  const [rightAnswers, setRightAnswers] = useState({
+    year: "",
+    author: "",
+    character: "",
+  });
+  const [randomNum, setRandomNum] = useState(0);
+  const [max, setMax] = useState(0);
 
-  const getAnswers = async (category) => {
+  const getRandom = (max) => {
+    const random = Math.floor(Math.random() * max);
+    setRandomNum(random);
+    return random;
+  };
+
+  const getAllAnswers = async (category) => {
     const response = await fetch("http://localhost:4020/questions");
     const data = await response.json();
-    console.log(data);
+    setAllAnswers((otherAnswers) => ({
+      ...otherAnswers,
+      [category]: Array.from(new Set(data.map((manga) => manga[category]))),
+    }));
+  };
+
+  const getRightAnswers = async (category) => {
+    const response = await fetch("http://localhost:4020/questions");
+    const data = await response.json();
+    getRandom(
+      data.filter((manga) => manga.id === selectedManga.id)[0]["characters"]
+        .length
+    );
+    setMax(
+      data.filter((manga) => manga.id === selectedManga.id)[0]["characters"]
+        .length
+    );
+    setRightAnswers((otherAnswers) => ({
+      ...otherAnswers,
+      [category]: data.filter((manga) => manga.id === selectedManga.id)[0][
+        category
+      ],
+    }));
+    setRightAnswers((otherAnswers) => ({
+      ...otherAnswers,
+      ["character"]: data.filter((manga) => manga.id === selectedManga.id)[0][
+        "characters"
+      ][
+        getRandom(
+          data.filter((manga) => manga.id === selectedManga.id)[0]["characters"]
+            .length
+        )
+      ],
+    }));
   };
 
   useEffect(() => {
-    getAnswers();
-  }, []);
+    getAllAnswers("years");
+    getAllAnswers("authors");
+    getAllAnswers("characters");
+    getRightAnswers("year");
+    getRightAnswers("author");
+    // getRightAnswers("character");
+  }, [test]);
 
   const question1 = (
     <p>
@@ -30,7 +85,6 @@ const QuizCard = ({ selectedManga }) => {
       <strong>{selectedManga.title}</strong>?
     </p>
   );
-  //   const items = ["hello", "my", "name", "is", "Linda"];
   const questions = [question1, question2, question3];
   const [currentQ, setCurrentQ] = useState(0);
 
