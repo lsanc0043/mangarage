@@ -37,6 +37,7 @@ const MangaPoster = ({ userId }) => {
   useEffect(() => {
     getMangas();
     getReadMangas();
+    // eslint-disable-next-line
   }, []);
 
   const markReadOrUnread = async (selectedId, doneReading) => {
