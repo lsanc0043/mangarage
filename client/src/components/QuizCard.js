@@ -1,20 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const QuizCard = () => {
+const QuizCard = ({ selectedManga }) => {
+  const [allAnswers, setAllAnswers] = useState([]);
+  const [rightAnswer, setRightAnswer] = useState("");
+
+  const getAnswers = async (category) => {
+    const response = await fetch("http://localhost:4020/questions");
+    const data = await response.json();
+    console.log(data);
+  };
+
+  useEffect(() => {
+    getAnswers();
+  }, []);
+
   const question1 = (
     <p>
-      What year was <strong>Insert Title</strong> first serialized?
+      What year was <strong>{selectedManga.title}</strong> first serialized?
     </p>
   );
   const question2 = (
     <p>
-      Who is the author of <strong>Insert Title</strong>?
+      Who is the author of <strong>{selectedManga.title}</strong>?
     </p>
   );
   const question3 = (
     <p>
-      Which of the following is not a character of <strong>Insert Title</strong>
-      ?
+      Which of the following is not a character of{" "}
+      <strong>{selectedManga.title}</strong>?
     </p>
   );
   //   const items = ["hello", "my", "name", "is", "Linda"];

@@ -169,11 +169,6 @@ body {
   justify-content: space-evenly;
 }
 
-.carousel {
-  background-color: #EBEBEB;
-  text-align: center;
-}
-
 path {
   stroke-linecap: round;
 }

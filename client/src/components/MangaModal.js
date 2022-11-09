@@ -1,5 +1,5 @@
 import Modal from "react-bootstrap/Modal";
-// import QuizCard from "./QuizCard";
+import QuizCard from "./QuizCard";
 
 const MangaModal = ({
   showModal,
@@ -62,8 +62,8 @@ const MangaModal = ({
         </Modal.Header>
         <Modal.Body>
           <div className="manga-modal">
-            {/* <QuizCard /> */}
-            {renderInfo()}
+            <QuizCard selectedManga={selectedManga}/>
+            {/* {renderInfo()} */}
           </div>
         </Modal.Body>
         <Modal.Footer>
