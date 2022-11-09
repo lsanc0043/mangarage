@@ -5,10 +5,10 @@ import Home from "./components/Home";
 import MangaPoster from "./components/MangaPoster";
 
 function App() {
-  const [currentView, setCurrentView] = useState("poster");
+  const [currentView, setCurrentView] = useState("");
   const [showError, setShowError] = useState(false);
   const [validLogin, setValidLogin] = useState(false);
-  const [userId, setUserId] = useState(5);
+  const [userId, setUserId] = useState(0);
 
   const getUserId = (childData) => {
     setUserId(childData);
