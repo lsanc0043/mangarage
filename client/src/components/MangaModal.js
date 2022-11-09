@@ -1,4 +1,5 @@
 import Modal from "react-bootstrap/Modal";
+import QuizCard from "./QuizCard";
 
 const MangaModal = ({
   showModal,
@@ -7,6 +8,47 @@ const MangaModal = ({
   readMangas,
   markReadOrUnread,
 }) => {
+  const renderInfo = () => {
+    return (
+      <>
+        <div>
+          <img
+            className="modal-cover"
+            src={selectedManga.cover}
+            alt={`${selectedManga.title} cover`}
+          />
+        </div>
+        {/* other manga content: author, status, genres, description */}
+        <div className="manga-info">
+          <h5>
+            <strong>Author: </strong>
+            <span>{selectedManga.author}</span>
+          </h5>
+          <h5>
+            <strong>Status: </strong>
+            {selectedManga.status
+              ? selectedManga.status.slice(0, 1).toUpperCase() +
+                selectedManga.status.slice(1)
+              : ""}
+          </h5>
+          <h5>
+            <strong>Genres: </strong>
+            {selectedManga.genres
+              ? selectedManga.genres.slice(0, 5).join(", ")
+              : ""}
+          </h5>
+          {/* scrollable description */}
+          <div className="manga-description">
+            <h5>
+              <strong>Description: </strong>
+              {selectedManga.description}
+            </h5>
+          </div>
+        </div>
+      </>
+    );
+  };
+
   if (selectedManga === {}) {
     return "Loading...";
   } else {
@@ -20,40 +62,8 @@ const MangaModal = ({
         </Modal.Header>
         <Modal.Body>
           <div className="manga-modal">
-            <div>
-              <img
-                className="modal-cover"
-                src={selectedManga.cover}
-                alt={`${selectedManga.title} cover`}
-              />
-            </div>
-            {/* other manga content: author, status, genres, description */}
-            <div className="manga-info">
-              <h5>
-                <strong>Author: </strong>
-                <span>{selectedManga.author}</span>
-              </h5>
-              <h5>
-                <strong>Status: </strong>
-                {selectedManga.status
-                  ? selectedManga.status.slice(0, 1).toUpperCase() +
-                    selectedManga.status.slice(1)
-                  : ""}
-              </h5>
-              <h5>
-                <strong>Genres: </strong>
-                {selectedManga.genres
-                  ? selectedManga.genres.slice(0, 5).join(", ")
-                  : ""}
-              </h5>
-              {/* scrollable description */}
-              <div className="manga-description">
-                <h5>
-                  <strong>Description: </strong>
-                  {selectedManga.description}
-                </h5>
-              </div>
-            </div>
+            <QuizCard />
+            {renderInfo()}
           </div>
         </Modal.Body>
         <Modal.Footer>
