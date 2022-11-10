@@ -9,6 +9,9 @@ const MangaModal = ({
   markReadOrUnread,
   complete,
   getComplete,
+  ratings,
+  userRating,
+  sendRating,
 }) => {
   const renderInfo = () => {
     return (
@@ -106,11 +109,34 @@ const MangaModal = ({
                 completeQuiz={getComplete}
               />
             )}
-            {/* {score} */}
-            {/* {renderInfo()} */}
           </div>
         </Modal.Body>
         <Modal.Footer>
+          <form
+            style={{
+              display:
+                readMangas.includes(selectedManga.id) ||
+                complete === selectedManga.id
+                  ? "block"
+                  : "none",
+            }}
+          >
+            <span style={{ fontSize: "18px" }}>
+              <strong>Rating: </strong>
+              {readMangas.includes(selectedManga.id) ? (
+                <u>{ratings[readMangas.indexOf(selectedManga.id)]}</u>
+              ) : (
+                <input
+                  type="number"
+                  max="10"
+                  style={{ width: "30px" }}
+                  value={userRating}
+                  onChange={(e) => sendRating(e.target.value)}
+                />
+              )}
+              <strong>/10</strong>
+            </span>
+          </form>
           {/* mark as read or unread */}
           <button
             className="modal-button"
@@ -132,7 +158,16 @@ const MangaModal = ({
             </strong>
           </button>
           {/* return to the poster */}
-          <button className="modal-button" onClick={() => setShowModal(false)}>
+          <button
+            className="modal-button"
+            onClick={() => {
+              setShowModal(false);
+              // markReadOrUnread(
+              //   selectedManga.id,
+              //   !readMangas.includes(selectedManga.id)
+              // );
+            }}
+          >
             <strong>Go Back to Poster</strong>
           </button>
         </Modal.Footer>
