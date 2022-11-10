@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const QuizCard = ({ selectedManga, sendScore }) => {
+const QuizCard = ({ selectedManga, completeQuiz }) => {
   const [rightAnswers, setRightAnswers] = useState({
     year: "",
     author: "",
@@ -20,6 +20,7 @@ const QuizCard = ({ selectedManga, sendScore }) => {
   });
 
   const [score, setScore] = useState(0);
+  const [restart, setRestart] = useState(false);
 
   const getRandom = (max) => {
     const random = Math.floor(Math.random() * max);
@@ -76,7 +77,6 @@ const QuizCard = ({ selectedManga, sendScore }) => {
   };
 
   const getAllAnswers = (category) => {
-    console.log(getRandom(3));
     if (wrongAnswers[category].length === 3) {
       const placeholder = wrongAnswers[category];
       placeholder.splice(getRandom(3), 0, rightAnswers[category]);
@@ -95,37 +95,57 @@ const QuizCard = ({ selectedManga, sendScore }) => {
     getWrongAnswers("author");
     getWrongAnswers("characters");
     // eslint-disable-next-line
-  }, []);
+  }, [restart]);
+
+  useEffect(() => {
+    setWrongAnswers({
+      year: new Set(),
+      author: new Set(),
+      characters: new Set(),
+    });
+  }, [restart]);
 
   useEffect(() => {
     getAllAnswers("year");
     getAllAnswers("author");
     getAllAnswers("characters");
     // eslint-disable-next-line
-  }, [wrongAnswers]);
-
+  }, [wrongAnswers, restart]);
+  const intro = (
+    <>
+      So you've read <strong>{selectedManga.title}</strong>, huh?
+    </>
+  );
   const question1 = (
-    <p>
+    <>
       What year was <strong>{selectedManga.title}</strong> first serialized?
-    </p>
+    </>
   );
   const question2 = (
-    <p>
+    <>
       Who is the author of <strong>{selectedManga.title}</strong>?
-    </p>
+    </>
   );
   const question3 = (
-    <p>
+    <>
       Which of the following is a character of{" "}
       <strong>{selectedManga.title}</strong>?
-    </p>
+    </>
   );
-  const questions = [question1, question2, question3];
+  const ending = (
+    <>
+      {score === 3 ? (
+        "Congratulations!"
+      ) : (
+        <>
+          I guess you didn't know <strong>{selectedManga.title}</strong> as well
+          as you thought.
+        </>
+      )}
+    </>
+  );
+  const questions = [intro, question1, question2, question3, ending];
   const [currentQ, setCurrentQ] = useState(0);
-
-  const prevItem = () => {
-    setCurrentQ(currentQ - 1);
-  };
 
   const nextItem = () => {
     if (currentQ < questions.length) {
@@ -140,52 +160,87 @@ const QuizCard = ({ selectedManga, sendScore }) => {
     nextItem();
   };
 
-  useEffect(() => {
-    sendScore(score);
-  }, [score]);
-
   return (
-    <div>
-      {questions[currentQ]}
-      {(() => {
-        switch (currentQ) {
-          case 0:
-            return allAnswers.year.map((answer) => {
+    <div className="quiz">
+      <h1>{questions[currentQ]}</h1>
+      <h5
+        style={{ display: currentQ >= 1 && currentQ <= 3 ? "block" : "none" }}
+      >
+        Question {currentQ}/3
+      </h5>
+
+      <div className="questions">
+        {(() => {
+          switch (currentQ) {
+            case 0:
               return (
-                <button
-                  key={answer}
-                  onClick={() => checkAnswer(answer, "year")}
-                >
-                  {answer}
-                </button>
+                <>
+                  <br /> <br /> <br />
+                  <h4>Surely you can answer this quick quiz then!</h4> <br />
+                  <button className="modal-button" onClick={nextItem}>
+                    <strong>Start</strong>
+                  </button>
+                  <br /> <br />
+                  <h6>Note: you must get all of them correct!</h6>
+                </>
               );
-            });
-          case 1:
-            return allAnswers.author.map((answer) => {
-              return (
-                <button
-                  key={answer}
-                  onClick={() => checkAnswer(answer, "author")}
-                >
-                  {answer}
-                </button>
+            case 1:
+              return allAnswers.year.map((answer) => {
+                return (
+                  <button
+                    key={answer}
+                    className="modal-button"
+                    onClick={() => checkAnswer(answer, "year")}
+                  >
+                    {answer}
+                  </button>
+                );
+              });
+            case 2:
+              return allAnswers.author.map((answer) => {
+                return (
+                  <button
+                    className="modal-button"
+                    key={answer}
+                    onClick={() => checkAnswer(answer, "author")}
+                  >
+                    {answer}
+                  </button>
+                );
+              });
+            case 3:
+              return allAnswers.characters.map((answer) => {
+                return (
+                  <button
+                    className="modal-button"
+                    key={answer}
+                    onClick={() => checkAnswer(answer, "characters")}
+                  >
+                    {answer}
+                  </button>
+                );
+              });
+            default:
+              return score === 3 ? (
+                completeQuiz(selectedManga.id)
+              ) : (
+                <>
+                  <br /> <br /> <br />
+                  <button
+                    className="modal-button"
+                    onClick={() => {
+                      setCurrentQ(1);
+                      setRestart(true);
+                    }}
+                  >
+                    <strong>Restart</strong>
+                  </button>
+                  <br /> <br />
+                </>
               );
-            });
-          case 2:
-            return allAnswers.characters.map((answer) => {
-              return (
-                <button
-                  key={answer}
-                  onClick={() => checkAnswer(answer, "characters")}
-                >
-                  {answer}
-                </button>
-              );
-            });
-          default:
-            return <button>Restart</button>;
-        }
-      })()}
+          }
+        })()}
+      </div>
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import Modal from "react-bootstrap/Modal";
 import QuizCard from "./QuizCard";
-import { useState } from "react";
 
 const MangaModal = ({
   showModal,
@@ -8,18 +7,29 @@ const MangaModal = ({
   selectedManga,
   readMangas,
   markReadOrUnread,
+  complete,
+  getComplete,
 }) => {
-  const [score, setScore] = useState(0);
-  const getScore = (childData) => {
-    setScore(childData);
-  };
   const renderInfo = () => {
     return (
       <>
-        <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <p style={{ position: "fixed", width: "100px", textAlign: "center", display: !readMangas.includes(selectedManga.id) ? "block" : "none"}}>
+            You can now scratch this manga off on the poster!
+          </p>
           <img
             className="modal-cover"
-            src={selectedManga.cover}
+            src={
+              complete === selectedManga.id && !readMangas.includes(selectedManga.id)
+                ? "https://i.ibb.co/H49kqG7/silver.png"
+                : selectedManga.cover
+            }
             alt={`${selectedManga.title} cover`}
           />
         </div>
@@ -62,17 +72,31 @@ const MangaModal = ({
       <Modal size="lg" show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header>
           <Modal.Title>
-            <h2>{selectedManga.title}</h2>
+            <h2
+              style={{
+                display:
+                  readMangas.includes(selectedManga.id) ||
+                  complete === selectedManga.id
+                    ? "block"
+                    : "none",
+              }}
+            >
+              {selectedManga.title}
+            </h2>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="manga-modal">
-            {readMangas.includes(selectedManga.id) ? (
+            {readMangas.includes(selectedManga.id) ||
+            complete === selectedManga.id ? (
               renderInfo()
             ) : (
-              <QuizCard selectedManga={selectedManga} sendScore={getScore} />
+              <QuizCard
+                selectedManga={selectedManga}
+                completeQuiz={getComplete}
+              />
             )}
-            {score}
+            {/* {score} */}
             {/* {renderInfo()} */}
           </div>
         </Modal.Body>
@@ -80,6 +104,9 @@ const MangaModal = ({
           {/* mark as read or unread */}
           <button
             className="modal-button"
+            style={{
+              display: readMangas.includes(selectedManga.id) ? "block" : "none",
+            }}
             onClick={() => {
               setShowModal(false);
               markReadOrUnread(

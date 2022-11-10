@@ -9,6 +9,11 @@ const MangaPoster = ({ userId }) => {
   const [selectedManga, setSelectedManga] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [reset, setReset] = useState(false);
+  const [complete, setComplete] = useState(0);
+
+  const getComplete = (childData) => {
+    setComplete(childData);
+  };
 
   const onClickReset = () => {
     setReset(true);
@@ -82,10 +87,11 @@ const MangaPoster = ({ userId }) => {
   const renderCard = (manga) => {
     return (
       <div
-        className="scratch-card"
+        className={complete === manga.id ? "scratch-card" : ""}
         id={`card-${manga.id}`}
         style={{
           display: readMangas.includes(manga.id) ? "none" : "block",
+          pointerEvents: complete === manga.id ? "" : "none",
         }}
       >
         <ScratchCard
@@ -115,6 +121,8 @@ const MangaPoster = ({ userId }) => {
         selectedManga={selectedManga}
         readMangas={readMangas}
         markReadOrUnread={markReadOrUnread}
+        complete={complete}
+        getComplete={getComplete}
       />
       {/* map all mangas */}
       {allMangas.map((manga, index) => {
