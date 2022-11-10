@@ -17,6 +17,7 @@ const MangaPoster = ({ userId }) => {
 
   const onClickReset = () => {
     setReset(true);
+    setComplete(0);
   };
 
   // dismounts the scratchcard and remounts it after 1 second
