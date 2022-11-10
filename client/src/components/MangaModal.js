@@ -1,5 +1,6 @@
 import Modal from "react-bootstrap/Modal";
 import QuizCard from "./QuizCard";
+import { useState } from "react";
 
 const MangaModal = ({
   showModal,
@@ -8,6 +9,10 @@ const MangaModal = ({
   readMangas,
   markReadOrUnread,
 }) => {
+  const [score, setScore] = useState(0);
+  const getScore = (childData) => {
+    setScore(childData);
+  };
   const renderInfo = () => {
     return (
       <>
@@ -62,7 +67,12 @@ const MangaModal = ({
         </Modal.Header>
         <Modal.Body>
           <div className="manga-modal">
-            <QuizCard selectedManga={selectedManga}/>
+            {readMangas.includes(selectedManga.id) ? (
+              renderInfo()
+            ) : (
+              <QuizCard selectedManga={selectedManga} sendScore={getScore} />
+            )}
+            {score}
             {/* {renderInfo()} */}
           </div>
         </Modal.Body>

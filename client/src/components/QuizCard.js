@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const QuizCard = ({ selectedManga }) => {
+const QuizCard = ({ selectedManga, sendScore }) => {
   const [rightAnswers, setRightAnswers] = useState({
     year: "",
     author: "",
@@ -18,6 +18,8 @@ const QuizCard = ({ selectedManga }) => {
     author: [],
     characters: [],
   });
+
+  const [score, setScore] = useState(0);
 
   const getRandom = (max) => {
     const random = Math.floor(Math.random() * max);
@@ -63,6 +65,8 @@ const QuizCard = ({ selectedManga }) => {
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ")
         );
+      } else {
+        wrongAnswers[category].delete(selectedManga[category]);
       }
     }
     setWrongAnswers((oldValues) => ({
@@ -72,9 +76,10 @@ const QuizCard = ({ selectedManga }) => {
   };
 
   const getAllAnswers = (category) => {
+    console.log(getRandom(3));
     if (wrongAnswers[category].length === 3) {
       const placeholder = wrongAnswers[category];
-      placeholder.splice(1, 0, rightAnswers[category]);
+      placeholder.splice(getRandom(3), 0, rightAnswers[category]);
       setAllAnswers((oldValues) => ({
         ...oldValues,
         [category]: placeholder,
@@ -111,7 +116,7 @@ const QuizCard = ({ selectedManga }) => {
   );
   const question3 = (
     <p>
-      Which of the following is not a character of{" "}
+      Which of the following is a character of{" "}
       <strong>{selectedManga.title}</strong>?
     </p>
   );
@@ -123,15 +128,64 @@ const QuizCard = ({ selectedManga }) => {
   };
 
   const nextItem = () => {
-    setCurrentQ(currentQ + 1);
+    if (currentQ < questions.length) {
+      setCurrentQ(currentQ + 1);
+    }
   };
 
+  const checkAnswer = (answer, category) => {
+    if (answer === rightAnswers[category]) {
+      setScore(score + 1);
+    }
+    nextItem();
+  };
+
+  useEffect(() => {
+    sendScore(score);
+  }, [score]);
+
   return (
-    <div className="carousel">
+    <div>
       {questions[currentQ]}
-      {console.log(allAnswers)}
-      <button onClick={prevItem}>{"<"}</button>
-      <button onClick={nextItem}>{">"}</button>
+      {(() => {
+        switch (currentQ) {
+          case 0:
+            return allAnswers.year.map((answer) => {
+              return (
+                <button
+                  key={answer}
+                  onClick={() => checkAnswer(answer, "year")}
+                >
+                  {answer}
+                </button>
+              );
+            });
+          case 1:
+            return allAnswers.author.map((answer) => {
+              return (
+                <button
+                  key={answer}
+                  onClick={() => checkAnswer(answer, "author")}
+                >
+                  {answer}
+                </button>
+              );
+            });
+          case 2:
+            return allAnswers.characters.map((answer) => {
+              return (
+                <button
+                  key={answer}
+                  onClick={() => checkAnswer(answer, "characters")}
+                >
+                  {answer}
+                </button>
+              );
+            });
+          default:
+            return <button>Restart</button>;
+        }
+      })()}
     </div>
   );
 };
