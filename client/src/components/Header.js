@@ -6,6 +6,8 @@ const Header = ({
   setValidLogin,
   setLoginInfo,
   setCurrentView,
+  logout,
+  isAuthenticated,
 }) => {
   return (
     <>
@@ -25,17 +27,18 @@ const Header = ({
           alignItems: "center",
         }}
       >
-        {validLogin ? (
+        {validLogin || isAuthenticated ? (
           <>
             <h4 className="welcome">
               Welcome,{" "}
               <span style={{ textDecoration: "underline" }}>
-                {loggedUser[0].username}
+                {isAuthenticated ? loggedUser : loggedUser[0].username}
               </span>
             </h4>
             <button
               className="login-or-register"
               onClick={() => {
+                logout();
                 setValidLogin(false);
                 setCurrentView("");
                 setLoginInfo({
