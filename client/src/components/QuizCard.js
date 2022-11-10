@@ -53,7 +53,7 @@ const QuizCard = ({ selectedManga, completeQuiz }) => {
   };
 
   const getWrongAnswers = async (category) => {
-    const response = await fetch("http://localhost:4020/questions");
+    const response = await fetch("/questions");
     const data = await response.json();
     const allAnswers = Array.from(
       new Set(

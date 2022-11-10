@@ -39,7 +39,7 @@ const LoginOrRegister = ({
 
   // retrieve all the users from the backend
   const getUsers = async () => {
-    const response = await fetch("http://localhost:4020/users");
+    const response = await fetch("/users");
     const data = await response.json();
     setAllUsers(data);
   };
@@ -110,7 +110,7 @@ const LoginOrRegister = ({
   // when enter is clicked
   const submitInfo = async () => {
     // send the user typed info to the backend to validate
-    const response = await fetch("http://localhost:4020/users/validate", {
+    const response = await fetch("/users/validate", {
       method: "POST",
       headers: {
         Accepted: "application/json",
@@ -152,7 +152,7 @@ const LoginOrRegister = ({
           );
           sendUserId(userId);
           const response = await fetch(
-            `http://localhost:4020/users/${userId}`,
+            `/users/${userId}`,
             {
               method: "PUT",
               headers: {
@@ -162,6 +162,7 @@ const LoginOrRegister = ({
               body: JSON.stringify({ last_login: new Date() }),
             }
           );
+          await response.json();
         } else {
           // invalid user login
           setError("Wrong Password");
@@ -175,7 +176,7 @@ const LoginOrRegister = ({
         // redirect to the login modal with the prefilled info from the register page
         loginModal();
         // post the new account to the users table in the backend
-        const response = await fetch("http://localhost:4020/users/add", {
+        const response = await fetch("/users/add", {
           method: "POST",
           headers: {
             Accept: "application/json",
@@ -208,7 +209,7 @@ const LoginOrRegister = ({
         sendUserId(userId);
         const updateData = async () => {
           const response = await fetch(
-            `http://localhost:4020/users/${userId}`,
+            `/users/${userId}`,
             {
               method: "PUT",
               headers: {
@@ -218,11 +219,12 @@ const LoginOrRegister = ({
               body: JSON.stringify({ last_login: new Date() }),
             }
           );
+          await response.json();
         };
         updateData();
       } else {
         const postData = async () => {
-          const response = await fetch("http://localhost:4020/users/add", {
+          const response = await fetch("/users/add", {
             method: "POST",
             headers: {
               Accept: "application/json",
@@ -234,11 +236,12 @@ const LoginOrRegister = ({
               password: "",
             }),
           });
-          console.log(user);
+          await response.json();
         };
         postData();
       }
     }
+    // eslint-disable-next-line
   }, [isAuthenticated]);
 
   return (

@@ -31,14 +31,14 @@ const MangaPoster = ({ userId }) => {
 
   // retrieve all the mangas
   const getMangas = async () => {
-    const response = await fetch("http://localhost:4020/manga");
+    const response = await fetch("/manga");
     const data = await response.json();
     setAllMangas(data);
   };
 
   // retrieve the read mangas
   const getReadMangas = async () => {
-    const response = await fetch(`http://localhost:4020/users/read/${userId}`);
+    const response = await fetch(`/users/read/${userId}`);
     const data = await response.json();
     setReadMangas(data.map((value) => value.manga_id));
     setRatings(data.map((value) => value.rating));
@@ -58,7 +58,7 @@ const MangaPoster = ({ userId }) => {
     const read = { user: userId, manga: selectedId, rating: userRating }; // object that saves the user id, manga id, and the rating
     // if the user is done reading the manga, post it to the backend
     if (doneReading) {
-      const response = await fetch("http://localhost:4020/users/read", {
+      const response = await fetch("/users/read", {
         method: "POST",
         headers: {
           Accepted: "application/json",
@@ -75,12 +75,9 @@ const MangaPoster = ({ userId }) => {
       }
     } else {
       // delete the manga from the junction table if the user wants to mark it as unread
-      const response = await fetch(
-        `http://localhost:4020/users/read/${userId}/${selectedId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`/users/read/${userId}/${selectedId}`, {
+        method: "DELETE",
+      });
       const data = await response.json();
       // if the delete is valid
       if (data.type === "success") {
