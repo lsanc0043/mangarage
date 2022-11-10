@@ -22,6 +22,12 @@ const QuizCard = ({ selectedManga, completeQuiz }) => {
   const [score, setScore] = useState(0);
   const [resetCount, setResetCount] = useState(0);
 
+  function decodeHtml(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  }
+
   const getRandom = (max) => {
     const random = Math.floor(Math.random() * max);
     return random;
@@ -35,13 +41,13 @@ const QuizCard = ({ selectedManga, completeQuiz }) => {
     if (category === "characters") {
       setRightAnswers((oldValues) => ({
         ...oldValues,
-        [category]: selectedManga[category][
-          getRandom(selectedManga[category].length)
-        ]
-          .toLowerCase()
-          .split(" ")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(" "),
+        [category]: decodeHtml(
+          selectedManga[category][getRandom(selectedManga[category].length)]
+            .toLowerCase()
+            .split(" ")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ")
+        ),
       }));
     }
   };
@@ -60,11 +66,13 @@ const QuizCard = ({ selectedManga, completeQuiz }) => {
     while (wrongAnswers[category].size < 3) {
       if (!wrongAnswers[category].has(selectedManga[category])) {
         wrongAnswers[category].add(
-          allAnswers[getRandom(allAnswers.length)]
-            .toLowerCase()
-            .split(" ")
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ")
+          decodeHtml(
+            allAnswers[getRandom(allAnswers.length)]
+              .toLowerCase()
+              .split(" ")
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(" ")
+          )
         );
       } else {
         wrongAnswers[category].delete(selectedManga[category]);
