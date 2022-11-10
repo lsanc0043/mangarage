@@ -108,74 +108,120 @@ const LoginOrRegister = ({
   };
 
   // when enter is clicked
-  const submitInfo = async (source) => {
-    if (source === "built-in") {
-      // send the user typed info to the backend to validate
-      const response = await fetch("http://localhost:4020/users/validate", {
-        method: "POST",
-        headers: {
-          Accepted: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(loginInfo),
-      });
-      const data = await response.json();
-      // if the user had a valid login
-      const loggedIn = data.type === "success";
-      setValidLogin(loggedIn);
-      // if the user intended to login and NOT register
-      if (login && !register) {
-        // check if the username/email is correct
-        if (
-          allUsers.filter(
+  const submitInfo = async () => {
+    // send the user typed info to the backend to validate
+    const response = await fetch("http://localhost:4020/users/validate", {
+      method: "POST",
+      headers: {
+        Accepted: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginInfo),
+    });
+    const data = await response.json();
+    // if the user had a valid login
+    const loggedIn = data.type === "success";
+    setValidLogin(loggedIn);
+    // if the user intended to login and NOT register
+    if (login && !register) {
+      // check if the username/email is correct
+      if (
+        allUsers.filter(
+          (user) =>
+            user.username === loginInfo.username ||
+            user.email === loginInfo.username
+        ).length === 0
+      ) {
+        setError("Wrong Username or Email");
+      } else {
+        // valid user login, hide login/register modal, hide error modal, grab the username of the user, send the user id to App.js
+        if (loggedIn) {
+          const userId = allUsers.filter(
             (user) =>
               user.username === loginInfo.username ||
               user.email === loginInfo.username
-          ).length === 0
-        ) {
-          setError("Wrong Username or Email");
-        } else {
-          // valid user login, hide login/register modal, hide error modal, grab the username of the user, send the user id to App.js
-          if (loggedIn) {
-            const userId = allUsers.filter(
+          )[0].id;
+          setShow(false);
+          setShowError(false);
+          setLoggedUser(
+            allUsers.filter(
               (user) =>
                 user.username === loginInfo.username ||
                 user.email === loginInfo.username
-            )[0].id;
-            setShow(false);
-            setShowError(false);
-            setLoggedUser(
-              allUsers.filter(
-                (user) =>
-                  user.username === loginInfo.username ||
-                  user.email === loginInfo.username
-              )
-            );
-            sendUserId(userId);
-            const response = await fetch(
-              `http://localhost:4020/users/${userId}`,
-              {
-                method: "PUT",
-                headers: {
-                  Accepted: "application/json",
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ last_login: new Date() }),
-              }
-            );
-          } else {
-            // invalid user login
-            setError("Wrong Password");
-          }
+            )
+          );
+          sendUserId(userId);
+          const response = await fetch(
+            `http://localhost:4020/users/${userId}`,
+            {
+              method: "PUT",
+              headers: {
+                Accepted: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ last_login: new Date() }),
+            }
+          );
+        } else {
+          // invalid user login
+          setError("Wrong Password");
         }
+      }
+    } else {
+      // if register and NOT login
+      // if EVERY password validation passed, reset error, redirect to login
+      if (passwordValidity.every((val) => val === 1)) {
+        setValidRegistration(true);
+        // redirect to the login modal with the prefilled info from the register page
+        loginModal();
+        // post the new account to the users table in the backend
+        const response = await fetch("http://localhost:4020/users/add", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: loginInfo.email,
+            username: loginInfo.username,
+            password: loginInfo.password,
+          }),
+        });
+        await response.json();
+        setError("");
       } else {
-        // if register and NOT login
-        // if EVERY password validation passed, reset error, redirect to login
-        if (passwordValidity.every((val) => val === 1)) {
-          setValidRegistration(true);
-          // redirect to the login modal with the prefilled info from the register page
-          loginModal();
-          // post the new account to the users table in the backend
+        // one or more password validation failed
+        setError("Please check the requirements!");
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setLoggedUser(user.given_name);
+      setShow(false);
+      setShowError(false);
+      setValidLogin(true);
+      if (allUsers.filter((users) => users.email === user.email).length === 1) {
+        const userId = allUsers.filter((users) => users.email === user.email)[0]
+          .id;
+        sendUserId(userId);
+        const updateData = async () => {
+          const response = await fetch(
+            `http://localhost:4020/users/${userId}`,
+            {
+              method: "PUT",
+              headers: {
+                Accepted: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ last_login: new Date() }),
+            }
+          );
+        };
+        updateData();
+      } else {
+        const postData = async () => {
           const response = await fetch("http://localhost:4020/users/add", {
             method: "POST",
             headers: {
@@ -183,27 +229,15 @@ const LoginOrRegister = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              email: loginInfo.email,
-              username: loginInfo.username,
-              password: loginInfo.password,
+              email: user.email,
+              username: user.nickname,
+              password: "",
             }),
           });
-          await response.json();
-          setError("");
-        } else {
-          // one or more password validation failed
-          setError("Please check the requirements!");
-        }
+          console.log(user);
+        };
+        postData();
       }
-    }
-    if (source === "auth0") {
-      console.log(user);
-    }
-  };
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      setLoggedUser(user.given_name);
     }
   }, [isAuthenticated]);
 
@@ -388,10 +422,9 @@ const LoginOrRegister = ({
             className="LR-modal-button"
             onClick={() => {
               loginWithRedirect();
-              submitInfo("auth0");
             }}
           >
-            <i class="fa fa-google" aria-hidden="true"></i>
+            <i className="fa fa-google" aria-hidden="true"></i>
           </button>
           <button
             className="LR-modal-button"
@@ -414,7 +447,7 @@ const LoginOrRegister = ({
           <button
             variant="secondary"
             className="LR-modal-button"
-            onClick={() => submitInfo("built-in")}
+            onClick={submitInfo}
           >
             Enter
           </button>
