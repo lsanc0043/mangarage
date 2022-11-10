@@ -13,6 +13,7 @@ const LoginOrRegister = ({
   setValidLogin,
   showError,
   setShowError,
+  sendUserId,
 }) => {
   const [allUsers, setAllUsers] = useState([]); // list of all users
   const [show, setShow] = useState(false); // show login/register modal or not
@@ -140,6 +141,13 @@ const LoginOrRegister = ({
                 user.username === loginInfo.username ||
                 user.email === loginInfo.username
             )
+          );
+          sendUserId(
+            allUsers.filter(
+              (user) =>
+                user.username === loginInfo.username ||
+                user.email === loginInfo.username
+            )[0].id
           );
         } else {
           // invalid user login

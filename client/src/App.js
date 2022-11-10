@@ -5,9 +5,14 @@ import Home from "./components/Home";
 import MangaPoster from "./components/MangaPoster";
 
 function App() {
-  const [currentView, setCurrentView] = useState("");
+  const [currentView, setCurrentView] = useState("poster");
   const [showError, setShowError] = useState(false);
   const [validLogin, setValidLogin] = useState(false);
+  const [userId, setUserId] = useState(5);
+
+  const getUserId = (childData) => {
+    setUserId(childData);
+  };
 
   return (
     <div className="App">
@@ -17,6 +22,7 @@ function App() {
         setValidLogin={setValidLogin}
         showError={showError}
         setShowError={setShowError}
+        sendUserId={getUserId}
       />
       {/* essentially a nav functionlity using switch */}
       {(() => {
@@ -30,7 +36,7 @@ function App() {
               />
             );
           case "poster":
-            return <MangaPoster />;
+            return <MangaPoster userId={userId} />;
           default:
             return null;
         }
