@@ -8,6 +8,7 @@ const Header = ({
   setCurrentView,
   logout,
   isAuthenticated,
+  isLoading,
 }) => {
   return (
     <>
@@ -27,7 +28,13 @@ const Header = ({
           alignItems: "center",
         }}
       >
-        {validLogin || isAuthenticated ? (
+        {isLoading ? (
+          <img
+            style={{ width: "75px" }}
+            src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/43a14ae7-38bd-4670-a62a-c0b84942569f/d9vbsdw-1c158bd1-e416-4e12-85a6-3658be0874c4.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzQzYTE0YWU3LTM4YmQtNDY3MC1hNjJhLWMwYjg0OTQyNTY5ZlwvZDl2YnNkdy0xYzE1OGJkMS1lNDE2LTRlMTItODVhNi0zNjU4YmUwODc0YzQuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.R6MCtC0Yy25VSbPQJo19QTkei0XOjq4iSQ8Ss0QCFX8"
+            alt="loading"
+          />
+        ) : validLogin || isAuthenticated ? (
           <>
             <h4 className="welcome">
               Welcome,{" "}

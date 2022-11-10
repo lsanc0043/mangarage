@@ -16,7 +16,8 @@ const LoginOrRegister = ({
   setShowError,
   sendUserId,
 }) => {
-  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
+  const { loginWithRedirect, logout, user, isAuthenticated, isLoading } =
+    useAuth0();
 
   const [allUsers, setAllUsers] = useState([]); // list of all users
   const [show, setShow] = useState(false); // show login/register modal or not
@@ -151,17 +152,14 @@ const LoginOrRegister = ({
             )
           );
           sendUserId(userId);
-          const response = await fetch(
-            `/users/${userId}`,
-            {
-              method: "PUT",
-              headers: {
-                Accepted: "application/json",
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ last_login: new Date() }),
-            }
-          );
+          const response = await fetch(`/users/${userId}`, {
+            method: "PUT",
+            headers: {
+              Accepted: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ last_login: new Date() }),
+          });
           await response.json();
         } else {
           // invalid user login
@@ -208,17 +206,14 @@ const LoginOrRegister = ({
           .id;
         sendUserId(userId);
         const updateData = async () => {
-          const response = await fetch(
-            `/users/${userId}`,
-            {
-              method: "PUT",
-              headers: {
-                Accepted: "application/json",
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ last_login: new Date() }),
-            }
-          );
+          const response = await fetch(`/users/${userId}`, {
+            method: "PUT",
+            headers: {
+              Accepted: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ last_login: new Date() }),
+          });
           await response.json();
         };
         updateData();
@@ -466,6 +461,7 @@ const LoginOrRegister = ({
         setCurrentView={setCurrentView}
         logout={logout}
         isAuthenticated={isAuthenticated}
+        isLoading={isLoading}
       />
     </div>
   );
