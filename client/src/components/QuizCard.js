@@ -1,16 +1,22 @@
 import { useState, useEffect } from "react";
 
 const QuizCard = ({ selectedManga }) => {
-  const test = 0;
-  const [otherAnswers, setOtherAnswers] = useState({
-    year: [],
-    author: [],
-    characters: [],
-  });
   const [rightAnswers, setRightAnswers] = useState({
     year: "",
     author: "",
-    character: "",
+    characters: "",
+  });
+
+  const [wrongAnswers, setWrongAnswers] = useState({
+    year: new Set(),
+    author: new Set(),
+    characters: new Set(),
+  });
+
+  const [allAnswers, setAllAnswers] = useState({
+    year: [],
+    author: [],
+    characters: [],
   });
 
   const getRandom = (max) => {
@@ -18,51 +24,80 @@ const QuizCard = ({ selectedManga }) => {
     return random;
   };
 
-  const getAllOtherAnswers = async (category) => {
+  const getRightAnswers = async (category) => {
+    setRightAnswers((oldValues) => ({
+      ...oldValues,
+      [category]: selectedManga[category],
+    }));
+    if (category === "characters") {
+      setRightAnswers((oldValues) => ({
+        ...oldValues,
+        [category]: selectedManga[category][
+          getRandom(selectedManga[category].length)
+        ]
+          .toLowerCase()
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" "),
+      }));
+    }
+  };
+
+  const getWrongAnswers = async (category) => {
     const response = await fetch("http://localhost:4020/questions");
     const data = await response.json();
-    setOtherAnswers((otherAnswers) => ({
-      ...otherAnswers,
-      [category]: Array.from(
-        new Set(
-          data
-            .filter((manga) => manga.id !== selectedManga.id)
-            .map((manga) => manga[category])
-            .flat()
-        )
-      ),
+    const allAnswers = Array.from(
+      new Set(
+        data
+          .filter((manga) => manga.id !== selectedManga.id)
+          .map((manga) => manga[category])
+          .flat()
+      )
+    );
+    while (wrongAnswers[category].size < 3) {
+      if (!wrongAnswers[category].has(selectedManga[category])) {
+        wrongAnswers[category].add(
+          allAnswers[getRandom(allAnswers.length)]
+            .toLowerCase()
+            .split(" ")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ")
+        );
+      }
+    }
+    setWrongAnswers((oldValues) => ({
+      ...oldValues,
+      [category]: Array.from(wrongAnswers[category]),
     }));
   };
 
-  const getRightAnswers = async (category) => {
-    const response = await fetch("http://localhost:4020/questions");
-    const data = await response.json();
-    setRightAnswers((otherAnswers) => ({
-      ...otherAnswers,
-      [category]: data.filter((manga) => manga.id === selectedManga.id)[0][
-        category
-      ],
-    }));
-    setRightAnswers((otherAnswers) => ({
-      ...otherAnswers,
-      ["character"]: data.filter((manga) => manga.id === selectedManga.id)[0][
-        "characters"
-      ][
-        getRandom(
-          data.filter((manga) => manga.id === selectedManga.id)[0]["characters"]
-            .length
-        )
-      ],
-    }));
+  const getAllAnswers = (category) => {
+    if (wrongAnswers[category].length === 3) {
+      const placeholder = wrongAnswers[category];
+      placeholder.splice(1, 0, rightAnswers[category]);
+      setAllAnswers((oldValues) => ({
+        ...oldValues,
+        [category]: placeholder,
+      }));
+    }
   };
 
   useEffect(() => {
-    getAllOtherAnswers("year");
-    getAllOtherAnswers("author");
-    getAllOtherAnswers("characters");
     getRightAnswers("year");
     getRightAnswers("author");
-  }, [test]);
+    getRightAnswers("characters");
+    getWrongAnswers("year");
+    getWrongAnswers("author");
+    getWrongAnswers("characters");
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    getAllAnswers("year");
+    getAllAnswers("author");
+    getAllAnswers("characters");
+    // eslint-disable-next-line
+  }, [wrongAnswers]);
 
   const question1 = (
     <p>
@@ -94,8 +129,7 @@ const QuizCard = ({ selectedManga }) => {
   return (
     <div className="carousel">
       {questions[currentQ]}
-      {console.log(otherAnswers)}
-      {console.log(rightAnswers)}
+      {console.log(allAnswers)}
       <button onClick={prevItem}>{"<"}</button>
       <button onClick={nextItem}>{">"}</button>
     </div>
