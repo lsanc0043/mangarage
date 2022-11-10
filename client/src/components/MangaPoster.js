@@ -9,9 +9,18 @@ const MangaPoster = ({ userId }) => {
   const [selectedManga, setSelectedManga] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [reset, setReset] = useState(false);
+  const [complete, setComplete] = useState(0);
+  const [ratings, setRatings] = useState([]);
+  const [userRating, setUserRating] = useState(0);
+
+  const getComplete = (childData) => {
+    setComplete(childData);
+  };
 
   const onClickReset = () => {
     setReset(true);
+    setComplete(0);
+    setUserRating(0);
   };
 
   // dismounts the scratchcard and remounts it after 1 second
@@ -32,15 +41,21 @@ const MangaPoster = ({ userId }) => {
     const response = await fetch(`http://localhost:4020/users/read/${userId}`);
     const data = await response.json();
     setReadMangas(data.map((value) => value.manga_id));
+    setRatings(data.map((value) => value.rating));
   };
 
   useEffect(() => {
     getMangas();
     getReadMangas();
+    // eslint-disable-next-line
   }, []);
 
+  const getRating = (childData) => {
+    setUserRating(childData);
+  };
+
   const markReadOrUnread = async (selectedId, doneReading) => {
-    const read = { user: userId, manga: selectedId, rating: 10 }; // object that saves the user id, manga id, and the rating
+    const read = { user: userId, manga: selectedId, rating: userRating }; // object that saves the user id, manga id, and the rating
     // if the user is done reading the manga, post it to the backend
     if (doneReading) {
       const response = await fetch("http://localhost:4020/users/read", {
@@ -81,10 +96,11 @@ const MangaPoster = ({ userId }) => {
   const renderCard = (manga) => {
     return (
       <div
-        className="scratch-card"
+        className={complete === manga.id ? "scratch-card" : ""}
         id={`card-${manga.id}`}
         style={{
           display: readMangas.includes(manga.id) ? "none" : "block",
+          pointerEvents: complete === manga.id ? "" : "none",
         }}
       >
         <ScratchCard
@@ -114,6 +130,11 @@ const MangaPoster = ({ userId }) => {
         selectedManga={selectedManga}
         readMangas={readMangas}
         markReadOrUnread={markReadOrUnread}
+        complete={complete}
+        getComplete={getComplete}
+        ratings={ratings}
+        userRating={userRating}
+        sendRating={getRating}
       />
       {/* map all mangas */}
       {allMangas.map((manga, index) => {

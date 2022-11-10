@@ -361,7 +361,7 @@ const LoginOrRegister = ({
           {error}
           {/* redirects to register modal, resets loginInfo & error message*/}
           <button
-            className="modal-button"
+            className="LR-modal-button"
             variant="secondary"
             onClick={() => {
               setLoginInfo({
@@ -380,7 +380,7 @@ const LoginOrRegister = ({
           {/* submits the info */}
           <button
             variant="secondary"
-            className="modal-button"
+            className="LR-modal-button"
             onClick={submitInfo}
           >
             Enter

@@ -24,7 +24,7 @@ function App() {
         setShowError={setShowError}
         sendUserId={getUserId}
       />
-      {/* essentially a nav functionlity using switch */}
+      {/* essentially a nav functionality using switch */}
       {(() => {
         switch (currentView) {
           case "":

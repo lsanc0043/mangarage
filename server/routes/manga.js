@@ -6,10 +6,9 @@ const router = Router();
 // retrieves all manga poster information
 router.get("/", async (req, res) => {
   try {
-    const allMangas = await db.any(
-      "SELECT id, title, author, status, description, cover, genres FROM manga ORDER BY title",
-      [true]
-    );
+    const allMangas = await db.any("SELECT * FROM manga ORDER BY title", [
+      true,
+    ]);
     res.send(allMangas);
   } catch (e) {
     console.log("manga get", e);

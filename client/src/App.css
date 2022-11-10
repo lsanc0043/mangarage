@@ -116,11 +116,32 @@ body {
   padding-bottom: 0px;
 }
 
-.modal-button {
+.LR-modal-button {
   background-color: #EBEBEB;
   border-radius: 10%;
   padding: 2%;
   color:#404264;
+}
+
+
+.modal-button {
+  background-color: #EBEBEB;
+  border-radius: 10px;
+  padding: 2px 3%;
+  color:#404264;
+  font-size: 20px;
+  width: 300px;
+  margin: 10px;
+}
+
+.answer-button {
+  background-color: #EBEBEB;
+  border-radius: 25px;
+  padding: 4%;
+  color:#404264;
+  font-size: 20px;
+  width: 300px;
+  margin: 10px;
 }
 
 .login-height {
@@ -141,6 +162,7 @@ body {
   padding: 10px;
   padding-top: 0px;
   align-items: flex-start;
+  justify-content: center;
   margin: 0px 50px;
 }
 
@@ -155,6 +177,12 @@ body {
 
 .manga-info {
   padding-left: 40px;
+}
+
+.quiz {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
 
 .user-modal {
@@ -196,6 +224,12 @@ path {
 .pw-requirements {
   text-align: right;
   font-size: 15px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 input[type=text], input[type=password], input[type=email] {
