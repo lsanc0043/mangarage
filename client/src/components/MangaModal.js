@@ -20,13 +20,23 @@ const MangaModal = ({
             alignItems: "center",
           }}
         >
-          <p style={{ position: "fixed", width: "100px", textAlign: "center", display: !readMangas.includes(selectedManga.id) ? "block" : "none"}}>
+          <p
+            style={{
+              position: "fixed",
+              width: "100px",
+              textAlign: "center",
+              display: !readMangas.includes(selectedManga.id)
+                ? "block"
+                : "none",
+            }}
+          >
             You can now scratch this manga off on the poster!
           </p>
           <img
             className="modal-cover"
             src={
-              complete === selectedManga.id && !readMangas.includes(selectedManga.id)
+              complete === selectedManga.id &&
+              !readMangas.includes(selectedManga.id)
                 ? "https://i.ibb.co/H49kqG7/silver.png"
                 : selectedManga.cover
             }
@@ -81,7 +91,7 @@ const MangaModal = ({
                     : "none",
               }}
             >
-              {selectedManga.title}
+              {`${selectedManga.title} (${selectedManga.year})`}
             </h2>
           </Modal.Title>
         </Modal.Header>

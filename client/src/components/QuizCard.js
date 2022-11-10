@@ -123,6 +123,7 @@ const QuizCard = ({ selectedManga, completeQuiz }) => {
       author: [],
       characters: [],
     });
+    setScore(0);
     setResetCount(resetCount + 1);
   };
 
@@ -177,7 +178,7 @@ const QuizCard = ({ selectedManga, completeQuiz }) => {
 
   return (
     <div className="quiz">
-      <h1>{questions[currentQ]}</h1>
+      <h2>{questions[currentQ]}</h2>
       <h5
         style={{ display: currentQ >= 1 && currentQ <= 3 ? "block" : "none" }}
       >
