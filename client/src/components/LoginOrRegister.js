@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import Header from "./Header";
 import LoginError from "./LoginError";
+import { useAuth0 } from "@auth0/auth0-react";
 
 // CONTAINS:
 // the header with the page title + the login and register buttons
@@ -15,6 +16,8 @@ const LoginOrRegister = ({
   setShowError,
   sendUserId,
 }) => {
+  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
+
   const [allUsers, setAllUsers] = useState([]); // list of all users
   const [show, setShow] = useState(false); // show login/register modal or not
   const [login, setLogin] = useState(false); // is the modal for login?
@@ -133,6 +136,11 @@ const LoginOrRegister = ({
       } else {
         // valid user login, hide login/register modal, hide error modal, grab the username of the user, send the user id to App.js
         if (loggedIn) {
+          const userId = allUsers.filter(
+            (user) =>
+              user.username === loginInfo.username ||
+              user.email === loginInfo.username
+          )[0].id;
           setShow(false);
           setShowError(false);
           setLoggedUser(
@@ -142,12 +150,17 @@ const LoginOrRegister = ({
                 user.email === loginInfo.username
             )
           );
-          sendUserId(
-            allUsers.filter(
-              (user) =>
-                user.username === loginInfo.username ||
-                user.email === loginInfo.username
-            )[0].id
+          sendUserId(userId);
+          const response = await fetch(
+            `http://localhost:4020/users/${userId}`,
+            {
+              method: "PUT",
+              headers: {
+                Accepted: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ last_login: new Date() }),
+            }
           );
         } else {
           // invalid user login
@@ -182,6 +195,51 @@ const LoginOrRegister = ({
       }
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setLoggedUser(user.given_name);
+      setShow(false);
+      setShowError(false);
+      setValidLogin(true);
+      if (allUsers.filter((users) => users.email === user.email).length === 1) {
+        const userId = allUsers.filter((users) => users.email === user.email)[0]
+          .id;
+        sendUserId(userId);
+        const updateData = async () => {
+          const response = await fetch(
+            `http://localhost:4020/users/${userId}`,
+            {
+              method: "PUT",
+              headers: {
+                Accepted: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ last_login: new Date() }),
+            }
+          );
+        };
+        updateData();
+      } else {
+        const postData = async () => {
+          const response = await fetch("http://localhost:4020/users/add", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: user.email,
+              username: user.nickname,
+              password: "",
+            }),
+          });
+          console.log(user);
+        };
+        postData();
+      }
+    }
+  }, [isAuthenticated]);
 
   return (
     <div className="header">
@@ -362,6 +420,14 @@ const LoginOrRegister = ({
           {/* redirects to register modal, resets loginInfo & error message*/}
           <button
             className="LR-modal-button"
+            onClick={() => {
+              loginWithRedirect();
+            }}
+          >
+            <i className="fa fa-google" aria-hidden="true"></i>
+          </button>
+          <button
+            className="LR-modal-button"
             variant="secondary"
             onClick={() => {
               setLoginInfo({
@@ -395,6 +461,8 @@ const LoginOrRegister = ({
         setValidLogin={setValidLogin}
         setLoginInfo={setLoginInfo}
         setCurrentView={setCurrentView}
+        logout={logout}
+        isAuthenticated={isAuthenticated}
       />
     </div>
   );

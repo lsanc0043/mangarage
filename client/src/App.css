@@ -74,6 +74,10 @@ body {
   height: 240px;
   background-color: #ebebeb;
   border-radius: 5%;
+  /* #201D1D */
+  /* #404264 */
+  /* #839FC3 */
+  /* #EBEBEB */
 }
 
 .scratch-card {
@@ -119,7 +123,7 @@ body {
 .LR-modal-button {
   background-color: #EBEBEB;
   border-radius: 10%;
-  padding: 2%;
+  padding: 5px 10px;
   color:#404264;
 }
 
@@ -137,7 +141,7 @@ body {
 .answer-button {
   background-color: #EBEBEB;
   border-radius: 25px;
-  padding: 4%;
+  padding: 3%;
   color:#404264;
   font-size: 20px;
   width: 300px;
@@ -228,7 +232,7 @@ path {
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
+  appearance: none;
   margin: 0;
 }
 
