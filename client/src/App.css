@@ -137,7 +137,7 @@ body {
 .answer-button {
   background-color: #EBEBEB;
   border-radius: 25px;
-  padding: 4%;
+  padding: 3%;
   color:#404264;
   font-size: 20px;
   width: 300px;
@@ -228,7 +228,7 @@ path {
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
+  appearance: none;
   margin: 0;
 }
 
