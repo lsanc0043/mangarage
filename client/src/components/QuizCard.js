@@ -20,7 +20,7 @@ const QuizCard = ({ selectedManga, completeQuiz }) => {
   });
 
   const [score, setScore] = useState(0);
-  const [restart, setRestart] = useState(false);
+  const [resetCount, setResetCount] = useState(0);
 
   const getRandom = (max) => {
     const random = Math.floor(Math.random() * max);
@@ -95,22 +95,29 @@ const QuizCard = ({ selectedManga, completeQuiz }) => {
     getWrongAnswers("author");
     getWrongAnswers("characters");
     // eslint-disable-next-line
-  }, [restart]);
-
-  useEffect(() => {
-    setWrongAnswers({
-      year: new Set(),
-      author: new Set(),
-      characters: new Set(),
-    });
-  }, [restart]);
+  }, [resetCount]);
 
   useEffect(() => {
     getAllAnswers("year");
     getAllAnswers("author");
     getAllAnswers("characters");
     // eslint-disable-next-line
-  }, [wrongAnswers, restart]);
+  }, [wrongAnswers, resetCount]);
+
+  const restart = () => {
+    setWrongAnswers({
+      year: new Set(),
+      author: new Set(),
+      characters: new Set(),
+    });
+    setAllAnswers({
+      year: [],
+      author: [],
+      characters: [],
+    });
+    setResetCount(resetCount + 1);
+  };
+
   const intro = (
     <>
       So you've read <strong>{selectedManga.title}</strong>, huh?
@@ -189,7 +196,7 @@ const QuizCard = ({ selectedManga, completeQuiz }) => {
                 return (
                   <button
                     key={answer}
-                    className="modal-button"
+                    className="answer-button"
                     onClick={() => checkAnswer(answer, "year")}
                   >
                     {answer}
@@ -200,7 +207,7 @@ const QuizCard = ({ selectedManga, completeQuiz }) => {
               return allAnswers.author.map((answer) => {
                 return (
                   <button
-                    className="modal-button"
+                    className="answer-button"
                     key={answer}
                     onClick={() => checkAnswer(answer, "author")}
                   >
@@ -212,7 +219,7 @@ const QuizCard = ({ selectedManga, completeQuiz }) => {
               return allAnswers.characters.map((answer) => {
                 return (
                   <button
-                    className="modal-button"
+                    className="answer-button"
                     key={answer}
                     onClick={() => checkAnswer(answer, "characters")}
                   >
@@ -230,7 +237,7 @@ const QuizCard = ({ selectedManga, completeQuiz }) => {
                     className="modal-button"
                     onClick={() => {
                       setCurrentQ(1);
-                      setRestart(true);
+                      restart();
                     }}
                   >
                     <strong>Restart</strong>

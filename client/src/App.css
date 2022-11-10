@@ -126,8 +126,18 @@ body {
 
 .modal-button {
   background-color: #EBEBEB;
-  border-radius: 10%;
+  border-radius: 10px;
   padding: 2px 3%;
+  color:#404264;
+  font-size: 20px;
+  width: 300px;
+  margin: 10px;
+}
+
+.answer-button {
+  background-color: #EBEBEB;
+  border-radius: 25px;
+  padding: 4%;
   color:#404264;
   font-size: 20px;
   width: 300px;
