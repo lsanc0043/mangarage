@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import Header from "./Header";
 import LoginError from "./LoginError";
+import { useAuth0 } from "@auth0/auth0-react";
 
 // CONTAINS:
 // the header with the page title + the login and register buttons
@@ -15,6 +16,8 @@ const LoginOrRegister = ({
   setShowError,
   sendUserId,
 }) => {
+  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
+
   const [allUsers, setAllUsers] = useState([]); // list of all users
   const [show, setShow] = useState(false); // show login/register modal or not
   const [login, setLogin] = useState(false); // is the modal for login?
@@ -182,6 +185,12 @@ const LoginOrRegister = ({
       }
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setLoggedUser(user.given_name);
+    }
+  }, [isAuthenticated]);
 
   return (
     <div className="header">
@@ -362,6 +371,12 @@ const LoginOrRegister = ({
           {/* redirects to register modal, resets loginInfo & error message*/}
           <button
             className="LR-modal-button"
+            onClick={() => loginWithRedirect()}
+          >
+            <i class="fa fa-google" aria-hidden="true"></i>
+          </button>
+          <button
+            className="LR-modal-button"
             variant="secondary"
             onClick={() => {
               setLoginInfo({
@@ -395,6 +410,8 @@ const LoginOrRegister = ({
         setValidLogin={setValidLogin}
         setLoginInfo={setLoginInfo}
         setCurrentView={setCurrentView}
+        logout={logout}
+        isAuthenticated={isAuthenticated}
       />
     </div>
   );
