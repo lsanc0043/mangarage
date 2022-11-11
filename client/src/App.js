@@ -9,7 +9,7 @@ function App() {
   const [showError, setShowError] = useState(false);
   const [validLogin, setValidLogin] = useState(false);
   const [userId, setUserId] = useState(0);
-  const [admin, setAdmin] = useState(true);
+  const [admin, setAdmin] = useState(false);
 
   const getUserId = (childData) => {
     setUserId(childData);
