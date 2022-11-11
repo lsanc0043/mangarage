@@ -1,9 +1,25 @@
-import { useLayoutEffect } from "react";
+import { useState, useLayoutEffect, useEffect } from "react";
+import Modal from "react-bootstrap/Modal";
 // sketch package
 import rough from "roughjs/bundled/rough.esm";
 const gen = rough.generator();
 
 const Home = ({ validLogin, setCurrentView, setShowError, admin }) => {
+  const [show, setShow] = useState(false);
+  const [allUsers, setAllUsers] = useState([]); // list of all users
+
+  // retrieve all the users from the backend
+  const getUsers = async () => {
+    const response = await fetch("/users");
+    const data = await response.json();
+    setAllUsers(data);
+  };
+
+  // re-retrieves the user info if the user makes a valid registration
+  useEffect(() => {
+    getUsers();
+  }, []);
+
   // allows canvas to draw as the page is uploading
   useLayoutEffect(() => {
     const canvas = document.getElementById("canvas");
@@ -15,7 +31,6 @@ const Home = ({ validLogin, setCurrentView, setShowError, admin }) => {
     const drawLine = (x1, y1, x2, y2, color, width, rough) => {
       rc.draw(
         gen.line(x1, y1, x2, y2, {
-          fill: admin ? color : "",
           stroke: color,
           strokeWidth: width,
           roughness: rough,
@@ -125,7 +140,34 @@ const Home = ({ validLogin, setCurrentView, setShowError, admin }) => {
 
   return (
     <>
-      <button className="record"></button>
+      <Modal show={show} onHide={() => {setShow(false)}}>
+        <Modal.Header className="admin" style={{display: "flex", flexDirection: "column", alignItems: "center", color: "#ebebeb"}}>
+          <Modal.Title>All Users</Modal.Title>
+          <table className="table user-list">
+            <thead>
+              <tr>
+                <th></th>
+                <th>User</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+          </table>
+        </Modal.Header>
+        <Modal.Body className="admin-modal admin">
+          <table className="table user-list">
+            <tbody>
+              {allUsers.map((user, index) => {
+                return <tr key={index}>
+                  <td>{index+1}</td>
+                  <td>{user.username}</td>
+                  <td>{user.email.slice(0, 2) + "*****@gmail.com"}</td>
+                </tr>
+              })}
+            </tbody>
+          </table>
+        </Modal.Body>
+      </Modal>
+      <button className="record" onClick={() => setShow(true)} style={{ display: admin ? "block" : "none"}}></button>
       <button className="manga-poster" onClick={() => validLogin ? setCurrentView("poster") : setShowError(true)}></button>
       <canvas id="canvas" width={window.innerWidth} height={window.innerWidth} style={{position: "fixed", top: "125px"}}>
         Canvas

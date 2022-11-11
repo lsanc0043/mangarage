@@ -251,7 +251,6 @@ const LoginOrRegister = ({
         setShowError={setShowError}
       />
       {/* login/register modal */}
-      {/* login/register modal */}
       <Modal
         contentClassName={
           login && !register ? "login-height" : "register-height"

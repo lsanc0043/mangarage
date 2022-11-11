@@ -45,6 +45,27 @@ body {
   z-index: 100;
 }
 
+.admin {
+  border: 1px solid #404264;
+  background-color: #404264;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: rgb(235, 235, 235);
+}
+
+.admin-modal {
+  overflow-y: auto;
+  margin: none;
+  margin-top: -17px;
+}
+
+.table {
+  color: #ebebeb;
+  font-size: 15px;
+  margin-bottom: 0px;
+}
+
 .manga-poster {
   left: 550px;
   top: 185px;
