@@ -3,7 +3,7 @@ import { useLayoutEffect } from "react";
 import rough from "roughjs/bundled/rough.esm";
 const gen = rough.generator();
 
-const Home = ({validLogin, setCurrentView, setShowError}) => {
+const Home = ({ validLogin, setCurrentView, setShowError, admin }) => {
   // allows canvas to draw as the page is uploading
   useLayoutEffect(() => {
     const canvas = document.getElementById("canvas");
@@ -15,6 +15,7 @@ const Home = ({validLogin, setCurrentView, setShowError}) => {
     const drawLine = (x1, y1, x2, y2, color, width, rough) => {
       rc.draw(
         gen.line(x1, y1, x2, y2, {
+          fill: admin ? color : "",
           stroke: color,
           strokeWidth: width,
           roughness: rough,
@@ -104,6 +105,12 @@ const Home = ({validLogin, setCurrentView, setShowError}) => {
       drawCircle(1400 + xChange, 190 + yChange, 5, "#ebebeb", 0.3, 2);
     }
 
+    const drawRecord = (color, width, rough, xChange, yChange) => {
+      rc.path(`M${480 + xChange} ${380 + yChange} L ${605 + xChange} 
+              ${380 + yChange} L ${525 + xChange} ${420 + yChange} L ${400 + xChange} ${420 + yChange} Z`
+              , { stroke: "#000", fill: color });
+    }
+
     drawRoom("#ebebeb", 0.3, 1, 0, 30);
     drawDesk("#ebebeb", 0.5, 2.5, 0, 30);
     drawWindow("#ebebeb", 0.3, 2, 0, 0);
@@ -111,10 +118,14 @@ const Home = ({validLogin, setCurrentView, setShowError}) => {
         fill: "#404264"
     });
     rc.draw(rect);
+    if (admin) {
+      drawRecord("#839FC3", 0.3, 1, 0, 30);
+    }
   });
 
   return (
     <>
+      <button className="record"></button>
       <button className="manga-poster" onClick={() => validLogin ? setCurrentView("poster") : setShowError(true)}></button>
       <canvas id="canvas" width={window.innerWidth} height={window.innerWidth} style={{position: "fixed", top: "125px"}}>
         Canvas

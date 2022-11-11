@@ -4,16 +4,12 @@ import LoginOrRegister from "./components/LoginOrRegister";
 import Home from "./components/Home";
 import MangaPoster from "./components/MangaPoster";
 
-// Set a same-site cookie for first-party contexts
-document.cookie = "cookie1=value1; SameSite=Lax";
-// Set a cross-site cookie for third-party contexts
-document.cookie = "cookie2=value2; SameSite=None; Secure";
-
 function App() {
   const [currentView, setCurrentView] = useState("");
   const [showError, setShowError] = useState(false);
   const [validLogin, setValidLogin] = useState(false);
   const [userId, setUserId] = useState(0);
+  const [admin, setAdmin] = useState(false);
 
   const getUserId = (childData) => {
     setUserId(childData);
@@ -28,6 +24,7 @@ function App() {
         showError={showError}
         setShowError={setShowError}
         sendUserId={getUserId}
+        setAdmin={setAdmin}
       />
       {/* essentially a nav functionality using switch */}
       {(() => {
@@ -38,6 +35,7 @@ function App() {
                 validLogin={validLogin}
                 setCurrentView={setCurrentView}
                 setShowError={setShowError}
+                admin={admin}
               />
             );
           case "poster":

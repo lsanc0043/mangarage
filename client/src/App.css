@@ -30,6 +30,21 @@ body {
   cursor: pointer;
 }
 
+.record {
+  margin: 20px;
+  top: 515px;
+  left: 420px;
+  width: 125px;
+  height: 40px;
+  position: fixed;
+  display: inline-block;
+  background: none;    
+  border: none;
+  outline:none !important;
+  transform: skewX(-63deg);
+  z-index: 100;
+}
+
 .manga-poster {
   left: 550px;
   top: 185px;
@@ -38,12 +53,12 @@ body {
   position: fixed;
   background-color: rgba(255, 255, 255, 0);
   outline:none !important;
-  border: black 0px solid;
+  border: none;
   z-index: 100;
 }
 
-.manga-poster:hover, .login-or-register:hover {
-  border: white 1px solid;
+.manga-poster:hover, .login-or-register:hover, .record:hover {
+  border: white 2px solid;
 }
 
 .container {

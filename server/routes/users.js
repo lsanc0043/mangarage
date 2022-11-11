@@ -8,9 +8,10 @@ const validLogin = [0]; // checks for valid login [0] = false, [1] = true
 // retrieves all users and displays, all users have encrypted passwords
 router.get("/", async (req, res) => {
   try {
-    const allUsers = await db.any("SELECT id, username, email FROM users", [
-      true,
-    ]);
+    const allUsers = await db.any(
+      "SELECT id, username, email, last_login FROM users",
+      [true]
+    );
     res.send(allUsers);
   } catch (e) {
     console.log("user get", e);
