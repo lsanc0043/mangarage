@@ -66,6 +66,14 @@ body {
   margin-bottom: 0px;
 }
 
+.fa-trash-o {
+  color: #ebebeb;
+}
+
+.fa-trash-o:hover {
+  color: #201D1D;
+}
+
 .manga-poster {
   left: 550px;
   top: 185px;

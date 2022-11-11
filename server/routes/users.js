@@ -9,7 +9,7 @@ const validLogin = [0]; // checks for valid login [0] = false, [1] = true
 router.get("/", async (req, res) => {
   try {
     const allUsers = await db.any(
-      "SELECT id, username, email, last_login FROM users",
+      "SELECT id, username, email, last_login FROM users ORDER BY id",
       [true]
     );
     res.send(allUsers);
@@ -70,6 +70,17 @@ router.put("/:id", async (req, res) => {
   const login = req.body.last_login;
   try {
     await db.any("UPDATE users SET last_login=$1 WHERE id=$2", [login, userId]);
+  } catch (e) {
+    console.log(e);
+    res.status(400).send({ e });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  const userId = req.params.id;
+  try {
+    await db.any("DELETE FROM readmangas WHERE user_id=$1", [userId]);
+    await db.any("DELETE FROM users WHERE id=$1", [userId]);
   } catch (e) {
     console.log(e);
     res.status(400).send({ e });
