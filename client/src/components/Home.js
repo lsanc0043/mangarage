@@ -1,9 +1,34 @@
-import { useLayoutEffect } from "react";
+import { useState, useLayoutEffect, useEffect } from "react";
+import Modal from "react-bootstrap/Modal";
 // sketch package
 import rough from "roughjs/bundled/rough.esm";
 const gen = rough.generator();
 
-const Home = ({validLogin, setCurrentView, setShowError}) => {
+const Home = ({ validLogin, setCurrentView, setShowError, admin }) => {
+  const [show, setShow] = useState(false);
+  const [allUsers, setAllUsers] = useState([]); // list of all users
+  const [deleteCount, setDeleteCount] = useState(0);
+
+  // retrieve all the users from the backend
+  const getUsers = async () => {
+    const response = await fetch("/users");
+    const data = await response.json();
+    setAllUsers(data);
+  };
+
+  const deleteUser = async (userId) => {
+    setDeleteCount(deleteCount + 1);
+    const response = await fetch(`/users/${userId}`, {
+      method: "DELETE"
+    })
+    await response.json();
+  }
+
+  // re-retrieves the user info if the user makes a valid registration
+  useEffect(() => {
+    getUsers();
+  }, [deleteCount]);
+
   // allows canvas to draw as the page is uploading
   useLayoutEffect(() => {
     const canvas = document.getElementById("canvas");
@@ -23,7 +48,7 @@ const Home = ({validLogin, setCurrentView, setShowError}) => {
     };
 
     const drawCircle = (xPosition, yPosition, radius, color, width, rough) => {
-       const circle = gen.circle(xPosition, yPosition, radius, { stroke: color, width: width, roughness: rough });
+      const circle = gen.circle(xPosition, yPosition, radius, { stroke: color, width: width, roughness: rough });
       rc.draw(circle);
     }
 
@@ -47,19 +72,19 @@ const Home = ({validLogin, setCurrentView, setShowError}) => {
       drawLine(200 + xChange, 480 + yChange, 200 + xChange, 500 + yChange, color, width, rough); // bottom left vertical - edge
       drawLine(500 + xChange, 480 + yChange, 500 + xChange, 500 + yChange, color, width, rough); // bottom right vertical - edge
       drawLine(800 + xChange, 330 + yChange, 800 + xChange, 350 + yChange, color, width, rough); // top right vertical - edge
-  
+
       drawLine(800 + xChange, 350 + yChange, 800 + xChange, 605 + yChange, color, 0.3, 1); // top right leg - outward edge 575-320 = 255
       drawLine(790 + xChange, 360 + yChange, 790 + xChange, 615 + yChange, color, 0.3, 1); // top right leg - middle edge
       drawLine(775 + xChange, 360 + yChange, 775 + xChange, 615 + yChange, color, 0.3, 1); // top right leg - inward edge 615-360 = 255
       drawLine(775 + xChange, 615 + yChange, 790 + xChange, 615 + yChange, color, 0.3, 1); // top right leg - bottom horizontal edge
       drawLine(800 + xChange, 605 + yChange, 790 + xChange, 615 + yChange, color, 0.3, 1); // top right leg - bottom horizontal edge
-  
+
       drawLine(510 + xChange, 490 + yChange, 510 + xChange, 770 + yChange, color, 0.3, 1); // bottom right leg - outward edge
       drawLine(500 + xChange, 500 + yChange, 500 + xChange, 780 + yChange, color, 0.3, 1); // bottom right leg - middle edge
       drawLine(485 + xChange, 500 + yChange, 485 + xChange, 780 + yChange, color, 0.3, 1); // bottom right leg - inward edge
       drawLine(485 + xChange, 780 + yChange, 500 + xChange, 780 + yChange, color, 0.3, 1); // top right leg - bottom horizontal edge
       drawLine(500 + xChange, 780 + yChange, 510 + xChange, 770 + yChange, color, 0.3, 1); // top right leg - bottom horizontal edge
-  
+
       drawLine(200 + xChange, 500 + yChange, 200 + xChange, 780 + yChange, color, 0.3, 1); // bottom left leg - outward edge
       drawLine(215 + xChange, 500 + yChange, 215 + xChange, 780 + yChange, color, 0.3, 1); // bottom left leg - middle edge
       drawLine(225 + xChange, 500 + yChange, 225 + xChange, 770 + yChange, color, 0.3, 1); // bottom left leg - inward edge
@@ -104,19 +129,101 @@ const Home = ({validLogin, setCurrentView, setShowError}) => {
       drawCircle(1400 + xChange, 190 + yChange, 5, "#ebebeb", 0.3, 2);
     }
 
+    const drawRecord = (color, xChange, yChange) => {
+      rc.path(
+        `M${480 + xChange} ${380 + yChange} L ${605 + xChange} 
+              ${380 + yChange} L ${525 + xChange} ${420 + yChange} L ${400 + xChange
+        } ${420 + yChange} Z`,
+        { stroke: "#000", fill: color }
+      );
+    };
+
     drawRoom("#ebebeb", 0.3, 1, 0, 30);
     drawDesk("#ebebeb", 0.5, 2.5, 0, 30);
     drawWindow("#ebebeb", 0.3, 2, 0, 0);
     const rect = gen.rectangle(550, 60, 200, 270, {
-        fill: "#404264"
+      fill: "#404264",
     });
     rc.draw(rect);
+    if (admin) {
+      drawRecord("#839FC3", 0, 30);
+    }
   });
 
   return (
     <>
-      <button className="manga-poster" onClick={() => validLogin ? setCurrentView("poster") : setShowError(true)}></button>
-      <canvas id="canvas" width={window.innerWidth} height={window.innerWidth} style={{position: "fixed", top: "125px"}}>
+      <Modal
+        show={show}
+        onHide={() => {
+          setShow(false);
+        }}
+      >
+        <Modal.Header
+          className="admin"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            color: "#ebebeb",
+          }}
+        >
+          <Modal.Title>All Users</Modal.Title>
+          <table className="table user-list">
+            <thead>
+              <tr>
+                <th></th>
+                <th>User</th>
+                <th>Email</th>
+                <th></th>
+              </tr>
+            </thead>
+          </table>
+        </Modal.Header>
+        <Modal.Body className="admin-modal admin">
+          <table className="table user-list">
+            <tbody>
+              {allUsers.filter((user) => user.username !== "admin").map((user, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{user.username}</td>
+                    <td>{user.email.slice(0, 2) + "*****@gmail.com"}</td>
+                    <td>
+                      <button
+                        onClick={() => deleteUser(user.id)}
+                        style={{
+                          outline: "none !important",
+                          background: "none",
+                          border: "none",
+                        }}
+                      >
+                        <i className="fa fa-trash-o" aria-hidden="true"></i>
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </Modal.Body>
+      </Modal>
+      <button
+        className="record"
+        onClick={() => setShow(true)}
+        style={{ display: admin ? "block" : "none" }}
+      ></button>
+      <button
+        className="manga-poster"
+        onClick={() =>
+          validLogin ? setCurrentView("poster") : setShowError(true)
+        }
+      ></button>
+      <canvas
+        id="canvas"
+        width={window.innerWidth}
+        height={window.innerWidth}
+        style={{ position: "fixed", top: "125px" }}
+      >
         Canvas
       </canvas>
     </>

@@ -15,6 +15,7 @@ const LoginOrRegister = ({
   showError,
   setShowError,
   sendUserId,
+  setAdmin,
 }) => {
   const { loginWithRedirect, logout, user, isAuthenticated, isLoading } =
     useAuth0();
@@ -142,15 +143,17 @@ const LoginOrRegister = ({
               user.username === loginInfo.username ||
               user.email === loginInfo.username
           )[0].id;
+          const user = allUsers.filter(
+            (user) =>
+              user.username === loginInfo.username ||
+              user.email === loginInfo.username
+          );
           setShow(false);
           setShowError(false);
-          setLoggedUser(
-            allUsers.filter(
-              (user) =>
-                user.username === loginInfo.username ||
-                user.email === loginInfo.username
-            )
-          );
+          setLoggedUser(user);
+          if (user[0].username === "admin") {
+            setAdmin(true);
+          }
           sendUserId(userId);
           const response = await fetch(`/users/${userId}`, {
             method: "PUT",
@@ -247,7 +250,6 @@ const LoginOrRegister = ({
         showError={showError}
         setShowError={setShowError}
       />
-      {/* login/register modal */}
       {/* login/register modal */}
       <Modal
         contentClassName={
