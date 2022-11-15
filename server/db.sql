@@ -325,19 +325,6 @@ I
 INSERT INTO public.test (id, characters, testdata) VALUES (3, NULL, '"Hello, 
 I''m postgres."');
 
-
---
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-INSERT INTO public.users (id, username, email, password, last_login) VALUES (8, 'lisa', 'lisa@gmail.com', '$2a$06$QhY76kasgjcmRNz6esrOJOLg.ARjIHyfotMjk4owquNri/jnAZRC2', '2022-11-10 10:05:49.255065');
-INSERT INTO public.users (id, username, email, password, last_login) VALUES (10, 'kyol', 'kyol@gmail.com', '$2a$06$BZmOi1SruBcoMXjJspP14Oy1/UE9lYj79vMiPHGDnzVihnO.0eF6K', '2022-11-10 10:05:49.255065');
-INSERT INTO public.users (id, username, email, password, last_login) VALUES (33, 'lsanc0043', 'lsanc0043@gmail.com', '$2a$06$d9Lobd.KscF6AscbdveRveEDfeUWPLfHvvZTu/WLno7fcrBRbB.ZW', '2022-11-10 19:43:52.624496');
-INSERT INTO public.users (id, username, email, password, last_login) VALUES (31, 'admin', 'admin@gmail.com', '$2a$06$796g4/WHT7RLtwd9Y9U4sOkLZ4dmoNg1qzWrMNN59WQyyRwgPGUwS', '2022-11-11 04:07:43.784');
-INSERT INTO public.users (id, username, email, password, last_login) VALUES (6, 'beta', 'beta@gmail.com', '$2a$06$/LSyALOyeat20Jccb.Eo0uhM5E6pf0pvZkWwwYHEXw4dAwIS0Jph6', '2022-11-11 00:46:55.025');
-INSERT INTO public.users (id, username, email, password, last_login) VALUES (5, 'alpha', 'alpha@gmail.com', '$2a$06$k4E/ZViPp7sogmuPFKLlx.TOf/rU6sqA6GcBg646BALwXeR3giPOe', '2022-11-10 19:53:13.754');
-
-
 --
 -- Name: manga_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
