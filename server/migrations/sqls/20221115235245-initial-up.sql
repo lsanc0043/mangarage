@@ -1,9 +1,3 @@
-DROP DATABASE mangarage IF EXISTS;
-
-CREATE DATABASE mangarage;
-
-\c mangarage;
-
 CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 
 CREATE TABLE public.manga (
@@ -110,16 +104,5 @@ INSERT INTO public.manga (id, title, author, year, status, last_updated, descrip
 
 
 INSERT INTO public.users (id, username, email, password, last_login) VALUES (1, 'admin', 'admin@gmail.com', '$2a$06$19HzdMJjUYyjdIHuvIHZW.WINc8.qJrJD3fiw7yKRRUY/7e/VEmda', '2022-11-15 17:29:44.333286');
-
-
-SELECT pg_catalog.setval('public.manga_id_seq', 48, true);
-
-SELECT pg_catalog.setval('public.users_id_seq', 2, true);
-
-ALTER TABLE ONLY public.readmangas
-    ADD CONSTRAINT readmangas_manga_id_fkey FOREIGN KEY (manga_id) REFERENCES public.manga(id) ON UPDATE CASCADE;
-
-ALTER TABLE ONLY public.readmangas
-    ADD CONSTRAINT readmangas_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE;
 
 
