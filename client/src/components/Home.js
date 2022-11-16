@@ -138,9 +138,22 @@ const Home = ({ validLogin, setCurrentView, setShowError, admin }) => {
       );
     };
 
+    const drawShelf = (color, width, rough, xChange, yChange) => {
+      drawLine(200 + xChange, 330 + yChange, 380 + xChange, 240 + yChange, color, width, rough); // inner diagonal
+      drawLine(480 + xChange, 240 + yChange, 300 + xChange, 330 + yChange, color, width, rough); // outer diagonal
+      drawLine(480 + xChange, 240 + yChange, 380 + xChange, 240 + yChange, color, width, rough); // top horizontal
+      drawLine(200 + xChange, 330 + yChange, 300 + xChange, 330 + yChange, color, width, rough); // bottom horizontal
+      drawLine(200 + xChange, 345 + yChange, 300 + xChange, 345 + yChange, color, width, rough); // bottom horizontal - edge
+      drawLine(480 + xChange, 255 + yChange, 300 + xChange, 345 + yChange, color, width, rough); // outer diagonal - edge
+      drawLine(200 + xChange, 330 + yChange, 200 + xChange, 345 + yChange, color, width, rough); // inner edge
+      drawLine(300 + xChange, 330 + yChange, 300 + xChange, 345 + yChange, color, width, rough); // outer edge
+      drawLine(480 + xChange, 240 + yChange, 480 + xChange, 255 + yChange, color, width, rough); // outer edge
+    }
+
     drawRoom("#ebebeb", 0.3, 1, 0, 30);
     drawDesk("#ebebeb", 0.5, 2.5, 0, 30);
     drawWindow("#ebebeb", 0.3, 2, 0, 0);
+    drawShelf("#87805A", 0.5, 2, 0, -25)
     const rect = gen.rectangle(550, 60, 200, 270, {
       fill: "#404264",
     });
