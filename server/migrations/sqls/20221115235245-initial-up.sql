@@ -7,7 +7,7 @@ CREATE DATABASE mangarage;
 CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 
 CREATE TABLE public.manga (
-    id integer NOT NULL,
+    id serial primary key,
     title text NOT NULL,
     author text NOT NULL,
     year text,
@@ -19,51 +19,22 @@ CREATE TABLE public.manga (
     characters text[]
 );
 
-CREATE SEQUENCE public.manga_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-ALTER SEQUENCE public.manga_id_seq OWNED BY public.manga.id;
-
-CREATE TABLE public.readmangas (
-    user_id integer NOT NULL,
-    manga_id integer NOT NULL,
-    rating numeric NOT NULL
+CREATE TABLE readmangas (
+    user_id int not null, 
+    manga_id int not null, 
+    rating decimal not null, 
+    PRIMARY KEY ( user_id, manga_id), 
+    FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE, 
+    FOREIGN KEY (manga_id) REFERENCES manga(id) ON UPDATE CASCADE
 );
 
-
-ALTER TABLE public.readmangas OWNER TO linda;
-
---
--- Name: users; Type: TABLE; Schema: public; Owner: linda
---
-
 CREATE TABLE public.users (
-    id integer NOT NULL,
+    id serial primary key,
     username text,
     email text NOT NULL,
     password text NOT NULL,
     last_login timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE SEQUENCE public.users_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
-
-ALTER TABLE ONLY public.manga ALTER COLUMN id SET DEFAULT nextval('public.manga_id_seq'::regclass);
-
-ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
-
 
 INSERT INTO public.manga (id, title, author, year, status, last_updated, description, genres, cover, characters) VALUES (1, 'A Returner''s Magic Should Be Special', 'Usonan (우소난)', '2018', 'ongoing', '2022-11-13T11:05:25+00:00', '"Now that I''m back, I won''t allow my loved ones to die again!" 
 The Shadow Labyrinth - the deadliest catastrophe humanity has ever known. Desir Arman, one of the six remaining survivors of mankind, is inside the Labyrinth. The six of them attempt to clear the final level of the Labyrinth but ultimately fail, and the world comes to an end. 
@@ -144,25 +115,6 @@ INSERT INTO public.users (id, username, email, password, last_login) VALUES (1, 
 SELECT pg_catalog.setval('public.manga_id_seq', 48, true);
 
 SELECT pg_catalog.setval('public.users_id_seq', 2, true);
-
-
-ALTER TABLE ONLY public.manga
-    ADD CONSTRAINT manga_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY public.manga
-    ADD CONSTRAINT manga_title_key UNIQUE (title);
-
-ALTER TABLE ONLY public.readmangas
-    ADD CONSTRAINT readmangas_pkey PRIMARY KEY (user_id, manga_id);
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_email_key UNIQUE (email);
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_username_key UNIQUE (username);
 
 ALTER TABLE ONLY public.readmangas
     ADD CONSTRAINT readmangas_manga_id_fkey FOREIGN KEY (manga_id) REFERENCES public.manga(id) ON UPDATE CASCADE;
