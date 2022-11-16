@@ -35,7 +35,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: manga; Type: TABLE; Schema: public; Owner: linda
+-- Name: manga; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.manga (
@@ -52,10 +52,10 @@ CREATE TABLE public.manga (
 );
 
 
-ALTER TABLE public.manga OWNER TO linda;
+ALTER TABLE public.manga OWNER TO postgres;
 
 --
--- Name: manga_id_seq; Type: SEQUENCE; Schema: public; Owner: linda
+-- Name: manga_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.manga_id_seq
@@ -67,17 +67,17 @@ CREATE SEQUENCE public.manga_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.manga_id_seq OWNER TO linda;
+ALTER TABLE public.manga_id_seq OWNER TO postgres;
 
 --
--- Name: manga_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: linda
+-- Name: manga_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.manga_id_seq OWNED BY public.manga.id;
 
 
 --
--- Name: readmangas; Type: TABLE; Schema: public; Owner: linda
+-- Name: readmangas; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.readmangas (
@@ -87,10 +87,10 @@ CREATE TABLE public.readmangas (
 );
 
 
-ALTER TABLE public.readmangas OWNER TO linda;
+ALTER TABLE public.readmangas OWNER TO postgres;
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: linda
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.users (
@@ -102,10 +102,10 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO linda;
+ALTER TABLE public.users OWNER TO postgres;
 
 --
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: linda
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.users_id_seq
@@ -117,31 +117,31 @@ CREATE SEQUENCE public.users_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.users_id_seq OWNER TO linda;
+ALTER TABLE public.users_id_seq OWNER TO postgres;
 
 --
--- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: linda
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: manga id; Type: DEFAULT; Schema: public; Owner: linda
+-- Name: manga id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.manga ALTER COLUMN id SET DEFAULT nextval('public.manga_id_seq'::regclass);
 
 
 --
--- Name: users id; Type: DEFAULT; Schema: public; Owner: linda
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
--- Data for Name: manga; Type: TABLE DATA; Schema: public; Owner: linda
+-- Data for Name: manga; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 INSERT INTO public.manga (id, title, author, year, status, last_updated, description, genres, cover, characters) VALUES (1, 'A Returner''s Magic Should Be Special', 'Usonan (∞£á∞åîδé£)', '2018', 'ongoing', '2022-10-29T07:54:20+00:00', '"Now that I''m back, I won''t allow my loved ones to die again!" 
@@ -192,7 +192,7 @@ INSERT INTO public.manga (id, title, author, year, status, last_updated, descrip
 INSERT INTO public.manga (id, title, author, year, status, last_updated, description, genres, cover, characters) VALUES (31, 'ReLIFE', 'Yayoi Sou', '2013', 'completed', '2021-10-05T05:28:33+00:00', 'Kaizaki Arata is a 27-year-old unemployed man who, after quitting his last job after three months, has failed every interview since. Enter Yoake Ryou; representative of the ReLIFE Organization. He offers Kaizaki a pill that changes his appearance to that of his 17-year-old self; thus, Kaizaki becomes the subject of a one-year experiment in which he begins his life as a third year high school student once again.', '{Sci-Fi,Romance,Comedy,Drama}', 'https://mangadex.org/covers/6e3553b9-ddb5-4d37-b7a3-99998044774e/e4504532-62f8-467c-9f90-d6390b5f3126.jpg', '{"An ONOYA","Arata KAIZAKI","Chizuru HISHIRO","Kazuomi OHGA","Rena KARIU","Ryo YOAKE","Akira INUKAI","Honoka TAMARAI","Nobunaga ASAJI","Arata&#039;s Mother","Kokoro AMATSU","Koshi USA","Sumire INUKAI"}');
 INSERT INTO public.manga (id, title, author, year, status, last_updated, description, genres, cover, characters) VALUES (33, 'Sinryeong', 'Lee Hye (∞¥┤φÿ£)', '2012', 'completed', '2021-02-07T16:19:13+00:00', 'Divine Bells - they choose their own masters and they determine the status, prestige, and influence of the countries their masters rule. The presence or lack of these Bells also has great consequence in the lives of each country''s royalty. In particular, the personal and political futures of King Hong-Ryeong seem doomed without a Bell, but at equally great peril if he obtains one. But are the Divine Bells simple magical charms, deities of great powers, or something else altogether? And when the owner of three of the eight existing Divine Bells dies, leaving them to choose new owners, where will the resulting turmoil lead?', '{Historical,Fantasy,Mystery}', 'https://mangadex.org/covers/497b7647-558f-4d68-bfb5-e4648bfd8427/384a30a6-ec86-4e87-aa3a-80e4f504d086.jpg', '{"Gang Hui","Hong Ryung","Chui Bi","Dong Hyung","Guk Yool","Hyun Joo","Ju Hie","Mu Hyang","No Woo",Yun,April,"Baek Yul",Dan,"Dan Hak","Ga Bi",Gak,"Ha Hyeon","Hoa Back","Hong Ryung&#039;s Father","Jae Sun","Ji Won","Poung Yeon","Seol Yun","Seo Wol Ha","So Hae Hu","So Hee","Sul Lan","Wi Jin","Yu Dam"}');
 INSERT INTO public.manga (id, title, author, year, status, last_updated, description, genres, cover, characters) VALUES (47, 'Toriko', 'Shimabukuro Mitsutoshi', '2008', 'completed', '2022-03-05T08:28:58+00:00', 'In the world where the taste and texture of food are very important, there is Toriko, a hunter of precious foods regularly hired by restaurants and the rich. He''s a man with the inhuman skills necessary to capture the ferocious, evasive, and rare animals to complete his ultimate dinner course! His current accomplice is a weak, timid person who was inspired by Toriko''s greatness and accompanies him on all his journeys on his quest for the course of his life.', '{Thriller,Action,Comedy,Adventure,Drama,Fantasy,"Slice of Life",Mystery}', 'https://mangadex.org/covers/a7a8149f-65cf-4cab-a243-9b00b91e3b24/d1b204be-0c2d-4e8f-b6ac-c35430f84d81.jpg', '{Komatsu,Toriko,Coco,Ichiryuu,Midora,Rin,Starjun,Sunny,Takimaru,"Terry CLOTH",Tommyrod,Zebra,Acacia,Ahmon,Aimaru,AIR,Akimaru,Alfaro,ANOTHER,"Anyo Jr.",Apollon,Appolo,Asarudy,Atashino,ATOM,Baidan,Bambina,Bambina,Barrygamon,Bei,Bile,"Bogie Woods",Boneless,Brubo,Brunch,Buchichupon,Bull,Cedre,Chako,Chichi,"Chin CHINCHIN",Chirin,Chiru,Chiyo,Chupaly,"CM Goron","Condor WINDOW","Damala Sky XIII",Darin,"Darnil KAHN","Daruma Hermit",Dinner,Dohem,Dohsa,Doragon,Dores,Drunker,Elboh,Elg,Endo,"Enma IKA",Froese,Gen,Gido,Glass,"Goblin RAMON",Grinpatch,Guemon,Guinness,Gur,Hatch,Heracles,Herusui,Horris,Iai-aye,Ikarishi,Jack,Janpin,Jerryboy,Jiji,Jirou,Joa,Joejoe,Johannes,Joymar,Kaitora,Kaka,"Kakino KISH",Kama,Kamizaru,Kariu,Kiss,Kitt,Klaraman,Koppowo,Kopuriko,Kousairou,Koyubi,Kurakage,Kuriboh,Kuromada,Limon,"Ling CHUN",Livebearer,Louie,Love,Lulubhu,Macross,"Mahmai MOI",Malee,Malisman,"Mama Tsurara",Mami,"Manabu SAKAMAKI",Manan,Manei,Mansam,Mappy,Mari,Marilyn,Match,Maymay,Meeko,Megarodras,"Melk the 1st","Melk the 2nd",Meria,Meyl,Miko,Mitsurou,Moh,"Mohyan SHAISHAI",Mokkoi,Monchy,Morijii,Morita,Morton,Munageh,Nakaume,Naroid,Nerimaru,NEWS,Niceny,Noburu,Nomarch,Nonchy,Nono,Nopekichi,Norisuke,Nosh,Ob,Ohban,Ootake,Pahpoh,Painomi,PAIR,Patch,Pen,"Picnic BOMBER",Pippi,Pochiko,Ponkochi,Pricomb,Pukin,Queen,Rala,Ram,Rapp,Ray,Rikiya,Rikk,Rikky,Ryu,Sakura,"Scorpion Demon Bull",Setsuno,Shigematsu,Shin,"Shusaku SHIRAKAWA",Shuu,Silk,Smile,Smith,Suguru,Sumire,Tack,Takeshi,Teppei,Thor,Tina,Titan,Tom,Ton,Toppo,Toshipiko,Tsukimaru,Tylan,"Uumen UMEDA",Wabutora,Wagon,Wyne,Yocchi,Yosaku,Yuda,Yukimaru,Yun,Yuu,Yuuji,Zaus,Zonge,Zyper}');
-INSERT INTO public.manga (id, title, author, year, status, last_updated, description, genres, cover, characters) VALUES (37, 'SPY├ùFAMILY', 'Endou Tatsuya', '2019', 'ongoing', '2022-10-30T20:16:55+00:00', 'The master spy codenamed <Twilight> has spent his days on undercover missions, all for the dream of a better world. But one day, he receives a particularly difficult new order from command. For his mission, he must form a temporary family and start a new life?! A Spy/Action/Comedy about a one-of-a-kind family!', '{Action,Romance,Comedy,Adventure,"Slice of Life"}', 'https://mangadex.org/covers/6b958848-c885-4735-9201-12ee77abcb3c/613db897-cf37-4f5c-b7b5-caa1e0b46b60.jpg', '{"Anya FORGER","Loid FORGER","Yor BRIAR","Becky BLACKBELL",Bond,"Damian DESMOND","Fiona FROST","Franky FRANKLIN","Henry HENDERSON","Yuri BRIAR",Barnes,"Benedict Ivan GOODFELLOW","Bill WATKINS",Bondman,Brantz,Brennan,Camilla,"Cecile Dorm Tutor","Chief Nurse",Chris,Dominic,"Donna SCHLAG","Donovan DESMOND","Eden Academy Gutter Student",Edgar,"Emile ELMAN","Ewen EGEBURG","Geometry Teacher",Honey,"Hurry TAYLAR","Jim HAYWARD","Jonas WELLMAN",Karen,"Keith KEPLER",Ken,Kurt,"Math Teacher","Melinda DESMOND",Millie,"Monica MCBRIDE","Murdoch SWAN",Nguyen,Nola,"Old Woman","Orphanage Director","Pance KARMER","Purse Snatcher",Rahden,"Real Estate Agent",Sharon,Shopkeeper,"SSS Director","SSS Lieutenant","Sylvia SHERWOOD","Tailor Shop Clerk","Tailor Shop Owner","Walter EVANS","WISE Director","WISE Secretary","Zachry FEISS"}');
+INSERT INTO public.manga (id, title, author, year, status, last_updated, description, genres, cover, characters) VALUES (37, 'SPY├ùFAMILY', 'Endou Tatsuya', '2019', 'ongoing', '2022-10-30T20:16:55+00:00', 'The master spy codenamed <Twilight> has spent his days on undercover missions, all for the dream of a better world. But one day, he receives a particularly difficult new order from command. For his mission, he must form a temporary family and start a new life?! A Spy/Action/Comedy about a one-of-a-kind family!', '{Action,Romance,Comedy,Adventure,"Slice of Life"}', 'https://mangadex.org/covers/6b958848-c885-4735-9201-12ee77abcb3c/613db897-cf37-4f5c-b7b5-caa1e0b46b60.jpg', '{"Anya FORGER","Loid FORGER","Yor BRIAR","Becky BLACKBELL",Bond,"Damian DESMOND","Fiona FROST","Franky FRANKLIN","Henry HENDERSON","Yuri BRIAR",Barnes,"Benedict Ivan GOODFELLOW","Bill WATKINS",Bondman,Brantz,Brennan,Camilla,"Cecile Dorm Tutor","Chief Nurse",Chris,Dominic,"Donna SCHLAG","Donovan DESMOND","Eden Academy Gutter Student",Edgar,"Emile ELMAN","Ewen EGEBURG","Geometry Teacher",Honey,"Hurry TAYLAR","Jim HAYWARD","Jonas WELLMAN",Karen,"Keith KEPLER",Ken,Kurt,"Math Teacher","Mepostgres DESMOND",Millie,"Monica MCBRIDE","Murdoch SWAN",Nguyen,Nola,"Old Woman","Orphanage Director","Pance KARMER","Purse Snatcher",Rahden,"Real Estate Agent",Sharon,Shopkeeper,"SSS Director","SSS Lieutenant","Sylvia SHERWOOD","Tailor Shop Clerk","Tailor Shop Owner","Walter EVANS","WISE Director","WISE Secretary","Zachry FEISS"}');
 INSERT INTO public.manga (id, title, author, year, status, last_updated, description, genres, cover, characters) VALUES (38, 'Tate no Yuusha no Nariagari', 'Aneko Yusagi', '2014', 'ongoing', '2022-10-27T23:08:10+00:00', 'Naofumi Iwatani, an uncharismatic Otaku who spends his days on games and manga, suddenly finds himself summoned to a parallel universe! He discovers he is one of four heroes equipped with legendary weapons and tasked with saving the world from its prophesied destruction.  
 As the Shield Hero, the weakest of the heroes, all is not as it seems. Naofumi is soon alone, penniless, and betrayed. With no one to turn to, and nowhere to run, he is left with only his shield. Now, Naofumi must rise to become the legendary Shield Hero and save the world!', '{Action,Romance,Adventure,Isekai,Drama,Fantasy}', 'https://mangadex.org/covers/0f237a5f-07ad-4e43-bbd9-2a320694434d/f08f48e6-b1d6-4165-ac6c-27550862d6d1.jpg', '{Filo,"Naofumi IWATANI",Raphtalia,"Eclair SEYAETTE","Elrasla GRILAROC",Erhard,Glass,"Itsuki KAWASUMI","Kizuna KAZAYAMA","L&#039;Arc Berg","Malty S MELROMARC","Melty Q MELROMARC","Mirelia Q. MELROMARC","Motoyasu KITAMURA","Ost HOURAI","Ren AMAKI","Rishia IVYRED","Theris ALEXANDREIT",Ake,Albert,"Aultcray MELROMARC",Chris,"Commander of the Kingdom of Haikazuya","Commander of the Spirit Tortoise Country","Commander of the State of Lowhirot","Commander of the State of Mideus","Elena HAVEN",Ethnobalt,Fitoria,Habenberg,"Idol RABIER",Kage,Kazuki,Keel,"Kyo ETHNINA","Leader of Melromarc Knights",Lesty,"Magic Store Owner",Mald,"Medicinal Shop Owner","Melromarc Knights Vice-Captain","Previous Shield Hero",Raph-chan,Rifana,Rino,Rojeel,"Slave Trader","Spear Girl","Spirit Tortoise","The Pope",Tsugumi,"Tyrant Dragon Rex","Van REICHNOTT",Weist,"Yomogi EMARL","Zombie Dragon"}');
 INSERT INTO public.manga (id, title, author, year, status, last_updated, description, genres, cover, characters) VALUES (39, 'Tensei Shitara Slime Datta Ken', 'Fuse', '2015', 'ongoing', '2022-10-31T04:38:21+00:00', 'The ordinary Mikami Satoru found himself dying after being stabbed by a slasher. It should have been the end of his meager 37 years, but he found himself deaf and blind after hearing a mysterious voice. He had been reincarnated into a slime! While complaining about becoming the weak but famous slime and enjoying the life of a slime at the same time, Mikami Satoru met with the Catastrophe-level monster "Storm Dragon Veldora", and his fate began to move.', '{Action,Comedy,Isekai,Fantasy}', 'https://mangadex.org/covers/e78a489b-6632-4d61-b00b-5206f5b8b22b/18ca07e5-6a28-41ad-aef8-54df9760b7b9.jpg', '{"Rimuru TEMPEST","Alice RONDO",Benimaru,"Chloe AUBERT",Clayman,Diablo,Gabiru,"Gale GIBSON",Geld,Gobta,"Great Sage",Hakurou,"Hinata SAKAGUCHI",Kaijin,"Kenya MISAKI",Laplace,"Milim NAVA",Myulan,Ramiris,Ranga,Rigur,Rigurd,"Ryota SEKIGUCHI",Shion,"Shizue IZAWA",Shuna,Souei,"Veldora TEMPEST",Youm,Abiru,Adalman,Albis,Apito,"Arnaud BAUMAN",Bacchus,Belyard,Beretta,"Bulud von BLUMUND",Carlos,Carrion,Charybdis,Daggrull,Damrada,Deeno,"Dire Wolf Leader",Dord,Dorf,"Edmaris FALMUTH",Edward,"Elalude GRIMWALD",Eren,Folgen,Footman,Frey,Fritz,Fuze,Gaia,Garde,Garm,"Gazel DWARGO",Gelmud,Gido,"Glenda ATTLEY",Gobichi,Gobzo,Grigori,Grucius,Gunther,"Guy CRIMSON",Haruna,Hermes,Hokusou,Ifrit,Jiggis,Kagali,Kaido,Kakushin,"Kaoru YOSHIDA",Kaval,Kazhil,"Kirara MIZUTANI",Koby,Koenig,Kurobee,"Kyoya TACHIBANA","Leonard JESTER","Leon CROMWELL",Litus,"Louis VALENTIN",Lucia,"Luminous VALENTINE",Mama,Middray,"Miho SAWATARI",Misery,Mjolmire,Muller,Myrd,Nansou,"Nicholas SHPERTAS","Nine Head","Orc General","Orc Lord Geld",Phobio,Phos,Pirone,Rain,Razen,Regurd,Reyheim,Ririna,Rogurdo,Rommel,"Roy VALENTINE",Rucia,Rugurdo,Saare,Saika,"Shogo TAGUCHI",Souka,Sukero,Suphia,Sylphid,Tamura,Tear,Touka,Treyni,Tyra,Veldanava,Velzard,Vesta,Viola,Yamza,Yashichi,"Yuuki KAGARAZUKA",Zegion}');
@@ -217,21 +217,21 @@ INSERT INTO public.manga (id, title, author, year, status, last_updated, descrip
 INSERT INTO public.manga (id, title, author, year, status, last_updated, description, genres, cover, characters) VALUES (48, 'YuΓÿàYuΓÿàHakusho', 'Togashi Yoshihiro', '1990', 'completed', '2022-08-02T20:18:52+00:00', 'Yusuuke Urameshi was a tough teen delinquent until one selfless act changed his life. by ending it. When he died saving a little kid from a speeding car, the afterlife didn''t know what to do with him, so it gave him a second chance at life. Now, Yusuuke is a ghost with a mission, performing good deeds at the behest of Botan, the ferrywoman of the River Styx, and Koenma, the pacifier-sucking judge of the dead.', '{Thriller,Action,Psychological,Romance,Comedy,Adventure,Drama,Horror,"Slice of Life",Mystery,Tragedy}', 'https://mangadex.org/covers/44a5cbe1-0204-4cc7-a1ff-0fda2ac004b6/6cad3617-7ced-453c-9801-48a743a08d6c.jpg', '{Botan,Hiei,"Kazuma KUWABARA",Koenma,"Yoko Kurama","Yusuke URAMESHI","Asato KIDO","Elder Toguro",Genkai,"Keiko YUKIMURA","Mitsunari YANAGISAWA",Mukuro,Puu,Rinku,"Shinobu SENSUI","Shizuru KUWABARA",Yomi,"Younger Toguro","Yu KAITO",Yukina,"Atsuko URAMESHI",Baldok,Byakko,Chin-Po,Chu,Genbu,Gokumonki,"Gonzo TARUKANE",Gouki,Hirue,Inmaki,Itsuki,Jin,"Kaname HAGIRI",Karasu,Kazemaru,Kibano,"Kiyoshi MITARAI",Komada,Kuroda,Masaru,"Minoru KAMIYA",Miyuki,"Mr. Akashi","Mr. Iwamoto","Mr. Takenaka",Murugu,Musashi,Okubo,Raizen,Rando,"Sadao MAKIHARA",Sawamura,Sayaka,Seiryuu,Shachi,Shorin,Suzaku,Touya,"Tsukihito AMANUMA"}');
 
 --
--- Name: manga_id_seq; Type: SEQUENCE SET; Schema: public; Owner: linda
+-- Name: manga_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.manga_id_seq', 48, true);
 
 
 --
--- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: linda
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.users_id_seq', 33, true);
 
 
 --
--- Name: manga manga_pkey; Type: CONSTRAINT; Schema: public; Owner: linda
+-- Name: manga manga_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.manga
@@ -239,7 +239,7 @@ ALTER TABLE ONLY public.manga
 
 
 --
--- Name: manga manga_title_key; Type: CONSTRAINT; Schema: public; Owner: linda
+-- Name: manga manga_title_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.manga
@@ -247,7 +247,7 @@ ALTER TABLE ONLY public.manga
 
 
 --
--- Name: readmangas readmangas_pkey; Type: CONSTRAINT; Schema: public; Owner: linda
+-- Name: readmangas readmangas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.readmangas
@@ -255,7 +255,7 @@ ALTER TABLE ONLY public.readmangas
 
 
 --
--- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: linda
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users
@@ -263,7 +263,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: linda
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users
@@ -271,7 +271,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: linda
+-- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users
@@ -279,7 +279,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: readmangas readmangas_manga_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: linda
+-- Name: readmangas readmangas_manga_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.readmangas
@@ -287,7 +287,7 @@ ALTER TABLE ONLY public.readmangas
 
 
 --
--- Name: readmangas readmangas_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: linda
+-- Name: readmangas readmangas_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.readmangas
