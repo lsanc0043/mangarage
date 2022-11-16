@@ -5,7 +5,7 @@ services:
     env: node
     repo: https://github.com/lsanc0043/mangarage
     buildCommand: cd client && npm install && npm run build && cd ../server && npm install
-    startCommand: cd server && PGPASSWORD=gxKFGK8yrRhOghWSKbjbDpHLy9YrptJp psql -h dpg-cdq4l6sgqg47to0i6qjg-a.oregon-postgres.render.com -U db_3wia_user db_3wia && npm run start
+    startCommand: cd server && db-migrate up && npm run start
     envVars:
       - key: DATABASE_URL
         fromDatabase:

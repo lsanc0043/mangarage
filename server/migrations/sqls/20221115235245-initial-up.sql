@@ -1,42 +1,10 @@
---
--- PostgreSQL database dump
---
+DROP DATABASE mangarage IF EXISTS;
 
--- Dumped from database version 14.5
--- Dumped by pg_dump version 14.5
+CREATE DATABASE mangarage;
 
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
---
--- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
---
+\c mangarage;
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
-
-
---
--- Name: EXTENSION pgcrypto; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
-
-
-SET default_tablespace = '';
-
-SET default_table_access_method = heap;
-
---
--- Name: manga; Type: TABLE; Schema: public; Owner: linda
---
 
 CREATE TABLE public.manga (
     id integer NOT NULL,
@@ -51,13 +19,6 @@ CREATE TABLE public.manga (
     characters text[]
 );
 
-
-ALTER TABLE public.manga OWNER TO linda;
-
---
--- Name: manga_id_seq; Type: SEQUENCE; Schema: public; Owner: linda
---
-
 CREATE SEQUENCE public.manga_id_seq
     AS integer
     START WITH 1
@@ -66,19 +27,7 @@ CREATE SEQUENCE public.manga_id_seq
     NO MAXVALUE
     CACHE 1;
 
-
-ALTER TABLE public.manga_id_seq OWNER TO linda;
-
---
--- Name: manga_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: linda
---
-
 ALTER SEQUENCE public.manga_id_seq OWNED BY public.manga.id;
-
-
---
--- Name: readmangas; Type: TABLE; Schema: public; Owner: linda
---
 
 CREATE TABLE public.readmangas (
     user_id integer NOT NULL,
@@ -101,13 +50,6 @@ CREATE TABLE public.users (
     last_login timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
-
-ALTER TABLE public.users OWNER TO linda;
-
---
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: linda
---
-
 CREATE SEQUENCE public.users_id_seq
     AS integer
     START WITH 1
@@ -116,33 +58,12 @@ CREATE SEQUENCE public.users_id_seq
     NO MAXVALUE
     CACHE 1;
 
-
-ALTER TABLE public.users_id_seq OWNER TO linda;
-
---
--- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: linda
---
-
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
-
-
---
--- Name: manga id; Type: DEFAULT; Schema: public; Owner: linda
---
 
 ALTER TABLE ONLY public.manga ALTER COLUMN id SET DEFAULT nextval('public.manga_id_seq'::regclass);
 
-
---
--- Name: users id; Type: DEFAULT; Schema: public; Owner: linda
---
-
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
-
---
--- Data for Name: manga; Type: TABLE DATA; Schema: public; Owner: linda
---
 
 INSERT INTO public.manga (id, title, author, year, status, last_updated, description, genres, cover, characters) VALUES (1, 'A Returner''s Magic Should Be Special', 'Usonan (우소난)', '2018', 'ongoing', '2022-11-13T11:05:25+00:00', '"Now that I''m back, I won''t allow my loved ones to die again!" 
 The Shadow Labyrinth - the deadliest catastrophe humanity has ever known. Desir Arman, one of the six remaining survivors of mankind, is inside the Labyrinth. The six of them attempt to clear the final level of the Labyrinth but ultimately fail, and the world comes to an end. 
@@ -217,92 +138,36 @@ INSERT INTO public.manga (id, title, author, year, status, last_updated, descrip
 INSERT INTO public.manga (id, title, author, year, status, last_updated, description, genres, cover, characters) VALUES (48, 'Yu★Yu★Hakusho', 'Togashi Yoshihiro', '1990', 'completed', '2022-08-02T20:18:52+00:00', 'Yusuuke Urameshi was a tough teen delinquent until one selfless act changed his life. by ending it. When he died saving a little kid from a speeding car, the afterlife didn''t know what to do with him, so it gave him a second chance at life. Now, Yusuuke is a ghost with a mission, performing good deeds at the behest of Botan, the ferrywoman of the River Styx, and Koenma, the pacifier-sucking judge of the dead.', '{Thriller,Action,Psychological,Romance,Comedy,Adventure,Drama,Horror,"Slice of Life",Mystery,Tragedy}', 'https://mangadex.org/covers/44a5cbe1-0204-4cc7-a1ff-0fda2ac004b6/6cad3617-7ced-453c-9801-48a743a08d6c.jpg', '{Botan,Hiei,"Kazuma KUWABARA",Koenma,"Yoko Kurama","Yusuke URAMESHI","Asato KIDO","Elder Toguro",Genkai,"Keiko YUKIMURA","Mitsunari YANAGISAWA",Mukuro,Puu,Rinku,"Shinobu SENSUI","Shizuru KUWABARA",Yomi,"Younger Toguro","Yu KAITO",Yukina,"Atsuko URAMESHI",Baldok,Byakko,Chin-Po,Chu,Genbu,Gokumonki,"Gonzo TARUKANE",Gouki,Hirue,Inmaki,Itsuki,Jin,"Kaname HAGIRI",Karasu,Kazemaru,Kibano,"Kiyoshi MITARAI",Komada,Kuroda,Masaru,"Minoru KAMIYA",Miyuki,"Mr. Akashi","Mr. Iwamoto","Mr. Takenaka",Murugu,Musashi,Okubo,Raizen,Rando,"Sadao MAKIHARA",Sawamura,Sayaka,Seiryuu,Shachi,Shorin,Suzaku,Touya,"Tsukihito AMANUMA"}');
 
 
---
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: linda
---
-
 INSERT INTO public.users (id, username, email, password, last_login) VALUES (1, 'admin', 'admin@gmail.com', '$2a$06$19HzdMJjUYyjdIHuvIHZW.WINc8.qJrJD3fiw7yKRRUY/7e/VEmda', '2022-11-15 17:29:44.333286');
 
 
---
--- Name: manga_id_seq; Type: SEQUENCE SET; Schema: public; Owner: linda
---
-
 SELECT pg_catalog.setval('public.manga_id_seq', 48, true);
-
-
---
--- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: linda
---
 
 SELECT pg_catalog.setval('public.users_id_seq', 2, true);
 
 
---
--- Name: manga manga_pkey; Type: CONSTRAINT; Schema: public; Owner: linda
---
-
 ALTER TABLE ONLY public.manga
     ADD CONSTRAINT manga_pkey PRIMARY KEY (id);
-
-
---
--- Name: manga manga_title_key; Type: CONSTRAINT; Schema: public; Owner: linda
---
 
 ALTER TABLE ONLY public.manga
     ADD CONSTRAINT manga_title_key UNIQUE (title);
 
-
---
--- Name: readmangas readmangas_pkey; Type: CONSTRAINT; Schema: public; Owner: linda
---
-
 ALTER TABLE ONLY public.readmangas
     ADD CONSTRAINT readmangas_pkey PRIMARY KEY (user_id, manga_id);
-
-
---
--- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: linda
---
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_email_key UNIQUE (email);
 
-
---
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: linda
---
-
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
-
-
---
--- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: linda
---
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_username_key UNIQUE (username);
 
-
---
--- Name: readmangas readmangas_manga_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: linda
---
-
 ALTER TABLE ONLY public.readmangas
     ADD CONSTRAINT readmangas_manga_id_fkey FOREIGN KEY (manga_id) REFERENCES public.manga(id) ON UPDATE CASCADE;
-
-
---
--- Name: readmangas readmangas_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: linda
---
 
 ALTER TABLE ONLY public.readmangas
     ADD CONSTRAINT readmangas_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE;
 
-
---
--- PostgreSQL database dump complete
---
 
