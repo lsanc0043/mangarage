@@ -13,6 +13,7 @@
     "react-dom": "^18.2.0",
     "react-scratchcard": "^1.1.2",
     "react-scripts": "5.0.1",
+    "react-widgets": "^5.8.4",
     "roughjs": "^4.5.2",
     "web-vitals": "^2.1.4"
   },

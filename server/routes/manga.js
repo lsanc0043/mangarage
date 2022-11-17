@@ -115,56 +115,57 @@ const getManga = async (search) => {
   console.log("search input", search);
   // grabs list of top 10 matching searches
   const allData = await fetchData(
-    `https://api.mangadex.org/manga?limit=10&title=${search}`
+    `https://api.mangadex.org/manga?limit=5&title=${search}`
   );
   const mangaData = allData.data.filter((manga) => manga.type === "manga"); // removes doujinshis or one-shots
   // grabs the ONE manga that matches the searched name the most
-  const filtered = mangaData.filter((manga) =>
-    search === "prince of tennis"
-      ? manga.attributes.title.en.toLowerCase() === "the prince of tennis"
-      : search === "spy x family"
-      ? manga.attributes.title.en.toLowerCase() === "spy×family"
-      : search === "yu yu hakusho"
-      ? manga.attributes.title.en.toLowerCase() === "yu★yu★hakusho"
-      : manga.attributes.title.en
-      ? manga.attributes.title.en.toLowerCase() === search.toLowerCase()
-      : ""
-  );
+  // const filtered = mangaData.filter((manga) =>
+  //   search === "prince of tennis"
+  //     ? manga.attributes.title.en.toLowerCase() === "the prince of tennis"
+  //     : search === "spy x family"
+  //     ? manga.attributes.title.en.toLowerCase() === "spy×family"
+  //     : search === "yu yu hakusho"
+  //     ? manga.attributes.title.en.toLowerCase() === "yu★yu★hakusho"
+  //     : manga.attributes.title.en
+  //     ? manga.attributes.title.en.toLowerCase() === search.toLowerCase()
+  //     : ""
+  // );
   // a separate API call for the filtered manga's cover page
-  const filteredCover = await fetchData(
-    `https://api.mangadex.org/cover/${
-      filtered[0].relationships.filter((tag) => tag.type === "cover_art")[0].id
-    }`
-  );
+  // const filteredCover = await fetchData(
+  //   `https://api.mangadex.org/cover/${
+  //     filtered[0].relationships.filter((tag) => tag.type === "cover_art")[0].id
+  //   }`
+  // );
   // a separate API call for the filtered manga's author
-  const filteredAuthor = await fetchData(
-    `https://api.mangadex.org/author/${
-      filtered[0].relationships.filter((tag) => tag.type === "author")[0].id
-    }`
-  );
+  // const filteredAuthor = await fetchData(
+  //   `https://api.mangadex.org/author/${
+  //     filtered[0].relationships.filter((tag) => tag.type === "author")[0].id
+  //   }`
+  // );
   // a separate API call for the filtered manga's last updated chapter
-  const lastChapter = await fetchData(
-    `https://api.mangadex.org/chapter/${filtered[0].attributes.latestUploadedChapter}`
-  );
+  // const lastChapter = await fetchData(
+  //   `https://api.mangadex.org/chapter/${filtered[0].attributes.latestUploadedChapter}`
+  // );
   // uses the helper function to retrieve all associated characters
-  const characters = await getChars(
-    filtered[0].attributes.title.en.replace(/[^\w\s]|_/g, "")
-  );
+  // const characters = await getChars(
+  //   filtered[0].attributes.title.en.replace(/[^\w\s]|_/g, "")
+  // );
+  return mangaData.map((manga) => manga.attributes.title.en);
   // only grabs the sections of the large object that i need
-  return filtered.map((manga) => ({
-    id: manga.id,
-    title: manga.attributes.title.en,
-    author: filteredAuthor.data.attributes.name,
-    year: manga.attributes.year,
-    status: manga.attributes.status,
-    last_updated: lastChapter.data.attributes.updatedAt,
-    description: manga.attributes.description.en,
-    genres: manga.attributes.tags
-      .filter((tag) => tag.attributes.group === "genre")
-      .map((tag) => tag.attributes.name.en),
-    cover: `https://mangadex.org/covers/${manga.id}/${filteredCover.data.attributes.fileName}`,
-    chars: characters,
-  }));
+  // return filtered.map((manga) => ({
+  //   id: manga.id,
+  //   title: manga.attributes.title.en,
+  //   author: filteredAuthor.data.attributes.name,
+  //   year: manga.attributes.year,
+  //   status: manga.attributes.status,
+  //   last_updated: lastChapter.data.attributes.updatedAt,
+  //   description: manga.attributes.description.en,
+  //   genres: manga.attributes.tags
+  //     .filter((tag) => tag.attributes.group === "genre")
+  //     .map((tag) => tag.attributes.name.en),
+  //   cover: `https://mangadex.org/covers/${manga.id}/${filteredCover.data.attributes.fileName}`,
+  //   chars: characters,
+  // }));
 };
 
 // get request, post to the backend

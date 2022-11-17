@@ -177,7 +177,6 @@ body {
   color:#404264;
 }
 
-
 .modal-button {
   background-color: #EBEBEB;
   border-radius: 10px;
@@ -286,6 +285,12 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+input::-webkit-calendar-picker-indicator {
+  display: none;
+  appearance: none;
+  margin: 0;
+}
+
 input[type=text], input[type=password], input[type=email] {
   font-family: Arial, Helvetica, sans-serif;
   padding: 10px;
@@ -318,6 +323,13 @@ input:focus {
 
 .fa-eye:hover {
   color: red;
+}
+
+.reading-list {
+  color:#EBEBEB;
+  display: flex;
+  justify-content: center;
+  margin: 10px;
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
