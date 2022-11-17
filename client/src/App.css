@@ -45,6 +45,12 @@ body {
   z-index: 100;
 }
 
+.bookshelf {
+  position: fixed;
+  z-index: 100;
+  clip-path: url("#shelf-path");
+}
+
 .admin {
   border: 1px solid #404264;
   background-color: #404264;
@@ -86,7 +92,7 @@ body {
   z-index: 100;
 }
 
-.manga-poster:hover, .login-or-register:hover, .record:hover {
+.manga-poster:hover, .login-or-register:hover, .record:hover, .shelf:hover {
   border: white 2px solid;
 }
 
