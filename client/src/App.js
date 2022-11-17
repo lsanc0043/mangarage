@@ -3,12 +3,13 @@ import { useState } from "react";
 import LoginOrRegister from "./components/LoginOrRegister";
 import Home from "./components/Home";
 import MangaPoster from "./components/MangaPoster";
+import ReadingList from "./components/ReadingList";
 
 function App() {
   const [currentView, setCurrentView] = useState("");
   const [showError, setShowError] = useState(false);
   const [validLogin, setValidLogin] = useState(false);
-  const [userId, setUserId] = useState(0);
+  const [userId, setUserId] = useState(1);
   const [admin, setAdmin] = useState(false);
 
   const getUserId = (childData) => {
@@ -40,6 +41,8 @@ function App() {
             );
           case "poster":
             return <MangaPoster userId={userId} />;
+          case "reading-list":
+            return <ReadingList userId={userId} />;
           default:
             return null;
         }

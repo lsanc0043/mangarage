@@ -261,14 +261,16 @@ const Home = ({ validLogin, setCurrentView, setShowError, admin }) => {
             e.target.style.stroke = "none";
             e.target.style.fill = "rgba(255, 255, 255, 0)";
           }}
-          onClick={() => {console.log("clicked")}}
+          onClick={() =>
+            validLogin ? setCurrentView("reading-list") : setShowError(true)
+          }
           style={{
             strokeWidth: "0.25",
             stroke: "none",
             fill: "rgba(255, 255, 255, 0)",
             cursor: "pointer"
           }}
-          d="M 20 90 L 20 88.5 L 26 85.5 L 26 76 L 34 72 L 41.5 72 L 41.5 79.5 L 48 79.5 L 48 81 L 30 90 Z"
+          d="M 20 88 L 20 86.5 L 26 83.5 L 26 74 L 34 70 L 41.5 70 L 41.5 77.5 L 48 77.5 L 48 79 L 30 88 Z"
         ></path>
       </svg>
       <button
