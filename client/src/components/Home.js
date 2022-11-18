@@ -132,15 +132,57 @@ const Home = ({ validLogin, setCurrentView, setShowError, admin }) => {
     const drawRecord = (color, xChange, yChange) => {
       rc.path(
         `M${480 + xChange} ${380 + yChange} L ${605 + xChange} 
-              ${380 + yChange} L ${525 + xChange} ${420 + yChange} L ${400 + xChange
+              ${380 + yChange} L ${525 + xChange} ${420 + yChange} L ${
+          400 + xChange
         } ${420 + yChange} Z`,
         { stroke: "#000", fill: color }
       );
     };
 
+    const drawBooks = (color, xChange, yChange) => {
+      rc.path(
+        `M${350 + xChange} ${205 + yChange} L ${365 + xChange} ${
+          195 + yChange
+        } L ${365 + xChange} ${295 + yChange} L ${350 + xChange} ${
+          305 + yChange
+        } Z`,
+        { fill: color }
+      );
+      rc.path(
+        `M${365 + xChange} ${195 + yChange} L ${290 + xChange} ${
+          195 + yChange
+        } L ${270 + xChange} ${205 + yChange} L ${350 + xChange} ${
+          205 + yChange
+        } Z`,
+        { fill: color }
+      );
+    };
+
+    const drawShelf = (color, width, rough, xChange, yChange) => {
+      drawLine(200 + xChange, 330 + yChange, 260 + xChange, 300 + yChange, color, width, rough); // inner diagonal
+      drawLine(480 + xChange, 240 + yChange, 300 + xChange, 330 + yChange, color, width, rough); // outer diagonal
+      drawLine(480 + xChange, 240 + yChange, 420 + xChange, 240 + yChange, color, width, rough); // top horizontal
+      drawLine(200 + xChange, 330 + yChange, 300 + xChange, 330 + yChange, color, width, rough); // bottom horizontal
+      drawLine(200 + xChange, 345 + yChange, 300 + xChange, 345 + yChange, color, width, rough); // bottom horizontal - edge
+      drawLine(480 + xChange, 255 + yChange, 300 + xChange, 345 + yChange, color, width, rough); // outer diagonal - edge
+      drawLine(200 + xChange, 330 + yChange, 200 + xChange, 345 + yChange, color, width, rough); // inner edge
+      drawLine(300 + xChange, 330 + yChange, 300 + xChange, 345 + yChange, color, width, rough); // outer edge
+      drawLine(480 + xChange, 240 + yChange, 480 + xChange, 255 + yChange, color, width, rough); // outer edge
+      const rect = gen.rectangle(260 + xChange, 205 + yChange, 80, 100, {
+        fill: color,
+      });
+      rc.draw(rect);
+
+      drawBooks(color, xChange - 10, yChange);
+      drawBooks(color, xChange + 10, yChange - 10);
+      drawBooks(color, xChange + 30, yChange - 20);
+      drawBooks(color, xChange + 50, yChange - 30);
+    }
+
     drawRoom("#ebebeb", 0.3, 1, 0, 30);
     drawDesk("#ebebeb", 0.5, 2.5, 0, 30);
     drawWindow("#ebebeb", 0.3, 2, 0, 0);
+    drawShelf("#87805A", 0.5, 2, 0, -25);
     const rect = gen.rectangle(550, 60, 200, 270, {
       fill: "#404264",
     });
@@ -182,31 +224,55 @@ const Home = ({ validLogin, setCurrentView, setShowError, admin }) => {
         <Modal.Body className="admin-modal admin">
           <table className="table user-list">
             <tbody>
-              {allUsers.filter((user) => user.username !== "admin").map((user, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{user.username}</td>
-                    <td>{user.email.slice(0, 2) + "*****@gmail.com"}</td>
-                    <td>
-                      <button
-                        onClick={() => deleteUser(user.id)}
-                        style={{
-                          outline: "none !important",
-                          background: "none",
-                          border: "none",
-                        }}
-                      >
-                        <i className="fa fa-trash-o" aria-hidden="true"></i>
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
+              {allUsers
+                .filter((user) => user.username !== "admin")
+                .map((user, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{user.username}</td>
+                      <td>{user.email.slice(0, 2) + "*****@gmail.com"}</td>
+                      <td>
+                        <button
+                          onClick={() => deleteUser(user.id)}
+                          style={{
+                            outline: "none !important",
+                            background: "none",
+                            border: "none",
+                          }}
+                        >
+                          <i className="fa fa-trash-o" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
         </Modal.Body>
       </Modal>
+      <svg viewBox="0 0 100 100" width="1000px" className="bookshelf">
+        <path
+          className="shelf"
+          onMouseEnter={(e) => {
+            e.target.style.stroke = "#ebebeb";
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.stroke = "none";
+            e.target.style.fill = "rgba(255, 255, 255, 0)";
+          }}
+          onClick={() =>
+            validLogin ? setCurrentView("reading-list") : setShowError(true)
+          }
+          style={{
+            strokeWidth: "0.25",
+            stroke: "none",
+            fill: "rgba(255, 255, 255, 0)",
+            cursor: "pointer"
+          }}
+          d="M 20 88 L 20 86.5 L 26 83.5 L 26 74 L 34 70 L 41.5 70 L 41.5 77.5 L 48 77.5 L 48 79 L 30 88 Z"
+        ></path>
+      </svg>
       <button
         className="record"
         onClick={() => setShow(true)}

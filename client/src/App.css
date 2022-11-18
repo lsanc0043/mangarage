@@ -45,6 +45,12 @@ body {
   z-index: 100;
 }
 
+.bookshelf {
+  position: fixed;
+  z-index: 100;
+  clip-path: url("#shelf-path");
+}
+
 .admin {
   border: 1px solid #404264;
   background-color: #404264;
@@ -86,7 +92,7 @@ body {
   z-index: 100;
 }
 
-.manga-poster:hover, .login-or-register:hover, .record:hover {
+.manga-poster:hover, .login-or-register:hover, .record:hover, .shelf:hover {
   border: white 2px solid;
 }
 
@@ -170,7 +176,6 @@ body {
   padding: 5px 10px;
   color:#404264;
 }
-
 
 .modal-button {
   background-color: #EBEBEB;
@@ -280,6 +285,12 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+input::-webkit-calendar-picker-indicator {
+  display: none;
+  appearance: none;
+  margin: 0;
+}
+
 input[type=text], input[type=password], input[type=email] {
   font-family: Arial, Helvetica, sans-serif;
   padding: 10px;
@@ -312,6 +323,13 @@ input:focus {
 
 .fa-eye:hover {
   color: red;
+}
+
+.reading-list {
+  color:#EBEBEB;
+  display: flex;
+  justify-content: center;
+  margin: 10px;
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
