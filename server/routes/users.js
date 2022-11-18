@@ -7,6 +7,10 @@ const validLogin = [0]; // checks for valid login [0] = false, [1] = true
 
 // retrieves all users and displays, all users have encrypted passwords
 router.get("/", async (req, res) => {
+  await db.any(
+    "CREATE TABLE IF NOT EXISTS users (id serial primary key, username text unique, email text unique not null, password text not null, last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP)",
+    [true]
+  );
   try {
     const allUsers = await db.any(
       "SELECT id, username, email, last_login FROM users ORDER BY id",
