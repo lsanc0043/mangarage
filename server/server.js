@@ -52,7 +52,9 @@ app.get("/initialize", async (req, res) => {
     "CREATE TABLE IF NOT EXISTS readmangas (user_id int not null, manga_id int not null, rating decimal not null, PRIMARY KEY ( user_id, manga_id), FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE, FOREIGN KEY (manga_id) REFERENCES manga(id) ON UPDATE CASCADE)",
     [true]
   );
-  MangaDump.map(async (query) => await db.any(`${query}`, [true]));
+  for (let i = 0; i < 48; i++) {
+    await db.query(`${MangaDump[i]}`, [true]);
+  }
   res.send({ type: "success" });
 });
 
