@@ -7,6 +7,7 @@ const router = Router();
 // retrieves all manga poster information
 router.get("/", async (req, res) => {
   try {
+    await db.any("CREATE EXTENSION IF NOT EXISTS pgcrypto", []);
     await db.any(
       "CREATE TABLE IF NOT EXISTS manga (id serial primary key, title text not null unique, author text not null, year text, status text,  last_updated text, description text, genres text[], cover text not null, characters text[])",
       [true]
