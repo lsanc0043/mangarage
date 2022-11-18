@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 const getData = async () => {
   try {
-    const response = await fetch("http://localhost:4020/initialize");
+    const response = await fetch("/initialize");
     const data = await response.json();
     console.log(data);
   } catch (e) {
