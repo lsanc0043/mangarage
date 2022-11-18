@@ -5,7 +5,7 @@ services:
     env: node
     repo: https://github.com/lsanc0043/mangarage
     buildCommand: cd client && npm install && npm run build && cd ../server && npm install
-    startCommand: cd server && psql -f db.sql postgres && npm run start
+    startCommand: cd server && db-migrate up initialize && npm run start
     envVars:
       - key: DATABASE_URL
         fromDatabase:
