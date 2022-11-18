@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
-
 CREATE TABLE public.manga (
     id serial primary key,
     title text NOT NULL,
