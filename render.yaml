@@ -4,8 +4,8 @@ services:
     type: web
     env: node
     repo: https://github.com/lsanc0043/mangarage
-    buildCommand: cd client && npm install && node src/components/test.mjs && npm run build && cd ../server && npm install
-    startCommand: cd server && node ./node_modules/db-migrate/bin/db-migrate up && npm run start
+    buildCommand: cd client && npm install && npm run build && cd ../server && npm install
+    startCommand: cd client && node src/components/test.mjs && cd ../server && node ./node_modules/db-migrate/bin/db-migrate up && npm run start
     envVars:
       - key: DATABASE_URL
         fromDatabase:
