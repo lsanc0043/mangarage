@@ -2,11 +2,13 @@ import { useState } from "react";
 // eslint-disable-next-line
 import "react-widgets/styles.css";
 import Combobox from "react-widgets/Combobox";
-// import DropdownList from "react-widgets/DropdownList";
+import DropdownList from "react-widgets/DropdownList";
 
 const ReadingList = ({ userId }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [selection, setSelection] = useState("");
+  const [status, setStatus] = useState("");
+
   const searchManga = async (e) => {
     const search = e;
     if (search[0] !== " " && search !== "") {
@@ -23,6 +25,21 @@ const ReadingList = ({ userId }) => {
     setSelection(data[0]);
   };
 
+  const addToList = async () => {
+    const response = await fetch(`/users/reading/${userId}`, {
+      method: "POST",
+      headers: {
+        Accepted: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: selection.id,
+        status: status,
+      }),
+    });
+    await response.json();
+  };
+
   return (
     <div className="reading-list">
       <form>
@@ -35,17 +52,13 @@ const ReadingList = ({ userId }) => {
           onChange={searchManga}
           onSelect={obtainMangaInfo}
         />
-        {/* <DropdownList
-          placeholder="Status"
-          data={["Just Started", "Halfway", "Almost Done"]}
-        /> */}
       </form>
       <div
         className="reading-list-selection"
-        style={{ display: selection === "" ? "none" : "block" }}
+        style={{ display: selection === "" ? "none" : "flex" }}
       >
         <h2>{`${selection.title} (${selection.year})`}</h2>
-        <div style={{display: "flex", width: "1000px", padding: "0px 40px"}}>
+        <div style={{ display: "flex", width: "1000px", padding: "15px 40px" }}>
           <img
             className="modal-cover"
             src={selection.cover}
@@ -69,15 +82,38 @@ const ReadingList = ({ userId }) => {
               {selection.genres ? selection.genres.slice(0, 5).join(", ") : ""}
             </h5>
             {/* scrollable description */}
-            <div className="manga-description">
-              <h5>
-                <strong>Description: </strong>
-                {selection.description}
-              </h5>
-            </div>
+            <h5 className="manga-description" style={{ width: "700px" }}>
+              <strong>Description: </strong>
+              {selection.description
+                ? selection.description.slice(
+                    0,
+                    selection.description.indexOf("---")
+                  )
+                : ""}
+            </h5>
           </div>
         </div>
-        <button className="modal-button">Add to Currently Reading</button>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            width: "500px",
+          }}
+        >
+          <DropdownList
+            placeholder="Status"
+            data={["Just Started", "Halfway", "Almost Done"]}
+            onSelect={(e) => setStatus(e)}
+          />
+          <button
+            className="modal-button"
+            onClick={addToList}
+            style={{ width: "1000px" }}
+          >
+            Add to Currently Reading
+          </button>
+        </div>
       </div>
     </div>
   );

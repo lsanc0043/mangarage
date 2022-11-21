@@ -113,7 +113,6 @@ const fetchData = async (url) => {
 
 const getManga = async (search, source) => {
   console.log("search input", search);
-  console.log("source", source);
   // grabs list of top 10 matching searches
   const allData = await fetchData(
     `https://api.mangadex.org/manga?limit=5&title=${search}`
@@ -155,6 +154,7 @@ const getManga = async (search, source) => {
       );
       // only grabs the sections of the large object that i need
       return filtered.map((manga) => ({
+        id: manga.id,
         title: manga.attributes.title.en,
         author: filteredAuthor.data.attributes.name,
         year: manga.attributes.year,

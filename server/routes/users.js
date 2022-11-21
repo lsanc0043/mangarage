@@ -7,6 +7,18 @@ const validLogin = [0]; // checks for valid login [0] = false, [1] = true
 
 // retrieves all users and displays, all users have encrypted passwords
 router.get("/", async (req, res) => {
+  await db.any(
+    "CREATE TABLE IF NOT EXISTS users (id serial primary key, username text unique, email text unique not null, password text not null, last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP)",
+    [true]
+  );
+  const admin = await db.any("SELECT FROM users WHERE id=1");
+  if (admin.length === 0) {
+    await db.any(
+      "INSERT INTO users (id, username, email, password) VALUES (1, 'admin', 'admin@gmail.com', $1);",
+      ["$2a$06$19HzdMJjUYyjdIHuvIHZW.WINc8.qJrJD3fiw7yKRRUY/7e/VEmda"]
+    );
+  }
+
   try {
     const allUsers = await db.any(
       "SELECT id, username, email, last_login FROM users ORDER BY id",
@@ -54,11 +66,17 @@ router.post("/add", async (req, res) => {
     username: req.body.username,
     password: req.body.password,
   };
+  const userLog = await db.any("SELECT FROM users WHERE username=$1", [
+    user.username,
+  ]);
   try {
-    const newUser = await db.any(
-      "INSERT INTO users (username, email, password) VALUES ($1, $2, crypt($3, gen_salt('bf')));",
-      [user.username, user.email, user.password]
-    );
+    console.log(userLog);
+    if (userLog.length === 0) {
+      const newUser = await db.any(
+        "INSERT INTO users (username, email, password) VALUES ($1, $2, crypt($3, gen_salt('bf')));",
+        [user.username, user.email, user.password]
+      );
+    }
   } catch (e) {
     console.log("user register", e);
     res.status(400).send({ e });
@@ -89,6 +107,10 @@ router.delete("/:id", async (req, res) => {
 
 // retrieves readmangas junction table info, filtered and separated by user id
 router.get("/read/:id", async (req, res) => {
+  await db.any(
+    "CREATE TABLE IF NOT EXISTS readmangas (user_id int not null, manga_id int not null, rating decimal not null, PRIMARY KEY ( user_id, manga_id), FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE, FOREIGN KEY (manga_id) REFERENCES manga(id) ON UPDATE CASCADE);",
+    [true]
+  );
   try {
     const readMangas = await db.any(
       "SELECT * FROM readmangas where user_id=$1 ORDER BY manga_id",
@@ -145,6 +167,33 @@ router.delete("/read/:userid/:mangaid", async (req, res) => {
     console.log("readmangas delete", e);
     res.status(400).send({ e });
   }
+});
+
+// retrieves readmangas junction table info, filtered and separated by user id
+router.get("/reading/:id", async (req, res) => {
+  await db.any(
+    "CREATE TABLE IF NOT EXISTS readinglist (id serial primary key, user_id int not null, manga_id text not null, status text);",
+    [true]
+  );
+  try {
+    const reading = await db.any(
+      "SELECT * FROM readinglist where user_id=$1 ORDER BY manga_id",
+      [req.params.id]
+    );
+    res.send(reading);
+  } catch (e) {
+    console.log("readinglist get", e);
+    res.status(400).send({ e });
+  }
+});
+
+router.post("/reading/:id", async (req, res) => {
+  const user_id = req.params.id;
+  const manga = {
+    id: req.body.id,
+    status: req.body.status,
+  };
+  console.log([user_id, manga.id, manga.status]);
 });
 
 export default router;
