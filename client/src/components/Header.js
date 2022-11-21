@@ -39,7 +39,9 @@ const Header = ({
             <h4 className="welcome">
               Welcome,{" "}
               <span style={{ textDecoration: "underline" }}>
-                {isAuthenticated ? loggedUser : loggedUser[0].username}
+                {isAuthenticated
+                  ? loggedUser.slice(0, loggedUser.indexOf("@"))
+                  : loggedUser[0].username}
               </span>
             </h4>
             <button
