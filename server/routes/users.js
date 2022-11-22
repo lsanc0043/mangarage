@@ -159,11 +159,16 @@ router.delete("/read/:userid/:mangaid", async (req, res) => {
   const mangaid = req.params.mangaid;
   console.log(userid, mangaid);
   try {
-    await db.query("DELETE FROM readmangas WHERE user_id=$1 AND manga_id=$2", [
-      userid,
-      mangaid,
-    ]);
-    res.send({ type: "success" });
+    if (Number(mangaid) === 0) {
+      await db.query("DELETE FROM readmangas WHERE user_id=$1", [userid]);
+      res.send({ type: "success" });
+    } else {
+      await db.query(
+        "DELETE FROM readmangas WHERE user_id=$1 AND manga_id=$2",
+        [userid, mangaid]
+      );
+      res.send({ type: "success" });
+    }
   } catch (e) {
     console.log("readmangas delete", e);
     res.status(400).send({ e });

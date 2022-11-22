@@ -6,7 +6,7 @@ import MangaPoster from "./components/MangaPoster";
 import ReadingList from "./components/ReadingList";
 
 function App() {
-  const [currentView, setCurrentView] = useState("reading-list");
+  const [currentView, setCurrentView] = useState("");
   const [showError, setShowError] = useState(false);
   const [validLogin, setValidLogin] = useState(false);
   const [userId, setUserId] = useState(2);

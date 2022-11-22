@@ -130,6 +130,7 @@ const MangaModal = ({
                   type="number"
                   max="10"
                   style={{ width: "30px" }}
+                  placeholder="0"
                   value={userRating}
                   onChange={(e) => sendRating(e.target.value)}
                 />
