@@ -23,11 +23,22 @@ const ReadingList = ({ userId, getList, readingList }) => {
     }
   };
 
+  const getImage = async (id) => {
+    // console.log(`cover-image-${id}`);
+    let img = document.getElementById(`cover-image-${id}`);
+    // console.log(img);
+    const response = await fetch("/cover");
+    const data = await response.blob();
+    let objectURL = URL.createObjectURL(data);
+    img.src = objectURL;
+  };
+
   const obtainMangaInfo = async (e) => {
     const response = await fetch(`/manga/select/${e}`);
     const data = await response.json();
     console.log(data[0]);
     setSelection(data[0]);
+    // getImage(data[0].id);
   };
 
   const addToList = async () => {
@@ -141,8 +152,9 @@ const ReadingList = ({ userId, getList, readingList }) => {
             style={{ display: "flex", width: "1000px", padding: "15px 40px" }}
           >
             <img
+              id={`cover-image-${selection.id}`}
               className="modal-cover"
-              src={selection.cover}
+              src={getImage(selection.id)}
               alt={`${selection.title} cover`}
             />
             {/* other manga content: author, status, genres, description */}

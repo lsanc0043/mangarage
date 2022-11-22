@@ -6,7 +6,7 @@ import MangaPoster from "./components/MangaPoster";
 import ReadingList from "./components/ReadingList";
 
 function App() {
-  const [currentView, setCurrentView] = useState("");
+  const [currentView, setCurrentView] = useState("reading-list");
   const [showError, setShowError] = useState(false);
   const [validLogin, setValidLogin] = useState(false);
   const [userId, setUserId] = useState(0);
@@ -34,15 +34,9 @@ function App() {
     setAllMangas(data);
   };
 
-  const getImage = async () => {
-    const response = await fetch("/cover");
-    console.log(response);
-  };
-
   useEffect(() => {
     getList();
     getMangas();
-    getImage();
   }, [userId]);
 
   return (
