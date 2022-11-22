@@ -3,8 +3,7 @@ import ScratchCard from "react-scratchcard";
 import { useState, useEffect } from "react";
 import MangaModal from "./MangaModal";
 
-const MangaPoster = ({ userId }) => {
-  const [allMangas, setAllMangas] = useState([]);
+const MangaPoster = ({ userId, allMangas, getMangas }) => {
   const [readMangas, setReadMangas] = useState([]);
   const [selectedManga, setSelectedManga] = useState({});
   const [showModal, setShowModal] = useState(false);
@@ -29,13 +28,6 @@ const MangaPoster = ({ userId }) => {
     return () => clearTimeout(timer);
   }, [reset]);
 
-  // retrieve all the mangas
-  const getMangas = async () => {
-    const response = await fetch("/manga");
-    const data = await response.json();
-    setAllMangas(data);
-  };
-
   // retrieve the read mangas
   const getReadMangas = async () => {
     const response = await fetch(`/users/read/${userId}`);
@@ -45,7 +37,6 @@ const MangaPoster = ({ userId }) => {
   };
 
   useEffect(() => {
-    getMangas();
     getReadMangas();
     // eslint-disable-next-line
   }, []);

@@ -230,6 +230,7 @@ body {
 
 .manga-info {
   padding-left: 40px;
+  text-align: left;
 }
 
 .quiz {
@@ -329,8 +330,30 @@ input:focus {
   color:#EBEBEB;
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
   margin: 10px;
 }
+
+.reading-list-selection {
+  margin-top: 20px;
+  background-color: #839FC3;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  color: #201D1D;
+  flex-direction: column;
+  align-items: center;
+}
+
+.all-tables {
+  display: grid;
+  grid-template-columns: repeat(3, 500px);
+  grid-gap: 10px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {

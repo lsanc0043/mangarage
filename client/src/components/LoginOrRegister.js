@@ -200,7 +200,7 @@ const LoginOrRegister = ({
 
   useEffect(() => {
     if (isAuthenticated) {
-      setLoggedUser(user.given_name);
+      setLoggedUser(user.email);
       setShow(false);
       setShowError(false);
       setValidLogin(true);
