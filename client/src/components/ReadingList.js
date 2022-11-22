@@ -12,7 +12,7 @@ const ReadingList = ({ userId }) => {
   const [status, setStatus] = useState("");
   const [readingStatus, setReadingStatus] = useState("");
   const [rating, setRating] = useState("");
-  const [editRating, setEditRating] = useState([]);
+  const [editRating, setEditRating] = useState({});
   const [currentPage, setCurrentPage] = useState("");
   const [readingList, setReadingList] = useState([]);
   const [editMode, setEditMode] = useState(false);
@@ -23,6 +23,7 @@ const ReadingList = ({ userId }) => {
     newParent: "",
   });
   const [editArray, setEditArray] = useState([]);
+  const [moveId, setMoveId] = useState(0);
 
   const searchManga = async (e) => {
     if (e[0] !== " " && e !== "") {
@@ -99,6 +100,7 @@ const ReadingList = ({ userId }) => {
 
   const handleUp = (e) => {
     getList();
+
     setDragInfo((oldValues) => ({ ...oldValues, name: e.target.innerText }));
     if (
       readingList.filter((manga) => manga.manga_name === e.target.innerText)
@@ -120,6 +122,16 @@ const ReadingList = ({ userId }) => {
 
   const handleDrag = async (e) => {
     if (editMode === false) {
+      if (
+        readingList.filter((manga) => manga.manga_name === e.target.innerText)
+          .length > 0
+      ) {
+        setMoveId(
+          readingList.filter(
+            (manga) => manga.manga_name === e.target.innerText
+          )[0].id
+        );
+      }
       console.log(e);
       let newParent = "";
       if (e.x < 525) {
@@ -157,13 +169,33 @@ const ReadingList = ({ userId }) => {
     console.log(e, manga_id);
   };
 
-  const handleDone = (mode) => {
+  const handleDone = (mode, changedItem) => {
+    setMoveId(0);
+    setEditId(0);
     // console.log(editArray.map((val) => Object.values(val)));
     if (mode === "Done") {
       getList();
-      editArray
-        .map((val) => Object.keys(val))
-        .map(async (editItem, index) => {
+      if (changedItem === "status") {
+        editArray
+          .map((val) => Object.keys(val))
+          .map(async (editItem, index) => {
+            const response = await fetch(
+              `/users/reading/${userId}/${editItem}`,
+              {
+                method: "PUT",
+                headers: {
+                  Accepted: "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  status: editArray.map((val) => Object.values(val)[0])[index],
+                }),
+              }
+            );
+          });
+      }
+      if (changedItem === "rating") {
+        Object.keys(editRating).map(async (editItem, index) => {
           const response = await fetch(`/users/reading/${userId}/${editItem}`, {
             method: "PUT",
             headers: {
@@ -171,25 +203,16 @@ const ReadingList = ({ userId }) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              status: editArray.map((val) => Object.values(val)[0])[index],
+              rating: Object.values(editRating)[index],
             }),
           });
+          console.log(editItem);
         });
-      editRating
-        .map((val) => Object.keys(val))
-        .map(async (editItem, index) => {
-          const response = await fetch(`/users/reading/${userId}/${editItem}`, {
-            method: "PUT",
-            headers: {
-              Accepted: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              rating: editRating.map((val) => Object.values(val)[0])[index],
-            }),
-          });
-        });
+      }
     }
+
+    setEditArray([]);
+    setEditRating([]);
   };
 
   const renderReadingList = () => {
@@ -254,21 +277,50 @@ const ReadingList = ({ userId }) => {
                             onStop={handleDrag}
                             key={manga.id}
                             onMouseDown={handleUp}
+                            disabled={editMode ? true : false}
                           >
-                            <tr className={editMode ? "" : "drag-manga"}>
+                            <tr
+                              className={
+                                editMode || moveId !== 0 ? "" : "drag-manga"
+                              }
+                            >
                               <td>{manga.manga_name}</td>
                               {tableName === "Currently Reading" ? (
                                 <td>
-                                  {editMode && editId === manga.id ? (
-                                    <DropdownList
-                                      placeholder={manga.status[1]}
-                                      data={[
-                                        "Just Started",
-                                        "Halfway",
-                                        "Almost Done",
-                                      ]}
-                                      onSelect={(e) => handleEdit(e, manga.id)}
-                                    />
+                                  {(editMode && editId === manga.id) ||
+                                  moveId === manga.id ? (
+                                    <>
+                                      <DropdownList
+                                        placeholder={manga.status[1]}
+                                        data={[
+                                          "Just Started",
+                                          "Halfway",
+                                          "Almost Done",
+                                        ]}
+                                        onSelect={(e) => {
+                                          handleEdit(e, manga.id);
+                                          handleDone("Done", "status");
+                                        }}
+                                      />
+                                      <button
+                                        style={{
+                                          border: "none",
+                                          background: "none",
+                                          display:
+                                            editMode || moveId === manga.id
+                                              ? "none"
+                                              : "inline",
+                                        }}
+                                        onClick={() => {
+                                          handleDone("Done", "status");
+                                        }}
+                                      >
+                                        <i
+                                          className="fa fa-check"
+                                          style={{ color: "#EBEBEB" }}
+                                        ></i>
+                                      </button>
+                                    </>
                                   ) : (
                                     manga.status[1]
                                   )}
@@ -292,26 +344,67 @@ const ReadingList = ({ userId }) => {
                                 </td>
                               ) : tableName === "Completed" ? (
                                 <td>
-                                  {editMode === true ? (
-                                    <form>
-                                      <span style={{ fontSize: "18px" }}>
-                                        <input
-                                          type="number"
-                                          max="10"
-                                          style={{ width: "30px" }}
-                                          value={editRating[manga.id]}
-                                          onChange={(e) => {
-                                            editRating.push({
-                                              [manga.id]: e.target.value,
-                                            });
+                                  {(editMode && editId === manga.id) ||
+                                  moveId === manga.id ? (
+                                    <>
+                                      <form>
+                                        <span style={{ fontSize: "18px" }}>
+                                          <input
+                                            type="number"
+                                            max="10"
+                                            style={{ width: "30px" }}
+                                            placeholder={manga.rating}
+                                            value={
+                                              editRating[manga.id]
+                                                ? editRating[manga.id]
+                                                : ""
+                                            }
+                                            onChange={(e) => {
+                                              setEditRating((oldValues) => ({
+                                                ...oldValues,
+                                                [manga.id]: e.target.value,
+                                              }));
+                                            }}
+                                          />
+                                        </span>
+                                        /10
+                                        <button
+                                          style={{
+                                            border: "none",
+                                            background: "none",
                                           }}
-                                        />
-                                      </span>
-                                      /10
-                                    </form>
+                                          onClick={(e) => {
+                                            e.preventDefault();
+                                            handleDone("Done", "rating");
+                                          }}
+                                        >
+                                          <i
+                                            className="fa fa-check"
+                                            style={{ color: "#EBEBEB" }}
+                                          ></i>
+                                        </button>
+                                      </form>
+                                    </>
                                   ) : (
                                     `${manga.rating}/10`
                                   )}
+                                  <button
+                                    style={{
+                                      display: editMode
+                                        ? editId === manga.id
+                                          ? "none"
+                                          : "inline"
+                                        : "none",
+                                      border: "none",
+                                      background: "none",
+                                    }}
+                                    onClick={() => setEditId(manga.id)}
+                                  >
+                                    <i
+                                      style={{ color: "#EBEBEB" }}
+                                      className="fa fa-pencil"
+                                    ></i>
+                                  </button>
                                 </td>
                               ) : (
                                 <></>
@@ -363,7 +456,14 @@ const ReadingList = ({ userId }) => {
             x
           </button>
         </div>
-        <div style={{ margin: "10px" }}>
+        <div
+          style={{
+            margin: "10px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
           <form style={{ display: "flex", alignItems: "center" }}>
             <Combobox
               hideCaret
