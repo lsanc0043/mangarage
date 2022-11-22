@@ -1,25 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // eslint-disable-next-line
 import "react-widgets/styles.css";
 import Combobox from "react-widgets/Combobox";
 import DropdownList from "react-widgets/DropdownList";
+const tables = ["Will Read", "Currently Reading", "Completed"];
 
-const ReadingList = ({ userId }) => {
-  const [userList, setUserList] = useState([]);
+const ReadingList = ({ userId, readingList }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [selection, setSelection] = useState("");
   const [status, setStatus] = useState("");
+  const [rating, setRating] = useState(0);
   const [currentPage, setCurrentPage] = useState("");
-
-  const getList = async (e) => {
-    const response = await fetch(`/users/reading/${userId}`);
-    const data = await response.json();
-    console.log(data);
-  };
-
-  useEffect(() => {
-    getList();
-  }, []);
 
   const searchManga = async (e) => {
     const search = e;
@@ -48,6 +39,7 @@ const ReadingList = ({ userId }) => {
       },
       body: JSON.stringify({
         id: selection.id,
+        title: selection.title,
         status: status,
       }),
     });
@@ -57,7 +49,59 @@ const ReadingList = ({ userId }) => {
   const renderReadingList = () => {
     return (
       <>
-        <button onClick={() => setCurrentPage("add")}>+</button>
+        <button
+          onClick={() => setCurrentPage("add")}
+          className="login-or-register"
+        >
+          Add To List
+        </button>
+        <div className="all-tables">
+          {tables.map((tableName, index) => {
+            return (
+              <div key={index}>
+                <h3>{tableName}</h3>
+                <table
+                  className={`table ${tableName
+                    .toLowerCase()
+                    .split(" ")
+                    .join("-")}`}
+                >
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      {tableName === "Currently Reading" ? (
+                        <th>Status</th>
+                      ) : tableName === "Completed" ? (
+                        <th>Rating</th>
+                      ) : (
+                        <></>
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* {console.log(readingList.filter((manga) => manga.status = tableName))} */}
+                    {readingList.map((manga) => {
+                      if (manga.status === tableName) {
+                        return (
+                          <tr key={manga.id}>
+                            <td>{manga.manga_name}</td>
+                            {tableName === "Currently Reading" ? (
+                              <td>{manga.status}</td>
+                            ) : tableName === "Completed" ? (
+                              <td>Rating</td>
+                            ) : (
+                              <></>
+                            )}
+                          </tr>
+                        );
+                      }
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            );
+          })}
+        </div>
       </>
     );
   };
@@ -130,15 +174,38 @@ const ReadingList = ({ userId }) => {
           >
             <DropdownList
               placeholder="Status"
-              data={["Just Started", "Halfway", "Almost Done"]}
+              data={["Will Read", "Currently Reading", "Completed"]}
               onSelect={(e) => setStatus(e)}
             />
+            {status === "Currently Reading" ? (
+              <DropdownList
+                placeholder="Status"
+                data={["Just Started", "Halfway", "Almost Done"]}
+                onSelect={(e) => setStatus(e)}
+              />
+            ) : status === "Completed" ? (
+              <form>
+                <span style={{ fontSize: "18px" }}>
+                  <strong>Rating: </strong>
+                  <input
+                    type="number"
+                    max="10"
+                    style={{ width: "30px" }}
+                    value={rating}
+                    onChange={(e) => setRating(e.target.value)}
+                  />
+                  <strong>/10</strong>
+                </span>
+              </form>
+            ) : (
+              <></>
+            )}
             <button
               className="modal-button"
               onClick={addToList}
               style={{ width: "1000px" }}
             >
-              Add to Currently Reading
+              {`Add to ${status}`}
             </button>
           </div>
         </div>
@@ -148,7 +215,7 @@ const ReadingList = ({ userId }) => {
 
   return (
     <div className="reading-list">
-      <h1>Your Reading List</h1>
+      {/* <h1>Your Reading List</h1> */}
       {currentPage === "" ? renderReadingList() : renderForm()}
     </div>
   );

@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
+import http from "http";
+import httpProxy from "http-proxy";
 import mangasRouter from "./routes/manga.js";
 import usersRouter from "./routes/users.js";
 import questionsRouter from "./routes/questions.js";
@@ -8,6 +10,24 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const app = express();
+const apiProxy = httpProxy.createProxyServer();
+
+httpProxy.createProxyServer({ target: "mangarage.onrender.com" }).listen(9000); // See (†)
+
+//
+// Create your target server
+//
+// http
+//   .createServer(function (req, res) {
+//     res.writeHead(200, { "Content-Type": "text/plain" });
+//     res.write(
+//       "request successfully proxied!" +
+//         "\n" +
+//         JSON.stringify(req.headers, true, 2)
+//     );
+//     res.end();
+//   })
+//   .listen(9000);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
