@@ -3,13 +3,15 @@ import { useState } from "react";
 import "react-widgets/styles.css";
 import Combobox from "react-widgets/Combobox";
 import DropdownList from "react-widgets/DropdownList";
+import Draggable from "react-draggable";
 const tables = ["Will Read", "Currently Reading", "Completed"];
 
-const ReadingList = ({ userId, readingList }) => {
+const ReadingList = ({ userId, getList, readingList }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [selection, setSelection] = useState("");
   const [status, setStatus] = useState("");
-  const [rating, setRating] = useState(0);
+  const [readingStatus, setReadingStatus] = useState("");
+  const [rating, setRating] = useState("");
   const [currentPage, setCurrentPage] = useState("");
 
   const searchManga = async (e) => {
@@ -31,6 +33,9 @@ const ReadingList = ({ userId, readingList }) => {
   const addToList = async () => {
     setCurrentPage("");
     setSelection("");
+    getList();
+    setStatus("");
+    setReadingStatus("");
     const response = await fetch(`/users/reading/${userId}`, {
       method: "POST",
       headers: {
@@ -40,7 +45,8 @@ const ReadingList = ({ userId, readingList }) => {
       body: JSON.stringify({
         id: selection.id,
         title: selection.title,
-        status: status,
+        status: [status, readingStatus],
+        rating: rating,
       }),
     });
     await response.json();
@@ -58,7 +64,7 @@ const ReadingList = ({ userId, readingList }) => {
         <div className="all-tables">
           {tables.map((tableName, index) => {
             return (
-              <div key={index}>
+              <div key={index} className="manga-list">
                 <h3>{tableName}</h3>
                 <table
                   className={`table ${tableName
@@ -81,18 +87,24 @@ const ReadingList = ({ userId, readingList }) => {
                   <tbody>
                     {/* {console.log(readingList.filter((manga) => manga.status = tableName))} */}
                     {readingList.map((manga) => {
-                      if (manga.status === tableName) {
+                      if (manga.status[0] === tableName) {
                         return (
-                          <tr key={manga.id}>
-                            <td>{manga.manga_name}</td>
-                            {tableName === "Currently Reading" ? (
-                              <td>{manga.status}</td>
-                            ) : tableName === "Completed" ? (
-                              <td>Rating</td>
-                            ) : (
-                              <></>
-                            )}
-                          </tr>
+                          <Draggable
+                            grid={[460, 50]}
+                            onStop={(e) => console.log(e)}
+                            key={manga.id}
+                          >
+                            <tr className="drag-manga">
+                              <td>{manga.manga_name}</td>
+                              {tableName === "Currently Reading" ? (
+                                <td>{manga.status[1]}</td>
+                              ) : tableName === "Completed" ? (
+                                <td>{manga.rating}/10</td>
+                              ) : (
+                                <></>
+                              )}
+                            </tr>
+                          </Draggable>
                         );
                       }
                     })}
@@ -181,7 +193,7 @@ const ReadingList = ({ userId, readingList }) => {
               <DropdownList
                 placeholder="Status"
                 data={["Just Started", "Halfway", "Almost Done"]}
-                onSelect={(e) => setStatus(e)}
+                onSelect={(e) => setReadingStatus(e)}
               />
             ) : status === "Completed" ? (
               <form>

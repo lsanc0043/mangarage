@@ -348,10 +348,21 @@ input:focus {
 
 .all-tables {
   display: grid;
-  grid-template-columns: repeat(3, 500px);
+  grid-template-columns: repeat(3, 450px);
   grid-gap: 10px;
   justify-content: center;
   margin-top: 15px;
+  height: fit-content;
+}
+
+.manga-list {
+  padding: 20px;
+  border:#404264 1px solid;
+  border-radius: 10px;
+}
+
+.drag-manga:hover {
+  cursor: move;
 }
 
 

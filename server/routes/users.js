@@ -173,7 +173,7 @@ router.delete("/read/:userid/:mangaid", async (req, res) => {
 // retrieves readinglist junction table info, filtered and separated by user id
 router.get("/reading/:id", async (req, res) => {
   await db.any(
-    "CREATE TABLE IF NOT EXISTS readinglist (id serial primary key, user_id int not null, manga_name text not null, manga_id text not null, status text);",
+    "CREATE TABLE IF NOT EXISTS readinglist (id serial primary key, user_id int not null, manga_name text not null, manga_id text not null, status text[], rating text);",
     [true]
   );
   try {
@@ -193,6 +193,7 @@ router.post("/reading/:id", async (req, res) => {
     id: req.body.id,
     title: req.body.title,
     status: req.body.status,
+    rating: req.body.rating,
   };
   console.log([user_id, manga.title, manga.status]);
   try {
@@ -202,8 +203,14 @@ router.post("/reading/:id", async (req, res) => {
     );
     if (!checkExists[0].exists) {
       await db.any(
-        "INSERT INTO readinglist(user_id, manga_name, manga_id, status) VALUES ($1, $2, $3, $4)",
-        [user_id, manga.title, manga.id, manga.status]
+        "INSERT INTO readinglist(user_id, manga_name, manga_id, status, rating) VALUES ($1, $2, $3, $4, $5)",
+        [
+          user_id,
+          manga.title,
+          manga.id,
+          manga.status,
+          manga.status[0] === "Completed" ? manga.rating : "",
+        ]
       );
     }
   } catch (e) {

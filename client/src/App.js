@@ -34,9 +34,15 @@ function App() {
     setAllMangas(data);
   };
 
+  const getImage = async () => {
+    const response = await fetch("/cover");
+    console.log(response);
+  };
+
   useEffect(() => {
     getList();
     getMangas();
+    getImage();
   }, [userId]);
 
   return (
@@ -71,7 +77,13 @@ function App() {
               />
             );
           case "reading-list":
-            return <ReadingList readingList={readingList} userId={userId} />;
+            return (
+              <ReadingList
+                readingList={readingList}
+                getList={getList}
+                userId={userId}
+              />
+            );
           default:
             return null;
         }
