@@ -28,9 +28,12 @@ const ReadingList = ({ userId, getList, readingList }) => {
     let img = document.getElementById(`cover-image-${id}`);
     // console.log(img);
     const response = await fetch("/cover");
-    const data = await response.blob();
-    let objectURL = URL.createObjectURL(data);
-    img.src = objectURL;
+    if (response.status === 200) {
+      const data = await response.blob();
+      let objectURL = URL.createObjectURL(data);
+      console.log(objectURL);
+      img.src = objectURL;
+    }
   };
 
   const obtainMangaInfo = async (e) => {
