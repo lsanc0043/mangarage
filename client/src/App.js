@@ -9,22 +9,12 @@ function App() {
   const [currentView, setCurrentView] = useState("reading-list");
   const [showError, setShowError] = useState(false);
   const [validLogin, setValidLogin] = useState(false);
-  const [userId, setUserId] = useState(0);
+  const [userId, setUserId] = useState(2);
   const [admin, setAdmin] = useState(false);
-  const [readingList, setReadingList] = useState([]);
   const [allMangas, setAllMangas] = useState([]);
 
   const getUserId = (childData) => {
     setUserId(childData);
-  };
-
-  const getList = async () => {
-    const response = await fetch(`/users/reading/${userId}`);
-    // const response = await fetch("/users/reading/4");
-    console.log(userId);
-    const data = await response.json();
-    console.log(data);
-    setReadingList(data);
   };
 
   // retrieve all the mangas
@@ -35,7 +25,6 @@ function App() {
   };
 
   useEffect(() => {
-    getList();
     getMangas();
   }, [userId]);
 
@@ -71,13 +60,7 @@ function App() {
               />
             );
           case "reading-list":
-            return (
-              <ReadingList
-                readingList={readingList}
-                getList={getList}
-                userId={userId}
-              />
-            );
+            return <ReadingList userId={userId} />;
           default:
             return null;
         }

@@ -177,9 +177,10 @@ router.get("/reading/:id", async (req, res) => {
     [true]
   );
   try {
-    const reading = await db.any("SELECT * FROM readinglist WHERE user_id=$1", [
-      req.params.id,
-    ]);
+    const reading = await db.any(
+      "SELECT * FROM readinglist WHERE user_id=$1 ORDER BY id",
+      [req.params.id]
+    );
     res.send(reading);
   } catch (e) {
     console.log("readinglist get", e);
@@ -215,6 +216,60 @@ router.post("/reading/:id", async (req, res) => {
     }
   } catch (e) {
     console.log("readinglist post", e);
+    res.status(400).send({ e });
+  }
+});
+
+router.delete("/reading/:userid/:mangaid", async (req, res) => {
+  const userid = req.params.userid;
+  const mangaid = req.params.mangaid;
+  console.log(userid, mangaid);
+  try {
+    await db.query("DELETE FROM readinglist WHERE user_id=$1 AND id=$2", [
+      userid,
+      mangaid,
+    ]);
+    res.send({ type: "success" });
+  } catch (e) {
+    console.log("readmangas delete", e);
+    res.status(400).send({ e });
+  }
+});
+
+router.put("/reading/:userid/:manganame", async (req, res) => {
+  const userid = req.params.userid;
+  const manga_name = req.params.manganame;
+  const manga = {
+    name: req.body.name,
+    parent: req.body.parent,
+    newParent: req.body.newParent,
+    status: req.body.status,
+    rating: req.body.rating,
+  };
+  console.log(userid, manga_name, manga.rating);
+  try {
+    if (isNaN(manga_name)) {
+      await db.query(
+        "UPDATE readinglist SET status=$1 WHERE user_id=$2 AND manga_name=$3",
+        [manga.newParent, userid, manga_name]
+      );
+      res.send({ type: "success" });
+    } else {
+      if (manga.rating) {
+        await db.query(
+          "UPDATE readinglist SET rating=$1 WHERE user_id=$2 AND id=$3",
+          [manga.rating, userid, manga_name]
+        );
+      } else {
+        await db.query(
+          "UPDATE readinglist SET status=$1 WHERE user_id=$2 AND id=$3",
+          [["Currently Reading", manga.status], userid, manga_name]
+        );
+      }
+      res.send({ type: "success" });
+    }
+  } catch (e) {
+    console.log("readmangas put", e);
     res.status(400).send({ e });
   }
 });
