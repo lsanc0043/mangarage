@@ -1,15 +1,26 @@
 import fetch from "node-fetch";
 import db from "../db/db-connection.js";
 import { Router } from "express";
+import MangaDump from "../dumps/manga_dump.js";
 const router = Router();
 
 // retrieves all manga poster information
 router.get("/", async (req, res) => {
   try {
-    const allMangas = await db.any("SELECT * FROM manga ORDER BY title", [
-      true,
-    ]);
-    res.send(allMangas);
+    await db.any("CREATE EXTENSION IF NOT EXISTS pgcrypto", []);
+    await db.any(
+      "CREATE TABLE IF NOT EXISTS manga (id serial primary key, title text not null unique, author text not null, year text, status text,  last_updated text, description text, genres text[], cover text not null, characters text[])",
+      [true]
+    );
+    const mangas = await db.any("SELECT * FROM manga ORDER BY title", [true]);
+    if (mangas.length !== 48) {
+      for (let i = 0; i < 48; i++) {
+        await db.query(`${MangaDump[i]}`, [true]);
+      }
+    }
+
+    res.send(mangas);
+    // res.send(allMangas);
   } catch (e) {
     console.log("manga get", e);
     res.status(400).send({ e });

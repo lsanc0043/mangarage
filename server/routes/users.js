@@ -86,6 +86,7 @@ router.post("/add", async (req, res) => {
 router.put("/:id", async (req, res) => {
   const userId = req.params.id;
   const login = req.body.last_login;
+  console.log([userId, login]);
   try {
     await db.any("UPDATE users SET last_login=$1 WHERE id=$2", [login, userId]);
   } catch (e) {
