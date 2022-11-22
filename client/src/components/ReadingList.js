@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // eslint-disable-next-line
 import "react-widgets/styles.css";
 import Combobox from "react-widgets/Combobox";
@@ -11,6 +11,7 @@ const ReadingList = ({ userId, readingList }) => {
   const [status, setStatus] = useState("");
   const [rating, setRating] = useState(0);
   const [currentPage, setCurrentPage] = useState("");
+  const [imageURL, setImageURL] = useState("");
 
   const searchManga = async (e) => {
     const search = e;
@@ -24,8 +25,10 @@ const ReadingList = ({ userId, readingList }) => {
   const obtainMangaInfo = async (e) => {
     const response = await fetch(`/manga/select/${e}`);
     const data = await response.json();
-    console.log(data[0]);
     setSelection(data[0]);
+    setImageURL(
+      `${process.env.REACT_APP_HOST_DOMAIN}${data[0].cover.slice(20)}`
+    );
   };
 
   const addToList = async () => {
@@ -120,6 +123,7 @@ const ReadingList = ({ userId, readingList }) => {
             onSelect={obtainMangaInfo}
           />
         </form>
+        <img id="test-cover" />
         <div
           className="reading-list-selection"
           style={{ display: selection === "" ? "none" : "flex" }}
@@ -130,7 +134,8 @@ const ReadingList = ({ userId, readingList }) => {
           >
             <img
               className="modal-cover"
-              src={selection.cover}
+              // src={selection.cover}
+              src={imageURL}
               alt={`${selection.title} cover`}
             />
             {/* other manga content: author, status, genres, description */}

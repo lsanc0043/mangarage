@@ -17,6 +17,7 @@ router.get("/", async (req, res) => {
       for (let i = 0; i < 48; i++) {
         await db.query(`${MangaDump[i]}`, [true]);
       }
+      console.log("dumped info");
     }
 
     res.send(mangas);

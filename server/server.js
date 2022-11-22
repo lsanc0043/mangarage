@@ -1,35 +1,15 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import http from "http";
-import httpProxy from "http-proxy";
 import mangasRouter from "./routes/manga.js";
 import usersRouter from "./routes/users.js";
 import questionsRouter from "./routes/questions.js";
 import db from "./db/db-connection.js";
-import MangaDump from "./dumps/manga_dump.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import { createProxyMiddleware } from "http-proxy-middleware";
 
 const app = express();
-const apiProxy = httpProxy.createProxyServer();
-
-httpProxy.createProxyServer({ target: "mangarage.onrender.com" }).listen(9000); // See (†)
-
-//
-// Create your target server
-//
-// http
-//   .createServer(function (req, res) {
-//     res.writeHead(200, { "Content-Type": "text/plain" });
-//     res.write(
-//       "request successfully proxied!" +
-//         "\n" +
-//         JSON.stringify(req.headers, true, 2)
-//     );
-//     res.end();
-//   })
-//   .listen(9000);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -48,9 +28,13 @@ app.use("/manga", mangasRouter);
 app.use("/users", usersRouter);
 app.use("/questions", questionsRouter);
 
-app.get("/", (req, res) => {
-  res.send("hello from server.js in the backend");
-});
+app.use(
+  "/covers",
+  createProxyMiddleware({
+    target: "https://mangadex.org",
+    changeOrigin: true,
+  })
+);
 
 app.get("/clear", async (req, res) => {
   await db.any("DROP TABLE IF EXISTS readmangas", [true]);

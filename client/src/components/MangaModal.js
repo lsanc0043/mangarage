@@ -41,7 +41,9 @@ const MangaModal = ({
               complete === selectedManga.id &&
               !readMangas.includes(selectedManga.id)
                 ? "https://i.ibb.co/H49kqG7/silver.png"
-                : selectedManga.cover
+                : `${
+                    process.env.REACT_APP_HOST_DOMAIN
+                  }${selectedManga.cover.slice(20)}`
             }
             alt={`${selectedManga.title} cover`}
           />

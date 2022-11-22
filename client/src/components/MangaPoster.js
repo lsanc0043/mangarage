@@ -147,7 +147,9 @@ const MangaPoster = ({ userId, allMangas, getMangas }) => {
             >
               <img
                 className="covers"
-                src={manga.cover}
+                src={`${process.env.REACT_APP_HOST_DOMAIN}${manga.cover.slice(
+                  20
+                )}`}
                 alt={`${manga.title} cover`}
               />
             </div>
