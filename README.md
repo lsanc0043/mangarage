@@ -3,7 +3,8 @@
 
 ![ManGaRage Logo, a garage with a manga rage icon](https://i.ibb.co/djLYvqf/Site-Title.png)
 
-<a href="https://mangarage.onrender.com">Deployed Project Page (Live)</a>
+<a href="https://mangarage.onrender.com">Deployed Project Page (Live)</a> 
+[See mock users](#mock-users)
 
 [![GitHub Pull Request](https://img.shields.io/github/issues-pr-closed/lsanc0043/mangarage)](https://github.com/lsanc0043/mangarage/pulls)
 [![GitHub repo size](https://img.shields.io/github/repo-size/lsanc0043/mangarage)](https://github.com/lsanc0043/mangarage/)
@@ -21,6 +22,7 @@
   - [Manga Reading List](#manga-reading-list)
 - [Drawing Board](#drawing-board)
 - [Installation](#installation)
+- [Mock Users](#mock-users)
 - [Future Development](#future-development)
 - [Acknowledgements](#acknowledgements)
 
@@ -209,6 +211,22 @@ Method 2: Have just one server running.
 **Note: 
 Client server will be running on [http://localhost:3000](http://localhost:3000) and server will be running on [http://localhost:4020](http://localhost:4020).**
 
+## Mock Users
+1. User that has read no mangas
+```bash
+  username: test
+  password: TestPass1
+```
+2. User that has a lot of manga read (checked off on poster)
+```bash
+  username: bookworm
+  password: BookWorm1
+```
+3. User that has a lot of manga in their reading list
+```bash
+  username: avidreader
+  password: AvidReader1
+```
 
 ## Future Development 
 [Back to Contents](#contents)
