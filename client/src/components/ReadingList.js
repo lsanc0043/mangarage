@@ -44,7 +44,6 @@ const ReadingList = ({ userId }) => {
 
     const response = await fetch(`/manga/select/${e}`);
     const data = await response.json();
-    console.log(data[0]);
     setSelection(data[0]);
     const checkExists = readingList.filter(
       (manga) => manga.manga_name === data[0].title
@@ -415,7 +414,7 @@ const ReadingList = ({ userId }) => {
             onClick={() => setCurrentPage("")}
             className="login-or-register"
           >
-            x
+          x
           </button>
         </div>
         <div
