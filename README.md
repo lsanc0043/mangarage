@@ -4,6 +4,7 @@
 ![ManGaRage Logo, a garage with a manga rage icon](https://i.ibb.co/djLYvqf/Site-Title.png)
 
 <a href="https://mangarage.onrender.com">Deployed Project Page (Live)</a> 
+
 [See mock users](#mock-users)
 
 [![GitHub Pull Request](https://img.shields.io/github/issues-pr-closed/lsanc0043/mangarage)](https://github.com/lsanc0043/mangarage/pulls)
@@ -212,6 +213,7 @@ Method 2: Have just one server running.
 Client server will be running on [http://localhost:3000](http://localhost:3000) and server will be running on [http://localhost:4020](http://localhost:4020).**
 
 ## Mock Users
+**Note: this is for the [deployed site](https://mangarage.onrender.com).**
 1. User that has read no mangas
 ```bash
   username: test
