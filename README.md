@@ -19,9 +19,10 @@
   - [User Authentication & User Management](#user-authentication--user-management)
   - [Manga Poster](#manga-poster)
   - [Manga Reading List](#manga-reading-list)
-- [Future Development](#future-development)
 - [Drawing Board](#drawing-board)
 - [Installation](#installation)
+- [Future Development](#future-development)
+- [Acknowledgements](#acknowledgements)
 
 ## About ManGaRage
 
@@ -142,14 +143,6 @@
 ##### User View of Add Manga Form
 <img src="https://user-images.githubusercontent.com/106147236/203654991-7191d813-eb79-4e65-9c2e-1f9547b8f9c7.png" width="1000" alt="User View of Add Manga Form" />
 
-## Future Development
-
-- Optimize media queries for mobile page
-- Add a user favorites list
-- Allow user to sort the reading list by rating or status!
-
-- Add a calendar to track manga chapter release dates
-
 ## Drawing Board
 [Excalidraw](https://excalidraw.com/#json=Cniy0hOLFdLXvohX1dtsO,iJePRDH64pJDyz8ffqXKqA)
 
@@ -207,3 +200,15 @@ Method 2: Have just one server running.
 
 **Note: 
 Client server will be running on [http://localhost:3000](http://localhost:3000) and server will be running on [http://localhost:4020](http://localhost:4020).**
+
+
+## Future Development
+
+- Optimize media queries for mobile page
+- Add a user favorites list
+- Allow user to sort the reading list by rating or status!
+- Add a calendar to track manga chapter release dates
+
+## Acknowledgements
+
+I would like to thank the Techtonica staff and my fellow cohort for being the light to guide me through. Thank you to my mentor, [Michael St. Clair](https://github.com/michaelst) for helping me when I was down. Finally, a special shoutout to [Alma](https://github.com/almabntz) and [Meia](https://github.com/m3ia) for keeping me grounded.
