@@ -209,7 +209,7 @@ router.get("/:mangaid/:coverid", async (req, res) => {
   const url = `https://uploads.mangadex.org/covers/${mangaid}/${coverid}`;
   const request = https.get(url, function (response) {
     const contentType = response.headers["content-type"];
-    console.log(contentType);
+    // console.log(contentType);
     res.setHeader("Content-Type", contentType);
     response.pipe(res);
   });

@@ -15,7 +15,6 @@ const ReadingList = ({ userId }) => {
   const [editRating, setEditRating] = useState({});
   const [currentPage, setCurrentPage] = useState("");
   const [readingList, setReadingList] = useState([]);
-  const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(0);
   const [dragInfo, setDragInfo] = useState({
     name: "",
@@ -24,6 +23,7 @@ const ReadingList = ({ userId }) => {
   });
   const [editArray, setEditArray] = useState([]);
   const [moveId, setMoveId] = useState(0);
+  const [message, setMessage] = useState("");
 
   const searchManga = async (e) => {
     if (e[0] !== " " && e !== "") {
@@ -40,11 +40,24 @@ const ReadingList = ({ userId }) => {
   };
 
   const obtainMangaInfo = async (e) => {
+    setMessage("");
+
     const response = await fetch(`/manga/select/${e}`);
     const data = await response.json();
     console.log(data[0]);
     setSelection(data[0]);
-    // getImage(data[0].id);
+    const checkExists = readingList.filter(
+      (manga) => manga.manga_name === data[0].title
+    );
+    console.log(
+      readingList.filter((manga) => manga.manga_name === data[0].title)[0]
+        .status[0]
+    );
+    if (checkExists.length > 0) {
+      setMessage(
+        `${checkExists[0].manga_name} is already in your ${checkExists[0].status[0]} list.`
+      );
+    }
   };
 
   const addToList = async () => {
@@ -96,56 +109,49 @@ const ReadingList = ({ userId }) => {
         )[0].status[0],
       }));
     }
-
-    // dragInfo.name = e.target.innerText;
-    // dragInfo.parent = readingList.filter(
-    // (manga) => manga.manga_name === e.target.innerText
-    // )[0].status[0];
   };
 
   const handleDrag = async (e) => {
-    if (editMode === false) {
-      if (
-        readingList.filter((manga) => manga.manga_name === e.target.innerText)
-          .length > 0
-      ) {
-        setMoveId(
-          readingList.filter(
-            (manga) => manga.manga_name === e.target.innerText
-          )[0].id
-        );
-      }
-      console.log(e);
-      let newParent = "";
-      if (e.x < 525) {
-        newParent = "Will Read";
-      } else if (e.x > 1000) {
-        newParent = "Completed";
-      } else {
-        newParent = "Currently Reading";
-      }
-      console.log({
-        name: dragInfo.name,
-        parent: dragInfo.parent,
-        newParent: newParent,
-      });
-      const response = await fetch(
-        `/users/reading/${userId}/${e.target.innerText}`,
-        {
-          method: "PUT",
-          headers: {
-            Accepted: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: dragInfo.name,
-            parent: dragInfo.parent,
-            newParent: [newParent, ""],
-          }),
-        }
+    if (
+      readingList.filter((manga) => manga.manga_name === e.target.innerText)
+        .length > 0
+    ) {
+      setMoveId(
+        readingList.filter(
+          (manga) => manga.manga_name === e.target.innerText
+        )[0].id
       );
-      await response.json();
     }
+    console.log(e);
+    let newParent = "";
+    if (e.x < 525) {
+      newParent = "Will Read";
+    } else if (e.x > 1000) {
+      newParent = "Completed";
+    } else {
+      newParent = "Currently Reading";
+    }
+    console.log({
+      name: dragInfo.name,
+      parent: dragInfo.parent,
+      newParent: newParent,
+    });
+    const response = await fetch(
+      `/users/reading/${userId}/${e.target.innerText}`,
+      {
+        method: "PUT",
+        headers: {
+          Accepted: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: dragInfo.name,
+          parent: dragInfo.parent,
+          newParent: [newParent, ""],
+        }),
+      }
+    );
+    await response.json();
   };
 
   const handleEdit = (e, manga_id) => {
@@ -153,34 +159,14 @@ const ReadingList = ({ userId }) => {
     console.log(e, manga_id);
   };
 
-  const handleDone = (mode, changedItem) => {
-    setMoveId(0);
+  const handleDone = (changedItem) => {
     setEditId(0);
     // console.log(editArray.map((val) => Object.values(val)));
-    if (mode === "Done") {
-      getList();
-      if (changedItem === "status") {
-        editArray
-          .map((val) => Object.keys(val))
-          .map(async (editItem, index) => {
-            const response = await fetch(
-              `/users/reading/${userId}/${editItem}`,
-              {
-                method: "PUT",
-                headers: {
-                  Accepted: "application/json",
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  status: editArray.map((val) => Object.values(val)[0])[index],
-                }),
-              }
-            );
-            await response.json();
-          });
-      }
-      if (changedItem === "rating") {
-        Object.keys(editRating).map(async (editItem, index) => {
+    getList();
+    if (changedItem === "status") {
+      editArray
+        .map((val) => Object.keys(val))
+        .map(async (editItem, index) => {
           const response = await fetch(`/users/reading/${userId}/${editItem}`, {
             method: "PUT",
             headers: {
@@ -188,16 +174,31 @@ const ReadingList = ({ userId }) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              rating: Object.values(editRating)[index],
+              status: editArray.map((val) => Object.values(val)[0])[index],
             }),
           });
           await response.json();
         });
-      }
+    }
+    if (changedItem === "rating") {
+      Object.keys(editRating).map(async (editItem, index) => {
+        const response = await fetch(`/users/reading/${userId}/${editItem}`, {
+          method: "PUT",
+          headers: {
+            Accepted: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            rating: Object.values(editRating)[index],
+          }),
+        });
+        await response.json();
+      });
     }
 
     setEditArray([]);
     setEditRating([]);
+    setMoveId(0);
   };
 
   const renderReadingList = () => {
@@ -216,16 +217,6 @@ const ReadingList = ({ userId }) => {
             className="login-or-register"
           >
             Add To List
-          </button>
-          <button
-            style={{ marginLeft: "30px" }}
-            className="login-or-register"
-            onClick={(e) => {
-              setEditMode((editMode) => !editMode);
-              handleDone(e.target.innerText);
-            }}
-          >
-            {editMode === true ? "Done" : "Edit"}
           </button>
         </div>
         <div className="all-tables">
@@ -262,17 +253,17 @@ const ReadingList = ({ userId }) => {
                             onStop={handleDrag}
                             key={manga.id}
                             onMouseDown={handleUp}
-                            disabled={editMode ? true : false}
+                            disabled={moveId === manga.id ? true : false}
                           >
                             <tr
                               className={
-                                editMode || moveId !== 0 ? "" : "drag-manga"
+                                moveId === manga.id ? "" : "drag-manga"
                               }
                             >
                               <td>{manga.manga_name}</td>
                               {tableName === "Currently Reading" ? (
                                 <td>
-                                  {(editMode && editId === manga.id) ||
+                                  {editId === manga.id ||
                                   moveId === manga.id ? (
                                     <>
                                       <DropdownList
@@ -284,38 +275,20 @@ const ReadingList = ({ userId }) => {
                                         ]}
                                         onSelect={(e) => {
                                           handleEdit(e, manga.id);
-                                          handleDone("Done", "status");
+                                          handleDone("status");
                                         }}
                                       />
-                                      <button
-                                        style={{
-                                          border: "none",
-                                          background: "none",
-                                          display:
-                                            editMode || moveId === manga.id
-                                              ? "none"
-                                              : "inline",
-                                        }}
-                                        onClick={() => {
-                                          handleDone("Done", "status");
-                                        }}
-                                      >
-                                        <i
-                                          className="fa fa-check"
-                                          style={{ color: "#EBEBEB" }}
-                                        ></i>
-                                      </button>
                                     </>
                                   ) : (
                                     manga.status[1]
                                   )}
                                   <button
                                     style={{
-                                      display: editMode
-                                        ? editId === manga.id
+                                      display:
+                                        editId === manga.id ||
+                                        moveId === manga.id
                                           ? "none"
-                                          : "inline"
-                                        : "none",
+                                          : "inline",
                                       border: "none",
                                       background: "none",
                                     }}
@@ -329,7 +302,7 @@ const ReadingList = ({ userId }) => {
                                 </td>
                               ) : tableName === "Completed" ? (
                                 <td>
-                                  {(editMode && editId === manga.id) ||
+                                  {editId === manga.id ||
                                   moveId === manga.id ? (
                                     <>
                                       <form>
@@ -338,7 +311,11 @@ const ReadingList = ({ userId }) => {
                                             type="number"
                                             max="10"
                                             style={{ width: "30px" }}
-                                            placeholder={manga.rating}
+                                            placeholder={
+                                              moveId === manga.id
+                                                ? ""
+                                                : manga.rating
+                                            }
                                             value={
                                               editRating[manga.id]
                                                 ? editRating[manga.id]
@@ -360,7 +337,7 @@ const ReadingList = ({ userId }) => {
                                           }}
                                           onClick={(e) => {
                                             e.preventDefault();
-                                            handleDone("Done", "rating");
+                                            handleDone("rating");
                                           }}
                                         >
                                           <i
@@ -375,11 +352,11 @@ const ReadingList = ({ userId }) => {
                                   )}
                                   <button
                                     style={{
-                                      display: editMode
-                                        ? editId === manga.id
+                                      display:
+                                        editId === manga.id ||
+                                        moveId === manga.id
                                           ? "none"
-                                          : "inline"
-                                        : "none",
+                                          : "inline",
                                       border: "none",
                                       background: "none",
                                     }}
@@ -460,60 +437,68 @@ const ReadingList = ({ userId }) => {
               onSelect={obtainMangaInfo}
             />
           </form>
+          {message}
           <div
             className="reading-list-selection"
             style={{ display: selection === "" ? "none" : "flex" }}
           >
-            <h2>{`${selection.title} (${selection.year})`}</h2>
-            <div
-              style={{ display: "flex", width: "1000px", padding: "15px 40px" }}
-            >
-              <img
-                id={`cover-image-${selection.id}`}
-                className="modal-cover"
-                src={`/manga/${selection.id}/${selection.cover}`}
-                alt={`${selection.title} cover`}
-              />
-              {/* other manga content: author, status, genres, description */}
-              <div className="manga-info">
-                <h5>
-                  <strong>Author: </strong>
-                  <span>{selection.author}</span>
-                </h5>
-                <h5>
-                  <strong>Status: </strong>
-                  {selection.status
-                    ? selection.status.slice(0, 1).toUpperCase() +
-                      selection.status.slice(1)
-                    : ""}
-                </h5>
-                <h5>
-                  <strong>Genres: </strong>
-                  {selection.genres
-                    ? selection.genres.slice(0, 5).join(", ")
-                    : ""}
-                </h5>
-                {/* scrollable description */}
-                <h5 className="manga-description" style={{ width: "700px" }}>
-                  <strong>Description: </strong>
-                  {selection.description
-                    ? selection.description.slice(
-                        0,
-                        selection.description.indexOf("---")
-                      )
-                    : ""}
-                </h5>
+            <div>
+              <h2>{`${selection.title} (${selection.year})`}</h2>
+              <div
+                style={{
+                  display: "flex",
+                  width: "1000px",
+                  padding: "15px 40px",
+                }}
+              >
+                <img
+                  id={`cover-image-${selection.id}`}
+                  className="modal-cover"
+                  src={`/manga/${selection.id}/${selection.cover}`}
+                  alt={`${selection.title} cover`}
+                />
+                {/* other manga content: author, status, genres, description */}
+                <div className="manga-info">
+                  <h5>
+                    <strong>Author: </strong>
+                    <span>{selection.author}</span>
+                  </h5>
+                  <h5>
+                    <strong>Status: </strong>
+                    {selection.status
+                      ? selection.status.slice(0, 1).toUpperCase() +
+                        selection.status.slice(1)
+                      : ""}
+                  </h5>
+                  <h5>
+                    <strong>Genres: </strong>
+                    {selection.genres
+                      ? selection.genres.slice(0, 5).join(", ")
+                      : ""}
+                  </h5>
+                  {/* scrollable description */}
+                  <h5 className="manga-description" style={{ width: "700px" }}>
+                    <strong>Description: </strong>
+                    {selection.description
+                      ? selection.description.slice(
+                          0,
+                          selection.description.indexOf("---")
+                        )
+                      : ""}
+                  </h5>
+                </div>
               </div>
             </div>
             <div
               style={{
-                display: "flex",
+                display: message !== "" ? "none" : "flex",
                 flexDirection: "row",
                 alignItems: "center",
-                width: "500px",
+                width: "800px",
               }}
             >
               <DropdownList
+                style={{ padding: "10px" }}
                 placeholder="Status"
                 data={["Will Read", "Currently Reading", "Completed"]}
                 onSelect={(e) => setStatus(e)}
@@ -544,7 +529,7 @@ const ReadingList = ({ userId }) => {
               <button
                 className="modal-button"
                 onClick={addToList}
-                style={{ width: "1000px" }}
+                style={{ width: "400px", fontSize: "16px" }}
               >
                 {`Add to ${status}`}
               </button>
@@ -557,7 +542,6 @@ const ReadingList = ({ userId }) => {
 
   return (
     <div className="reading-list">
-      {/* <h1>Your Reading List</h1> */}
       {currentPage === "" ? renderReadingList() : renderForm()}
     </div>
   );

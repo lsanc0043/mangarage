@@ -347,7 +347,7 @@ input:focus {
   text-align: center;
   color: #201D1D;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .all-tables {
