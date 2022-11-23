@@ -12,6 +12,7 @@ const MangaModal = ({
   ratings,
   userRating,
   sendRating,
+  userId,
 }) => {
   const renderInfo = () => {
     return (
@@ -41,9 +42,7 @@ const MangaModal = ({
               complete === selectedManga.id &&
               !readMangas.includes(selectedManga.id)
                 ? "https://i.ibb.co/H49kqG7/silver.png"
-                : `${
-                    process.env.REACT_APP_HOST_DOMAIN
-                  }${selectedManga.cover.slice(20)}`
+                : `/manga/${selectedManga.manga_id}/${selectedManga.cover}`
             }
             alt={`${selectedManga.title} cover`}
           />
@@ -91,7 +90,8 @@ const MangaModal = ({
               style={{
                 display:
                   readMangas.includes(selectedManga.id) ||
-                  complete === selectedManga.id
+                  complete === selectedManga.id ||
+                  userId === 1
                     ? "block"
                     : "none",
               }}
@@ -103,7 +103,8 @@ const MangaModal = ({
         <Modal.Body>
           <div className="manga-modal">
             {readMangas.includes(selectedManga.id) ||
-            complete === selectedManga.id ? (
+            complete === selectedManga.id ||
+            userId === 1 ? (
               renderInfo()
             ) : (
               <QuizCard
@@ -132,6 +133,7 @@ const MangaModal = ({
                   type="number"
                   max="10"
                   style={{ width: "30px" }}
+                  placeholder="0"
                   value={userRating}
                   onChange={(e) => sendRating(e.target.value)}
                 />

@@ -8,6 +8,10 @@ body {
   flex-direction: column;
 }
 
+button {
+  outline: none !important;
+}
+
 .header {
   display: flex;
   flex-direction: row;
@@ -343,17 +347,28 @@ input:focus {
   text-align: center;
   color: #201D1D;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .all-tables {
   display: grid;
-  grid-template-columns: repeat(3, 500px);
+  grid-template-columns: repeat(3, 450px);
   grid-gap: 10px;
   justify-content: center;
   margin-top: 15px;
+  height: fit-content;
+  align-items: baseline;
 }
 
+.manga-list {
+  padding: 20px;
+  border:#404264 1px solid;
+  border-radius: 10px;
+}
+
+.drag-manga:hover {
+  cursor: move;
+}
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {

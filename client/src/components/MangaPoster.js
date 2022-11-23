@@ -80,6 +80,19 @@ const MangaPoster = ({ userId, allMangas, getMangas }) => {
     }
   };
 
+  const clearRead = async () => {
+    const response = await fetch(`/users/read/${userId}/0`, {
+      method: "DELETE",
+    });
+    const data = await response.json();
+    if (data.type === "success") {
+      // refresh MangaPoster to load the data in real time
+      getMangas();
+      getReadMangas();
+      onClickReset(); // reset the scratch card so user can "mark as read" again
+    }
+  };
+
   // removing the scratchcard jsx allows me to remount the div
   const renderCard = (manga) => {
     return (
@@ -102,7 +115,7 @@ const MangaPoster = ({ userId, allMangas, getMangas }) => {
         >
           <img
             className="covers"
-            src={manga.cover}
+            src={`/manga/${manga.manga_id}/${manga.cover}`}
             alt={`${manga.title} cover`}
           />
         </ScratchCard>
@@ -111,55 +124,71 @@ const MangaPoster = ({ userId, allMangas, getMangas }) => {
   };
 
   return (
-    <div className="container">
-      <MangaModal
-        showModal={showModal}
-        setShowModal={setShowModal}
-        selectedManga={selectedManga}
-        readMangas={readMangas}
-        markReadOrUnread={markReadOrUnread}
-        complete={complete}
-        getComplete={getComplete}
-        ratings={ratings}
-        userRating={userRating}
-        sendRating={getRating}
-      />
-      {/* map all mangas */}
-      {allMangas.map((manga, index) => {
-        return (
-          <button
-            key={index}
-            onClick={() => {
-              setSelectedManga(manga);
-              setShowModal(true);
-              console.log(manga.id);
-            }}
-            className="manga-selection"
-          >
-            {/* unmount and remount if the user marks it as unread so content can be scratched again */}
-            {!reset ? renderCard(manga) : <></>}
-            {/* {renderCard(manga)} */}
-            {/* underlies the scratchcard, revealed when scratchcard is completed */}
-            <div
-              style={{
-                display: readMangas.includes(manga.id) ? "block" : "none",
+    <>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginRight: "40px",
+          marginTop: "20px",
+        }}
+      >
+        <button className="login-or-register" onClick={clearRead}>
+          Clear All
+        </button>
+      </div>
+      <div className="container">
+        <MangaModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          selectedManga={selectedManga}
+          readMangas={readMangas}
+          markReadOrUnread={markReadOrUnread}
+          complete={complete}
+          getComplete={getComplete}
+          ratings={ratings}
+          userRating={userRating}
+          sendRating={getRating}
+          userId={userId}
+        />
+        {/* map all mangas */}
+        {allMangas.map((manga, index) => {
+          return (
+            <button
+              key={index}
+              onClick={() => {
+                setSelectedManga(manga);
+                setShowModal(true);
+                console.log(manga.id);
               }}
+              className="manga-selection"
             >
-              <img
-                className="covers"
-                src={`${process.env.REACT_APP_HOST_DOMAIN}${manga.cover.slice(
-                  20
-                )}`}
-                alt={`${manga.title} cover`}
-              />
-            </div>
-            <p className="titles">
-              <strong>{manga.title}</strong>
-            </p>
-          </button>
-        );
-      })}
-    </div>
+              {/* unmount and remount if the user marks it as unread so content can be scratched again */}
+              {!reset && userId !== 1 ? renderCard(manga) : <></>}
+              {/* {renderCard(manga)} */}
+              {/* underlies the scratchcard, revealed when scratchcard is completed */}
+              <div
+                style={{
+                  display:
+                    readMangas.includes(manga.id) || userId === 1
+                      ? "block"
+                      : "none",
+                }}
+              >
+                <img
+                  className="covers"
+                  src={`/manga/${manga.manga_id}/${manga.cover}`}
+                  alt={`${manga.title} cover`}
+                />
+              </div>
+              <p className="titles">
+                <strong>{manga.title}</strong>
+              </p>
+            </button>
+          );
+        })}
+      </div>
+    </>
   );
 };
 

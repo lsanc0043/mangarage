@@ -1,27 +1,15 @@
 import fetch from "node-fetch";
 import db from "../db/db-connection.js";
 import { Router } from "express";
-import MangaDump from "../dumps/manga_dump.js";
 const router = Router();
+import https from "https";
 
 // retrieves all manga poster information
 router.get("/", async (req, res) => {
   try {
-    await db.any("CREATE EXTENSION IF NOT EXISTS pgcrypto", []);
-    await db.any(
-      "CREATE TABLE IF NOT EXISTS manga (id serial primary key, title text not null unique, author text not null, year text, status text,  last_updated text, description text, genres text[], cover text not null, characters text[])",
-      [true]
-    );
     const mangas = await db.any("SELECT * FROM manga ORDER BY title", [true]);
-    if (mangas.length !== 48) {
-      for (let i = 0; i < 48; i++) {
-        await db.query(`${MangaDump[i]}`, [true]);
-      }
-      console.log("dumped info");
-    }
-
+    console.log("retrieved all mangas");
     res.send(mangas);
-    // res.send(allMangas);
   } catch (e) {
     console.log("manga get", e);
     res.status(400).send({ e });
@@ -176,7 +164,7 @@ const getManga = async (search, source) => {
         genres: manga.attributes.tags
           .filter((tag) => tag.attributes.group === "genre")
           .map((tag) => tag.attributes.name.en),
-        cover: `https://mangadex.org/covers/${manga.id}/${filteredCover.data.attributes.fileName}`,
+        cover: filteredCover.data.attributes.fileName,
       }));
     default:
       break;
@@ -213,6 +201,21 @@ router.get("/select/:search", async (req, res) => {
   const search = req.params.search;
   const results = await getManga(search, "filter");
   res.send(results);
+});
+
+router.get("/:mangaid/:coverid", async (req, res) => {
+  const mangaid = req.params.mangaid;
+  const coverid = req.params.coverid;
+  const url = `https://uploads.mangadex.org/covers/${mangaid}/${coverid}`;
+  const request = https.get(url, function (response) {
+    const contentType = response.headers["content-type"];
+    // console.log(contentType);
+    res.setHeader("Content-Type", contentType);
+    response.pipe(res);
+  });
+  request.on("error", function (e) {
+    console.error(e);
+  });
 });
 
 export default router;

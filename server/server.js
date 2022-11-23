@@ -7,7 +7,6 @@ import questionsRouter from "./routes/questions.js";
 import db from "./db/db-connection.js";
 import path from "path";
 import { fileURLToPath } from "url";
-import { createProxyMiddleware } from "http-proxy-middleware";
 
 const app = express();
 
@@ -28,16 +27,10 @@ app.use("/manga", mangasRouter);
 app.use("/users", usersRouter);
 app.use("/questions", questionsRouter);
 
-app.use(
-  "/covers",
-  createProxyMiddleware({
-    target: "https://mangadex.org",
-    changeOrigin: true,
-  })
-);
-
 app.get("/clear", async (req, res) => {
+  console.log("cleared tables");
   await db.any("DROP TABLE IF EXISTS readmangas", [true]);
+  await db.any("DROP TABLE IF EXISTS readinglist", [true]);
   await db.any("DROP TABLE IF EXISTS manga", [true]);
   await db.any("DROP TABLE IF EXISTS users", [true]);
   res.send({ type: "success" });
