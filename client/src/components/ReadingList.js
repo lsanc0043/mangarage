@@ -44,7 +44,7 @@ const ReadingList = ({ userId }) => {
 
   // const getImage = async (id) => {
   //   // console.log(`cover-image-${id}`);
-  //   let img = document.getElementById(`cover-image-${id}`);
+  //   let img = document.getElementById(`cover-image`);
   //   // console.log(img);
   //   const response = await fetch("/cover");
   //   if (response.status === 200) {
@@ -52,9 +52,14 @@ const ReadingList = ({ userId }) => {
   //     let objectURL = URL.createObjectURL(data);
   //     console.log(objectURL);
   //     img.src = objectURL;
+  //     // src = [object Object]
   //     // return objectURL;
   //   }
   // };
+
+  // useEffect(() => {
+  //   getImage();
+  // }, []);
 
   const obtainMangaInfo = async (e) => {
     const response = await fetch(`/manga/select/${e}`);
@@ -572,6 +577,7 @@ const ReadingList = ({ userId }) => {
 
   return (
     <div className="reading-list">
+      <img id="cover-image" src="/cover" />
       {/* <h1>Your Reading List</h1> */}
       {currentPage === "" ? renderReadingList() : renderForm()}
     </div>
