@@ -3,6 +3,7 @@
 
 ![ManGaRage Logo, a garage with a manga rage icon](https://i.ibb.co/djLYvqf/Site-Title.png)
 
+<a href="https://mangarage.onrender.com">Deployed Project Page (Live)</a>
 
 [![GitHub Pull Request](https://img.shields.io/github/issues-pr-closed/lsanc0043/mangarage)](https://github.com/lsanc0043/mangarage/pulls)
 [![GitHub repo size](https://img.shields.io/github/repo-size/lsanc0043/mangarage)](https://github.com/lsanc0043/mangarage/)
@@ -11,8 +12,16 @@
 
 ## Contents
 
-[About](#about-mangarage)
-
+- [About](#about-mangarage)
+- [Tech Stack](#tech-stack)
+- [API Reference](#api-reference)
+- [Features](#features)
+  - [User Authentication & User Management](#user-authentication--user-management)
+  - [Manga Poster](#manga-poster)
+  - [Manga Reading List](#manga-reading-list)
+- [Future Development](#future-development)
+- [Drawing Board](#drawing-board)
+- [Installation](#installation)
 
 ## About ManGaRage
 
@@ -84,7 +93,7 @@
 
 ## Features
 
-**User Authentication & User Management**
+### User Authentication & User Management
 - Auth0 Login and Registration + Custom SQL encrypted login/registration
 - Admin can view a record of all users and delete them
 - Admin can view all posters without having to complete them
@@ -106,7 +115,7 @@
   </tr>
 </table>
 
-**Manga Poster**
+### Manga Poster
 - User can view a poster with 48 mangas
 - User can mark a manga as read or unread
 - User can take a three question quiz to test their knowledge in order to mark the manga as read
@@ -116,7 +125,7 @@
 ##### User View of Poster and Quiz
 <img src="https://user-images.githubusercontent.com/106147236/203654731-183f7df4-848c-42d6-86a5-748e3bd3c4b3.png" width="1000" alt="User View of Poster and Quiz" />
 
-**Manga Reading List**
+### Manga Reading List
 - User can view a reading list with tables for:
     - ***Will Read***
     - ***Currently Reading***
