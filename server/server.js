@@ -7,7 +7,6 @@ import questionsRouter from "./routes/questions.js";
 import db from "./db/db-connection.js";
 import path from "path";
 import { fileURLToPath } from "url";
-import https from "https";
 
 const app = express();
 
@@ -28,38 +27,10 @@ app.use("/manga", mangasRouter);
 app.use("/users", usersRouter);
 app.use("/questions", questionsRouter);
 
-app.get("/cover", async (req, res) => {
-  const url =
-    "https://uploads.mangadex.org/covers/6a468761-5bd6-4de0-a0cb-47cb456ac2e0/6fede191-79a0-453b-8b8d-939ab067f657.jpg";
-  const request = https.get(url, function (response) {
-    const contentType = response.headers["content-type"];
-
-    console.log(contentType);
-
-    res.setHeader("Content-Type", contentType);
-
-    response.pipe(res);
-  });
-
-  request.on("error", function (e) {
-    console.error(e);
-  });
-  // const base64Image = Buffer.from(
-  //   (await axios.get(url, { responseType: "arraybuffer" })).data
-  // ).toString("base64");
-  // var img = Buffer.from(base64Image, "base64");
-  // res.writeHead(200, {
-  //   "Content-Type": "image/jpg",
-  //   "Content-Length": img.length,
-  // });
-  // res.send();
-  // res.send({ base64: base64Image });
-  // res.end(img); // request.get(url).pipe(res);
-  // request.get(url).pipe(res);
-});
-
 app.get("/clear", async (req, res) => {
+  console.log("cleared tables");
   await db.any("DROP TABLE IF EXISTS readmangas", [true]);
+  await db.any("DROP TABLE IF EXISTS readinglist", [true]);
   await db.any("DROP TABLE IF EXISTS manga", [true]);
   await db.any("DROP TABLE IF EXISTS users", [true]);
   res.send({ type: "success" });

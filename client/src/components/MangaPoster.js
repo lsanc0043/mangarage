@@ -115,7 +115,7 @@ const MangaPoster = ({ userId, allMangas, getMangas }) => {
         >
           <img
             className="covers"
-            src={manga.cover}
+            src={`/manga/${manga.manga_id}/${manga.cover}`}
             alt={`${manga.title} cover`}
           />
         </ScratchCard>
@@ -149,6 +149,7 @@ const MangaPoster = ({ userId, allMangas, getMangas }) => {
           ratings={ratings}
           userRating={userRating}
           sendRating={getRating}
+          userId={userId}
         />
         {/* map all mangas */}
         {allMangas.map((manga, index) => {
@@ -163,17 +164,20 @@ const MangaPoster = ({ userId, allMangas, getMangas }) => {
               className="manga-selection"
             >
               {/* unmount and remount if the user marks it as unread so content can be scratched again */}
-              {!reset ? renderCard(manga) : <></>}
+              {!reset && userId !== 1 ? renderCard(manga) : <></>}
               {/* {renderCard(manga)} */}
               {/* underlies the scratchcard, revealed when scratchcard is completed */}
               <div
                 style={{
-                  display: readMangas.includes(manga.id) ? "block" : "none",
+                  display:
+                    readMangas.includes(manga.id) || userId === 1
+                      ? "block"
+                      : "none",
                 }}
               >
                 <img
                   className="covers"
-                  src={manga.cover}
+                  src={`/manga/${manga.manga_id}/${manga.cover}`}
                   alt={`${manga.title} cover`}
                 />
               </div>

@@ -35,31 +35,9 @@ const ReadingList = ({ userId }) => {
 
   const getList = async () => {
     const response = await fetch(`/users/reading/${userId}`);
-    // const response = await fetch("/users/reading/4");
-    // console.log(userId);
     const data = await response.json();
-    // console.log(data);
     setReadingList(data);
   };
-
-  // const getImage = async (id) => {
-  //   // console.log(`cover-image-${id}`);
-  //   let img = document.getElementById(`cover-image`);
-  //   // console.log(img);
-  //   const response = await fetch("/cover");
-  //   if (response.status === 200) {
-  //     const data = await response.blob();
-  //     let objectURL = URL.createObjectURL(data);
-  //     console.log(objectURL);
-  //     img.src = objectURL;
-  //     // src = [object Object]
-  //     // return objectURL;
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getImage();
-  // }, []);
 
   const obtainMangaInfo = async (e) => {
     const response = await fetch(`/manga/select/${e}`);
@@ -166,6 +144,7 @@ const ReadingList = ({ userId }) => {
           }),
         }
       );
+      await response.json();
     }
   };
 
@@ -197,6 +176,7 @@ const ReadingList = ({ userId }) => {
                 }),
               }
             );
+            await response.json();
           });
       }
       if (changedItem === "rating") {
@@ -211,7 +191,7 @@ const ReadingList = ({ userId }) => {
               rating: Object.values(editRating)[index],
             }),
           });
-          console.log(editItem);
+          await response.json();
         });
       }
     }
@@ -491,7 +471,7 @@ const ReadingList = ({ userId }) => {
               <img
                 id={`cover-image-${selection.id}`}
                 className="modal-cover"
-                src={selection.cover}
+                src={`/manga/${selection.id}/${selection.cover}`}
                 alt={`${selection.title} cover`}
               />
               {/* other manga content: author, status, genres, description */}
@@ -577,7 +557,6 @@ const ReadingList = ({ userId }) => {
 
   return (
     <div className="reading-list">
-      <img id="cover-image" src="/cover" />
       {/* <h1>Your Reading List</h1> */}
       {currentPage === "" ? renderReadingList() : renderForm()}
     </div>
