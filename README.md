@@ -24,7 +24,8 @@
 - [Future Development](#future-development)
 - [Acknowledgements](#acknowledgements)
 
-## About ManGaRage
+## About ManGaRage 
+[Back to Contents](#contents)
 
 ***ManGaRage*** is a manga bucket-list. Find your promised neverland!
 
@@ -35,7 +36,8 @@
 ###### User Landing Page
 <img src="https://user-images.githubusercontent.com/106147236/203653256-e7621098-bdef-469f-bea3-8c8c7a99cc87.png" width="1000" alt="user landing page" />
 
-## Tech Stack
+## Tech Stack 
+[Back to Contents](#contents)
 
 <table align="center">
   <tr>
@@ -78,7 +80,9 @@
   </tr>
 </table>
 
-## API Reference
+## API Reference 
+[Back to Contents](#contents)
+
 <table align="center">
   <tr>
      <td align="center" width="96">
@@ -92,7 +96,8 @@
   </tr>
 </table>
 
-## Features
+## Features 
+[Back to Contents](#contents)
 
 ### User Authentication & User Management
 - Auth0 Login and Registration + Custom SQL encrypted login/registration
@@ -143,7 +148,9 @@
 ##### User View of Add Manga Form
 <img src="https://user-images.githubusercontent.com/106147236/203654991-7191d813-eb79-4e65-9c2e-1f9547b8f9c7.png" width="1000" alt="User View of Add Manga Form" />
 
-## Drawing Board
+## Drawing Board 
+[Back to Contents](#contents)
+
 [Excalidraw](https://excalidraw.com/#json=Cniy0hOLFdLXvohX1dtsO,iJePRDH64pJDyz8ffqXKqA)
 
 #### Stylesheet
@@ -159,6 +166,7 @@
 <img src="https://user-images.githubusercontent.com/106147236/203657178-19d5251f-8533-4286-87a1-52cc7320ddc8.png" width="800" alt="User Flow" />
 
 ## Installation
+[Back to Contents](#contents)
 
 **This project requires Auth0! Please visit [Auth0](https://auth0.com/) to make an account and retrieve a domain and clientid. See .env.example for set up!**
 
@@ -202,13 +210,15 @@ Method 2: Have just one server running.
 Client server will be running on [http://localhost:3000](http://localhost:3000) and server will be running on [http://localhost:4020](http://localhost:4020).**
 
 
-## Future Development
+## Future Development 
+[Back to Contents](#contents)
 
 - Optimize media queries for mobile page
 - Add a user favorites list
 - Allow user to sort the reading list by rating or status!
 - Add a calendar to track manga chapter release dates
 
-## Acknowledgements
+## Acknowledgements 
+[Back to Contents](#contents)
 
 I would like to thank the Techtonica staff and my fellow cohort for being the light to guide me through. Thank you to my mentor, [Michael St. Clair](https://github.com/michaelst) for helping me when I was down. Finally, a special shoutout to [Alma](https://github.com/almabntz) and [Meia](https://github.com/m3ia) for keeping me grounded.
